@@ -10,7 +10,7 @@ app.use(cors({
     origin:"*"
 })) 
 app.use("/users",UserRouter)
-app.use("/notes",productsRouter)
+app.use("/products",productsRouter)
 app.get("/",(req,res)=>{
     res.send("Home Page")
 })
