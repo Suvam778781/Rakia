@@ -6,6 +6,7 @@ const UserRouter=express.Router()
 UserRouter.use(express.json())
 const jwt=require("jsonwebtoken")
 
+
 UserRouter.get("/", async (req, res) => {
     let users=await UserModel.find()
       res.send(users);
