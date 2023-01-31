@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+.Filter_Type_links{
+  
+  display: block;
+  text-align: left;
+  line-height: 2;
+  
+}
+
+.Filter_Brand_links{
+  display: block;
+  text-align: left;
+  line-height: 2;
+  
+}
+
+.Filter_Price_links{
+  display: block;
+  text-align: left;
+  line-height: 2;
+}
+.Filter_Parents{
+  background:rgb(167, 173, 173);
+  
+}

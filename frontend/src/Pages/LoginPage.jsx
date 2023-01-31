@@ -28,7 +28,7 @@ console.log(formdata)
         minH={'100vh'}
         align={'center'}
         justify={'center'}
-        bg="#63B3ED">
+        bg="rgb(167, 173, 173)">
         <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
           <Stack align={'center'}>
             <Heading fontSize={'4xl'}>Sign in to your account</Heading>
@@ -73,6 +73,8 @@ console.log(formdata)
           </Box>
         </Stack>
       </Flex>
+
+      
     );
   
 }

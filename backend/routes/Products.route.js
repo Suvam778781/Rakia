@@ -5,14 +5,14 @@ const productsRouter = express.Router();
 productsRouter.use(express.json());
 productsRouter.use("/", authenticate);
 productsRouter.get("/", async (req, res) => {
-let notes=await NoteModel.find()
-  res.send(notes);
+let products=await NoteModel.find()
+  res.send(products);
 });
 productsRouter.post("/create", async (req, res) => {
+
   const payload = req.body;
   try {
     const new_note = ProductsModel(payload);
-
     await new_note.save();
     res.send("Create Succesfully");
   } catch (err) {
@@ -33,7 +33,6 @@ const userID_in_making_req=req.body.userID
     res.send("err:something went wrong");
   }
 });
-
 
 productsRouter.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;

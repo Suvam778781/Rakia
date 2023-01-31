@@ -15,7 +15,6 @@ import {
     useColorModeValue,
     Link,
   } from '@chakra-ui/react';
-  import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 function SignUpPage() {
 const [formdata,setformdata]=useState({firstname:"",lastname:"",email:"",password:""})
@@ -31,7 +30,7 @@ console.log(formdata)
             minH={'100vh'}
             align={'center'}
             justify={'center'}
-            bg="#63B3ED"
+            bg="rgb(167, 173, 173)"
             >
             <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6} >
               <Stack align={'center'}>
@@ -39,7 +38,6 @@ console.log(formdata)
                   Sign up
                 </Heading>
                 <Text fontSize={'lg'} color={'gray.600'}>
-                
                 </Text>
               </Stack>
               <Box bg='RGBA(0, 0, 0, 0.64)' color={"white"}
