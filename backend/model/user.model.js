@@ -6,6 +6,6 @@ lastname:String,
 email:String,
 pass:String,
 })
-const UserModel=mongoose.model("Book",userSchema)
+const UserModel=mongoose.model("User",userSchema)
 module.exports={UserModel};
 

@@ -1,16 +1,15 @@
 const mongoose=require("mongoose")
 const productSchema=mongoose.Schema({
 title:String,
-note:String,
 category:String,
 description:String,
 image:String,
+brand:String,
 rating:Number,
 price:Number,
 quantity:Number,
-userID:String
 })
-const ProductsModel=mongoose.model("Notes",productSchema)
+const ProductsModel=mongoose.model("Product",productSchema)
 module.exports={ProductsModel};
 // {
 //     "title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",

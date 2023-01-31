@@ -1,9 +1,8 @@
 const jwt=require("jsonwebtoken");
 const authenticate=(req,res,next)=>{
-const token=req.headers. authorization
+const token=req.headers.authorization
 if(token){
 const decoded=jwt.verify(token,"masai")
-
 console.log(decoded)
 if(decoded){
     const userID=decoded.userID
@@ -17,6 +16,5 @@ else {
 else {
     res.send("please login first")
 }
-
 }
 module.exports={authenticate}

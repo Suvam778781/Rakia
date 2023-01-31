@@ -5,8 +5,6 @@ const { UserModel } = require("../model/user.model");
 const UserRouter=express.Router()
 UserRouter.use(express.json())
 const jwt=require("jsonwebtoken")
-
-
 UserRouter.get("/", async (req, res) => {
     let users=await UserModel.find()
       res.send(users);
@@ -14,11 +12,11 @@ UserRouter.get("/", async (req, res) => {
 UserRouter.post("/login",async(req,res)=>{
     let {email,pass}=req.body;
     try{
-    const user =await UserModel.find({email})
-    if(user.length>0){
-    bcrypt.compare(pass,user[0].pass,(err,result)=>{
+    const user =await UserModel.findOne({email})
+    if(user){
+    bcrypt.compare(pass,user.pass,(err,result)=>{
     if(result){
-        const token =jwt.sign({userID:user[0]._id},"masai",{expiresIn:"1h"})
+        const token =jwt.sign({userID:user._id},"masai",{expiresIn:"24h"})
         res.send(({"msg":"Login Succesfully","token":token}))
     }
     else {
@@ -27,23 +25,23 @@ UserRouter.post("/login",async(req,res)=>{
     })
     }
     }catch(err){
-        res.send({"err":err})
+        res.status(404).send({"err":err})
     }
     })
     UserRouter.post("/resistor",async(req,res)=>{
-    const {email,name,age,pass}=req.body;
+    const {email,firstname,lastname,pass}=req.body;
     try{
     bcrypt.hash(pass,5,async(err,secure_password)=>{
     if(err){
         console.log(err);
     }else {
-        const user=new UserModel({name,pass:secure_password,age,email})
+        const user=new UserModel({firstname,lastname,pass:secure_password,email})
         await user.save()
-        res.send("Resistered")
+        res.send("Resistered Succesfully")
     }
     })
     }catch(err){
-        res.send("Error While Resistroring The User")
+        res.status(404).send("Error While Resistroring The User")
         console.log(err)
     }
     })

@@ -6,11 +6,13 @@ const { connection } = require("./config/db");
 const { UserRouter } = require("./routes/User.Route");
 const cors=require("cors");
 const { productsRouter } = require("./routes/Products.route");
+const { cartsRouter } = require("./routes/Cart.Routes");
 app.use(cors({
     origin:"*"
 })) 
 app.use("/users",UserRouter)
 app.use("/products",productsRouter)
+app.use("/carts",cartsRouter)
 app.get("/",(req,res)=>{
     res.send("Home Page")
 })
