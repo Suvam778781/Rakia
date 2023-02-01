@@ -4,7 +4,6 @@ const Adminauthenticate=(req,res,next)=>{
 const admintoken=req.headers.authorization
 if(admintoken){
 const decoded=jwt.verify(admintoken,"admin")
-
 if(decoded){
     const userID=decoded.userID
     req.headers.userID=userID;

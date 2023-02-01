@@ -7,7 +7,7 @@ import { GET_PRODUCTS_DATA, LOADING_PRODUCTS_DATA, PRODUCTS_ERROR } from "./prod
   export const ProductsReducer = (state = initialstate, { type, payload }) => {
     switch (type) {
    case GET_PRODUCTS_DATA:
-    return { ...state, CartList: payload,Loading:false};
+    return { ...state, Products: payload,Loading:false};
     case LOADING_PRODUCTS_DATA:
         return {...state,Loading:true}
     case PRODUCTS_ERROR:
@@ -16,12 +16,9 @@ import { GET_PRODUCTS_DATA, LOADING_PRODUCTS_DATA, PRODUCTS_ERROR } from "./prod
         return state;
     }
   };
-
-
 // //   
 // case GET_CARTLIST_DATA:
 //     return { ...state, CartList: payload };
-
 // case ADD_TO_CART:
 //     return { ...state, CartList: [...state.CartList, payload] };
 // // case REMOVE_PRODUCTS_CART:
