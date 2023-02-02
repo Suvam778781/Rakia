@@ -41,11 +41,11 @@ console.log(formdata)
                 </Text>
               </Stack>
               <Box bg='RGBA(0, 0, 0, 0.64)' color={"white"}
-                rounded={'lg'}
+                
                 // bg={useColorModeValue('white', 'gray.700')}
                 boxShadow={'lg'}
                 p={8}>
-                <Stack spacing={4}>
+                <Stack spacing={5}>
                   <HStack>
                     <Box>
                       <FormControl id="firstName" isRequired>
@@ -54,17 +54,17 @@ console.log(formdata)
                       </FormControl>
                     </Box>
                     <Box>
-                      <FormControl id="lastName" isRequired>
+                      <FormControl id="lastName">
                         <FormLabel>Last Name</FormLabel>
                         <Input  onChange={(e)=>HandleonChange(e)} value={formdata.lastname} name="lastname"  type="text" />
                       </FormControl>
                     </Box>
                   </HStack>
-                  <FormControl id="email" isRequired>
+                  <FormControl id="email" >
                     <FormLabel>Email address</FormLabel>
                     <Input  onChange={(e)=>HandleonChange(e)} value={formdata.email} name="email"  type="email" />
                   </FormControl>
-                  <FormControl id="password" isRequired>
+                  <FormControl id="password" >
                     <FormLabel>Password</FormLabel>
                     <InputGroup>
                       <Input  onChange={(e)=>HandleonChange(e)} value={formdata.password} name="password"   type={"password"}/>

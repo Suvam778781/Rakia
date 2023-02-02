@@ -30,16 +30,13 @@ console.log(formdata)
         justify={'center'}
         bg="rgb(167, 173, 173)">
         <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-          <Stack align={'center'}>
-            <Heading fontSize={'4xl'}>Sign in to your account</Heading>
-          </Stack>
+         
           <Box
-            rounded={'lg'}
             bg="RGBA(0, 0, 0, 0.64)"
-            boxShadow={'lg'}
+            boxShadow={'sm'}
             color="white"
             p={8}>
-            <Stack spacing={4}>
+            <Stack spacing={5} >
               <FormControl id="email">
                 <FormLabel>Email address</FormLabel>
                 <Input  onChange={(e)=>HandleonChange(e)} value={formdata.email} name="email"  type="email" />
@@ -54,7 +51,7 @@ console.log(formdata)
                   align={'start'}
                   justify={'space-between'}>
                   <Checkbox>Remember me</Checkbox>
-                  <Link color={'#63B3ED'}>Forgot password?</Link>
+                  <Link color={'green.500'}>Forgot password?</Link>
                 </Stack>
                 <Button
                    onClick={HandleSubmit}
@@ -63,7 +60,7 @@ console.log(formdata)
                      bg='white'
                      color={"black"}
                      _hover={{
-                       bg:'#63B3ED',
+                       bg:'green.500',
                        color:"black",
                      }}>
                   Sign in
