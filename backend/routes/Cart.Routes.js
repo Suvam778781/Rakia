@@ -22,16 +22,14 @@ cartsRouter.post("/addtocart", async (req, res) => {
   const payload = req.body;
   const userID = req.body._id;
   req.body.userID = userID;
-
   try {
     const new_cart = CartsModel(payload);
     await new_cart.save();
-    res.send("added to cart succesfully");
+    res.status(200)("Products added to cart succesfully");
   } catch (err) {
-    res.send("something went wrong");
+    res.send("something went wrong while adding data to cart");
   }
 });
-
 cartsRouter.patch("/update:id", async (req, res) => {
   const data = req.body;
   const id = req.params.id;
@@ -46,10 +44,9 @@ cartsRouter.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;
   try {
     await CartsModel.deleteOne({ _id: id });
-    res.end("Note Delete Succesfully");
+    res.end("Products Delete Succesfully");
   } catch (err) {
     res.send("err:something went wrong");
   }
 });
-
 module.exports = { cartsRouter };
