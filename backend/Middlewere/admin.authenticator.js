@@ -5,16 +5,14 @@ const admintoken=req.headers.authorization
 if(admintoken){
 const decoded=jwt.verify(admintoken,"admin")
 if(decoded){
-    const userID=decoded.userID
-    req.headers.userID=userID;
     next()
 }
 else {
-    res.send("please login first")
+    res.send("please admin login first")
 }
 }
 else {
-    res.send("please login first")
+    res.send("please admin login first")
 }
 }
 module.exports={Adminauthenticate}
