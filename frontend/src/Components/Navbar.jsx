@@ -1,8 +1,15 @@
 import { Search2Icon } from '@chakra-ui/icons'
 import { Box, HStack, Input, Link } from '@chakra-ui/react'
-import React from 'react'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Products_Getdata } from '../HOF/Productreducer/product.action'
 
-export default function Navbar({search,setsearch,HandleSearch}) {
+export default function Navbar() {
+  const [search,setsearch]=useState("")
+  const dispatch=useDispatch()
+  const HandleSearch = () => {
+    dispatch(Products_Getdata(search));
+  };
   return (
     <div style={{height:'60px'}}mb="10px" >
       <HStack
