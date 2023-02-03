@@ -31,7 +31,6 @@ const SingleProductPage = () => {
 const params=useParams()
 const [product,setproduct]=useState({})
 const productsbyId=async()=>{
-
   let data=await axios.get(`http://localhost:8080/products/${params._id}`)
   setproduct(data.data)
 }
@@ -66,17 +65,12 @@ productsbyId()
           <Box as={'header'}>
             <Heading
               lineHeight={1.1}
-              fontWeight={600}
-              fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
+              fontWeight={400}
+              fontSize={{ base: '2xl', sm: '2xl', lg: '4xl' }}>
             {product.title}
             </Heading>
             
-            <Text
-              color={useColorModeValue('gray.900', 'gray.400')}
-              fontWeight={300}
-              fontSize={'2xl'}>
-              ${product.price}
-            </Text>
+           
           </Box>
           <Divider borderColor={"green"}/>
           <Stack
@@ -86,17 +80,9 @@ productsbyId()
               <Divider borderColor={"green"}/>
             }>
             <VStack spacing={{ base: 4, sm: 6 }}>
-              <Text
-                color={useColorModeValue('green.500', 'gray.400')}
-                fontSize={'2xl'}
-                fontWeight={'300'}>
-              {product.description}
-              </Text>
+            
               <Text fontSize={'lg'}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad
-                aliquid amet at delectus doloribus dolorum expedita hic, ipsum
-                maxime modi nam officiis porro, quae, quisquam quos
-                reprehenderit velit? Natus, totam.
+               {product.description}
               </Text>
             </VStack>
             <Box mb="200px">
@@ -108,10 +94,10 @@ productsbyId()
                 DETAILS
                 </Text>
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
-                <List spacing={2}>
+                <List textAlign={"left"} spacing={2}>
                   <ListItem>Price:{product.price}</ListItem>
-                  <ListItem>Master Chronometer Certified</ListItem>{' '}
-                  <ListItem>Tachymeter</ListItem>
+                  <ListItem>Category:{product.category}</ListItem>{' '}
+                  <ListItem>Stock:{product.total_quantity}</ListItem>
                 </List>
                 <List spacing={2}>
                   <ListItem>Anti‑magnetic</ListItem>

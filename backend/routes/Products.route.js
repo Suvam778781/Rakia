@@ -12,7 +12,7 @@ productsRouter.get("/", async (req, res) => {
     let {power,limit,page,sortBy,rating,q}=req.query
   // const data=await HeroModel.find({language,power})
   if(q){
-  var data =await ProductsModel.find({ title: { $regex:`${q}`,$options:"$i" }}).skip(page||1).limit(limit||10)
+  var data =await ProductsModel.find({ category: { $regex:`${q}`,$options:"$i" }}).skip(page||1).limit(limit||10)
   res.send(data)
   }
   else {

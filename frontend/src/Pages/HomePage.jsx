@@ -18,7 +18,8 @@ import {
   SkeletonCircle,
   SkeletonText,
   
-  Text
+  Text,
+  Flex
 } from "@chakra-ui/react";
 import {
   Container,
@@ -42,7 +43,7 @@ import { Products_Getdata } from "../HOF/Productreducer/product.action";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 function HomePage() {
-  const [search,setsearch]=useState("")
+ 
   const dispatch = useDispatch();
   const products = useSelector((store) => store.ProductsReducer);
   
@@ -54,16 +55,14 @@ function HomePage() {
   const HandleFilterByType = () => {};
   const HandleFilterByBrand = () => {};
   const HandleFilterByPrice = () => {};
-  const HandleSearch = () => {
-    dispatch(Products_Getdata(search));
-  };
+
   return (
     <div>
       {/* Navbar started here*/}
-  <Navbar setsearch={setsearch} HandleSearch={HandleSearch}search={search}/>
+  <Navbar />
       {/*her filter and sorting will come and some skeleton i will add*/}
 
-      <HStack m="auto" p="10px" mt="100px" w="100%">
+      <Flex  p="10px" mt="100px" w="100%">
         <Box w="20%">
           <ProductsLeftSection />
         </Box>
@@ -99,7 +98,7 @@ function HomePage() {
             ))
           )}
         </Grid>
-      </HStack>
+      </Flex>
     </div>
   );
 }
@@ -146,9 +145,9 @@ const ProductsLeftSection = ({
         lineHeight={2}
         w="100%"
         display={{
-          lg: "block",
-          xl: "block",
-          "2xl": "block",
+          lg: "inherit",
+          xl: "inherit",
+          "2xl": "inherit",
           md: "flex",
           sm: "flex",
         }}

@@ -71,3 +71,11 @@ font-size: large;
 
 
 }
+.admin_left_button{
+  text-align: left;
+  width:170px;
+  height:30px;
+  text-align: left;
+background: white;
+
+}

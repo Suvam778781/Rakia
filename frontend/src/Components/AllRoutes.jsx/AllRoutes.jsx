@@ -6,6 +6,7 @@ import HomePage from '../../Pages/HomePage'
 import LoginPage from '../../Pages/LoginPage'
 import SignUpPage from '../../Pages/SignUpPage'
 import SingleProductPage from '../../Pages/SingleProductPage'
+import AdminDashBoard from '../AdminDashBoard'
 
 const AllRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const AllRoutes = () => {
       <Route path="/addtocart" element={<AddToCartPage/>}/>
       <Route path="/checkout" element={<CheckoutPage/>}/>
       <Route path="/products/:_id" element={<SingleProductPage/>}/>
+      <Route path="/admin/dashboard" element={<AdminDashBoard/>}/>
     </Routes>
   )
 }
