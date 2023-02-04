@@ -49,7 +49,7 @@ productsRouter.patch("/update/:id", async (req, res) => {
   const id = req.params.id;
   try {
     await ProductsModel.findByIdAndUpdate({ _id: id }, data);
-    res.end("Note Update Succesfully");
+    res.end("Product Update Succesfully");
   } catch (err) {
     res.send("err:something went wrong");
   }
@@ -58,7 +58,7 @@ productsRouter.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;
   try {
     await ProductsModel.deleteOne({ _id: id });
-    res.end("Note Delete Succesfully");
+    res.end("Product Delete Succesfully");
   } catch (err) {
     res.send("err:something went wrong");
   }

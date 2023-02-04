@@ -1,0 +1,9 @@
+export const ADMIN_LOGIN_SUCCES="admin_succes";
+export const ADMIN_LOGIN_LOADING="admin_loading";
+export const ADMIN_LOGIN_ERROR="admin_error";
+export const USER_LOGIN_SUCCES="user_login_succes";
+export const USER_LOGIN_LOADING="user_login_loading";
+export const USER_LOGIN_ERROR="user_login_error";
+export const USER_RESISTOR_ERROR="user_resistor_error";
+export const USER_RESISTOR_LOADING="user_resistor_loading";
+export const USER_RESISTOR_SUCCES="user_resistor_succes";

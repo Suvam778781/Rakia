@@ -20,7 +20,7 @@ UserRouter.post("/login",async(req,res)=>{
         res.send(({"msg":"Login Succesfully","token":token}))
     }
     else {
-        res.send("Wrong Credntials")
+        res.status(400).send("Wrong Credntials")
     }
     })
     }
