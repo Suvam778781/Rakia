@@ -13,15 +13,31 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { useDispatch, useSelector } from "react-redux";
+import {Navigate} from "react-router-dom"
+import { user_login } from '../HOF/User&AdminReducer/UA.action';
 const LoginPage = () => {
-const [formdata,setformdata]=useState({email:"",password:""})
+const [formdata,setformdata]=useState({email:"",pass:""})
+const dispatch=useDispatch()
+const userandadmin=useSelector((state)=>state.useradminReducer)
 const HandleonChange=(e)=>{
 const {name,value}=e.target
   setformdata({...formdata,[name]:value})
-
 }
 const HandleSubmit=()=>{
-console.log(formdata)
+  // console.log(formdata)
+dispatch(user_login(formdata))
+}
+
+if(userandadmin.userloginSuc){
+
+  return <Navigate to="/"/>
+}
+
+
+if(userandadmin.adminloginSuc){
+
+  return <Navigate to="/admin/dashboard"/>
 }
     return (
       <Flex
@@ -43,7 +59,7 @@ console.log(formdata)
               </FormControl>
               <FormControl id="password">
                 <FormLabel>Password</FormLabel>
-                <Input onChange={(e)=>HandleonChange(e)} value={formdata.password} name="password" type="password" />
+                <Input onChange={(e)=>HandleonChange(e)} value={formdata.pass} name="pass" type="password" />
               </FormControl>
               <Stack spacing={10}>
                 <Stack

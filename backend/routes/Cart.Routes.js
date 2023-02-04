@@ -7,16 +7,13 @@ cartsRouter.use(express.json());
 cartsRouter.use("/", authenticate);
 cartsRouter.get("/", async (req, res) => {
   // i will pass it from local storage and then it will convert to id then i will get allcartdata  of that perticular person only
-  const token = req.headers.authorization;
-  if (token) {
-    const decoded = jwt.verify(token, "masai");
-    console.log(decoded);
-    if (decoded) {
-      const userID = decoded.userID;
+  const userID = req.body.userID;
+ try{
       let carts = await CartsModel.find({ userID: userID });
       res.send(carts);
-    }
-  }
+}catch(err){
+  res.send({"err":err})
+}
 });
 cartsRouter.post("/addtocart", async (req, res) => {
   const payload = req.body;
@@ -50,3 +47,4 @@ cartsRouter.delete("/delete/:id", async (req, res) => {
   }
 });
 module.exports = { cartsRouter };
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2M2RlMDVmMTI2YjdmNzUyNGQ5MjE0MDUiLCJpYXQiOjE2NzU0OTQ5MjYsImV4cCI6MTY3NTY2NzcyNn0.7kUoCYr2TUI01iYzFAJ0Geb1GHsxOc_JZoFmvsbwZ34

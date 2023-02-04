@@ -1,6 +1,6 @@
 import React from 'react'
 
-function AdminLogin() {
+function PrivateRoute() {
   return (
     <div>
       
@@ -8,4 +8,4 @@ function AdminLogin() {
   )
 }
 
-export default AdminLogin
+export default PrivateRoute

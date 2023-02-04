@@ -5,7 +5,7 @@ const AdminRouter=express.Router()
 AdminRouter.use(express.json())
 const jwt=require("jsonwebtoken");
 const { AdminModel } = require("../model/Admin.Model");
-AdminRouter.post("/adminlogin",async(req,res)=>{
+AdminRouter.post("/login",async(req,res)=>{
     let {email,pass}=req.body;
     try{
     const user =await AdminModel.findOne({email})
@@ -37,7 +37,7 @@ AdminRouter.post("/adminlogin",async(req,res)=>{
     }
     })
     }catch(err){
-        res.status(404).send("Error While Resistroring The User")
+        res.status(404).send("Error While Resistroring The admin")
         console.log(err)
     }
     })
