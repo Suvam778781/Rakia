@@ -17,12 +17,13 @@ cartsRouter.get("/", async (req, res) => {
 });
 cartsRouter.post("/addtocart", async (req, res) => {
   const payload = req.body;
-  const userID = req.body._id;
-  req.body.userID = userID;
+  // const userID = req.body._id;
+  // req.body.userID = userID;
+  console.log(payload)
   try {
     const new_cart = CartsModel(payload);
     await new_cart.save();
-    res.status(200)("Products added to cart succesfully");
+    res.send("Products added to cart succesfully");
   } catch (err) {
     res.send("something went wrong while adding data to cart");
   }
