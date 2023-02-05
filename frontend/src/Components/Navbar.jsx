@@ -3,15 +3,23 @@ import { Box, HStack, Input, Link } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Products_Getdata } from '../HOF/Productreducer/product.action'
+import { user_signout } from '../HOF/User&AdminReducer/UA.action'
 
 export default function Navbar() {
   const [search,setsearch]=useState("")
   const dispatch=useDispatch()
+  
   const userandadmin=useSelector((state)=>state.useradminReducer)
+  const [authstate,setauthstate]=useState(userandadmin.adminloginSuc||userandadmin.userloginSuc)
   console.log(userandadmin)
   const HandleSearch = () => {
     dispatch(Products_Getdata(search));
   };
+  const handleauth=()=>{
+    if(authstate){
+      user_signout()
+    }
+  }
   return (
     <div style={{height:'60px'}}mb="10px" >
       <HStack
@@ -63,7 +71,7 @@ export default function Navbar() {
             <Link href="/user/cart">Cart</Link>
           </Box>
           <Box>
-            <Link href="/login">{userandadmin.userloginSuc?"Logout":"Login"}</Link>
+            <Link href="/login" onClick={handleauth}>{authstate?"Logout":"Login"}</Link>
           </Box>
         </HStack>
       </HStack>

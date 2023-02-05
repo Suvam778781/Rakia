@@ -30,6 +30,8 @@ import axios from 'axios';
 const SingleProductPage = () => {
 const params=useParams()
 const [product,setproduct]=useState({})
+const userandadmin=useSelector((state)=>state.useradminReducer)
+console.log(userandadmin)
 const productsbyId=async()=>{
   let data=await axios.get(`http://localhost:8080/products/${params._id}`)
   setproduct(data.data)
@@ -60,7 +62,6 @@ productsbyId()
           />
          
         </Stack>
-        
         <Stack spacing={{ base: 6, md: 10 }}>
           <Box as={'header'}>
             <Heading
@@ -69,8 +70,6 @@ productsbyId()
               fontSize={{ base: '2xl', sm: '2xl', lg: '4xl' }}>
             {product.title}
             </Heading>
-            
-           
           </Box>
           <Divider borderColor={"green"}/>
           <Stack
@@ -105,8 +104,7 @@ productsbyId()
                   <ListItem>Small seconds</ListItem>
                 </List>
               </SimpleGrid>
-            </Box> 
-            
+            </Box>
           </Stack>
           <Button
             w={'300px'}

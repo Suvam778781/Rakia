@@ -59,7 +59,6 @@ function HomePage() {
   return (
     <div>
       {/* Navbar started here*/}
-  <Navbar />
       {/*her filter and sorting will come and some skeleton i will add*/}
 
       <Flex  p="10px" mt="100px" w="100%">
@@ -222,7 +221,7 @@ const ProductsLeftSection = ({
           <AccordionItem>
             <h2>
               <AccordionButton
-                backgroundColor="white"
+                backgroundColor="white" 
                 _expanded={{
                   bg: "rgb(167, 173, 173)",
                   color: "white",

@@ -12,6 +12,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  Spinner,
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from "react-redux";
 import {Navigate} from "react-router-dom"
@@ -33,8 +34,6 @@ if(userandadmin.userloginSuc){
 
   return <Navigate to="/"/>
 }
-
-
 if(userandadmin.adminloginSuc){
 
   return <Navigate to="/admin/dashboard"/>
@@ -46,7 +45,6 @@ if(userandadmin.adminloginSuc){
         justify={'center'}
         bg="rgb(167, 173, 173)">
         <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-         
           <Box
             bg="RGBA(0, 0, 0, 0.64)"
             boxShadow={'sm'}
@@ -79,17 +77,14 @@ if(userandadmin.adminloginSuc){
                        bg:'green.500',
                        color:"black",
                      }}>
-                  Sign in
+                {userandadmin.userloginLoad||userandadmin.userloginLoad?<Spinner />:"Sign in"}
                 </Button>
               </Stack>
             </Stack>
           </Box>
         </Stack>
       </Flex>
-
-      
     );
-  
 }
 
 export default LoginPage

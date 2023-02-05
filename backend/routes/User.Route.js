@@ -16,7 +16,8 @@ UserRouter.post("/login",async(req,res)=>{
     if(user){
     bcrypt.compare(pass,user.pass,(err,result)=>{
     if(result){
-        const token =jwt.sign({userID:user._id},"masai",{expiresIn:"24h"})
+        const token =jwt.sign({userID:user._id},"masai",)
+        // ?{expiresIn:"24h"}
         res.send(({"msg":"Login Succesfully","token":token}))
     }
     else {
