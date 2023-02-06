@@ -19,7 +19,7 @@ export const CartReducer = (state = initialstate, { type, payload }) => {
       return { ...state, Cart: [...state.Cart, payload] };
     case REMOVE_PRODUCTS_CART:
       let filterdatacart = state.Cart.filter((ele) => ele.id !== payload);
-      return { ...state, Cart: filterdatacart };
+      return { ...state, Cart: filterdatacart ,CartLoading: false};
     case CART_LOADING:
       return { ...state, CartLoading: true };
       case CART_ERROR:

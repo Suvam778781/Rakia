@@ -2,14 +2,13 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 
-function PrivateRoute() {
+function PrivateRoute({children}) {
   const userandadmin=useSelector((state)=>state.useradminReducer)
-console.log()
   if(userandadmin.userloginSuc){
-return (<Navigate to="/user/cart"/>)
+return children
   }
   else {
-      return <Navigate to="/"/>
+      return <Navigate to="/login"/>
   }
 }
 export default PrivateRoute

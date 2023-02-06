@@ -19,6 +19,7 @@ import {
   ListItem,
   Divider,
   Alert,
+  useToast,
 } from '@chakra-ui/react';
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
@@ -31,14 +32,42 @@ const SingleProductPage = () => {
 const params=useParams()
 const [product,setproduct]=useState({})
 const userandadmin=useSelector((state)=>state.useradminReducer)
-console.log(userandadmin)
+const toast=useToast()
 const productsbyId=async()=>{
-  let data=await axios.get(`http://localhost:8080/products/${params._id}`)
+  let data=await axios.get(`https://comfortable-bass-poncho.cyclic.app/products/${params._id}`)
   setproduct(data.data)
+}
+const handleAdd=async()=>{
+  const token = localStorage.getItem("token") || "";
+  console.log(product)
+  try{
+  await axios.post(
+      `https://comfortable-bass-poncho.cyclic.app/carts/addtocart`,product,
+      {
+        headers: {
+          Authorization:token,
+        },
+      }
+    )
+  
+      toast({
+        title: "Add To Cart",
+        description: "Add To Cart Succesfully",
+        status: "success",
+        position: "top",
+        duration: 2000,
+        isClosable: true,
+      });
+  }catch(err){
+
+    console.log(err)
+  }
+
 }
 useEffect(()=>{
 productsbyId()
 },[])
+
   return (
     <div>
       <Navbar/>
@@ -110,6 +139,7 @@ productsbyId()
             w={'300px'}
             size={'md'}
             py={'7'}
+            onClick={handleAdd}
             bg={useColorModeValue('green.500', 'gray.50')}
             _hover={{
               transform: 'translateY(4px)',

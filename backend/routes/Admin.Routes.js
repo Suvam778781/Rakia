@@ -12,7 +12,7 @@ AdminRouter.post("/login",async(req,res)=>{
     if(user){
     bcrypt.compare(pass,user.pass,(err,result)=>{
     if(result){
-        const admintoken =jwt.sign({userID:user._id},"admin",{expiresIn:"48h"})
+        const admintoken =jwt.sign({userID:user._id},"admin")
         res.send(({"msg":"Login Succesfully","admintoken":admintoken}))
     }
     else {
@@ -37,7 +37,7 @@ AdminRouter.post("/login",async(req,res)=>{
     }
     })
     }catch(err){
-        res.status(404).send("Error While Resistroring The admin")
+        res.status(404).send("Error While Resistoring The admin")
         console.log(err)
     }
     })

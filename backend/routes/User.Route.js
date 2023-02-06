@@ -26,7 +26,7 @@ UserRouter.post("/login",async(req,res)=>{
     })
     }
     }catch(err){
-        res.status(404).send({"err":err})
+        res.status(400).send({"err":err})
     }
     })
     UserRouter.post("/resistor",async(req,res)=>{

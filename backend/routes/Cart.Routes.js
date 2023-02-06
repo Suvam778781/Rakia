@@ -28,7 +28,7 @@ cartsRouter.post("/addtocart", async (req, res) => {
     res.send("something went wrong while adding data to cart");
   }
 });
-cartsRouter.patch("/update:id", async (req, res) => {
+cartsRouter.patch("/update/:id", async (req, res) => {
   const data = req.body;
   const id = req.params.id;
   try {

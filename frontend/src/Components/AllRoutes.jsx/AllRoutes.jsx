@@ -18,15 +18,17 @@ const AllRoutes = () => {
       <Route
         path="/user/cart"
         element={
+          <PrivateRoute>
             <AddToCartPage/>
+            </PrivateRoute>
         }
       />
       <Route
         path="/checkout"
         element={
-          // <PrivateRoute>
+          <PrivateRoute>
            <CheckoutPage /> 
-          // </PrivateRoute>
+           </PrivateRoute>
         }
       />
       <Route path="/products/:_id" element={<SingleProductPage />} />
