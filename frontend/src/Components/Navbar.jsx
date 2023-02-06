@@ -8,15 +8,14 @@ import { user_signout } from '../HOF/User&AdminReducer/UA.action'
 export default function Navbar() {
   const [search,setsearch]=useState("")
   const dispatch=useDispatch()
-  
   const userandadmin=useSelector((state)=>state.useradminReducer)
-  const [authstate,setauthstate]=useState(userandadmin.adminloginSuc||userandadmin.userloginSuc)
+  // const [authstate,setauthstate]=useState(userandadmin.adminloginSuc||userandadmin.userloginSuc)
   console.log(userandadmin)
   const HandleSearch = () => {
     dispatch(Products_Getdata(search));
   };
   const handleauth=()=>{
-    if(authstate){
+    if(userandadmin.adminloginSuc||userandadmin.userloginSuc){
       user_signout()
     }
   }
@@ -40,7 +39,9 @@ export default function Navbar() {
           color={"green.500"}
           style={{ fontFamily: "inherit" }}
         >
+          <Link href="/">
           RAKIA
+          </Link>
         </Box>
         <Box>
           {/* <InputAddon> */}
@@ -71,7 +72,7 @@ export default function Navbar() {
             <Link href="/user/cart">Cart</Link>
           </Box>
           <Box>
-            <Link href="/login" onClick={handleauth}>{authstate?"Logout":"Login"}</Link>
+            <Link href="/login" onClick={handleauth}>{userandadmin.adminloginSuc||userandadmin.userloginSuc?"Logout":"Login"}</Link>
           </Box>
         </HStack>
       </HStack>

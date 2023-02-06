@@ -64,7 +64,7 @@ const AddToCartPage = () => {
     console.log(token)
     axios
       .get(
-        `http://localhost:8080/carts`,
+        `https://comfortable-bass-poncho.cyclic.app/carts`,
         {
           headers: {
             Authorization:token,
@@ -105,9 +105,10 @@ const AddToCartPage = () => {
           return { ...ele, quantity: ele.quantity - 1 };
         } else return ele;
       });
+      item={...item,quantity:item.quantity-1}
       axios
       .patch(
-        `https://doubtful-wasp-cowboy-boots.cyclic.app/products/quantity/${item.id}`,
+        `https://comfortable-bass-poncho.cyclic.app/carts/update/${item._id}`,
         item,
         {
           headers: {
@@ -134,7 +135,7 @@ const AddToCartPage = () => {
   };
   const handleIncrease = (item) => {
     const token =localStorage.getItem("token") || "";
-    
+    console.log(item)
     if (item.quantity < 5) {
       let newdata = Cart_Data.map((ele) => {
         if (ele._id === item._id) {
@@ -143,24 +144,24 @@ const AddToCartPage = () => {
           return ele;
         }
       });
-      // axios
-      //   .patch(
-      //     `https://doubtful-wasp-cowboy-boots.cyclic.app/products/quantity/${item.id}`,
-      //     item,
-      //     {
-      //       headers: {
-      //         Authorization: "Bearer" + " " + token,
-      //         GSTIN: GSTIN,
-      //       },
-      //     }
-      //   )
-      //   .then((res) => {
-      //     console.log(res);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
-      set_Cart_Data(newdata);
+     item={...item,quantity:item.quantity+1}
+      axios
+        .patch(
+          `https://comfortable-bass-poncho.cyclic.app/carts/update/${item._id}`,
+          item,
+          {
+            headers: {
+              Authorization:token,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        set_Cart_Data(newdata);
     } else {
       toast({
         title: "Quantity",
@@ -180,17 +181,17 @@ const AddToCartPage = () => {
     }
   };
   const handleRemove = (item) => {
-    const token = JSON.parse(localStorage.getItem("token")) || "";
-    const GSTIN = JSON.parse(localStorage.getItem("GSTIN")) || "";
+    const token = localStorage.getItem("token") || "";
     const removedata = Cart_Data.filter((ele) => ele._id !== item._id);
     set_Cart_Data(removedata);
+
     axios
       .delete(
-        `https://doubtful-wasp-cowboy-boots.cyclic.app/products/delete/${item.id}`,
+        `https://comfortable-bass-poncho.cyclic.app/carts/delete/${item._id}`,
         {
           headers: {
-            Authorization: "Bearer" + " " + token,
-            GSTIN: GSTIN,
+            Authorization:token,
+           
           },
         }
       )

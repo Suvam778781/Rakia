@@ -23,7 +23,7 @@ switch(type){
     // user resistor //
     case USER_RESISTOR_ERROR:return {...state,userresistorErr:true,userresistorLoad:false}
     case USER_RESISTOR_LOADING:return{...state,userresistorLoad:true}
-    case USER_RESISTOR_SUCCES :return{...state,userloginSuc:true,userresistorLoad:false}
+    case USER_RESISTOR_SUCCES :return{...state,userresistorSuc:true,userresistorLoad:false}
     // admin login // 
     case ADMIN_LOGIN_ERROR:return{...state,adminloginErr:true}
     case ADMIN_LOGIN_LOADING:return{...state,adminloginLoad:true,adminloginErr:false}

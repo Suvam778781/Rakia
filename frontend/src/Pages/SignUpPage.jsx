@@ -14,17 +14,36 @@ import {
     Text,
     useColorModeValue,
     Link,
+    useToast,
+    Spinner,
   } from '@chakra-ui/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { user_signup } from '../HOF/User&AdminReducer/UA.action';
+import { Navigate } from 'react-router-dom';
 
 function SignUpPage() {
-const [formdata,setformdata]=useState({firstname:"",lastname:"",email:"",password:""})
+const [formdata,setformdata]=useState({firstname:"",lastname:"",email:"",pass:""})
+const userandadmin=useSelector((state)=>state.useradminReducer)
+const toast=useToast();
+const dispatch=useDispatch()
 const HandleonChange=(e)=>{
 const {name,value}=e.target
   setformdata({...formdata,[name]:value})
 }
 const HandleSubmit=()=>{
-console.log(formdata)
+dispatch(user_signup(formdata))
 }     
+
+if(userandadmin.userresistorSuc){
+  toast({
+    title: 'Account created.',
+    description: "We've created your account for you please login.",
+    status: 'success',
+    duration: 9000,
+    isClosable: true,
+  })
+  return <Navigate to="/login"/>
+}
         return (
           <Flex 
             minH={'100vh'}
@@ -48,7 +67,7 @@ console.log(formdata)
                 <Stack spacing={5}>
                   <HStack>
                     <Box>
-                      <FormControl id="firstName" isRequired>
+                      <FormControl id="firstName" >
                         <FormLabel>First Name</FormLabel>
                         <Input  onChange={(e)=>HandleonChange(e)} value={formdata.firstname} name="firstname"  type="text" />
                       </FormControl>
@@ -67,7 +86,7 @@ console.log(formdata)
                   <FormControl id="password" >
                     <FormLabel>Password</FormLabel>
                     <InputGroup>
-                      <Input  onChange={(e)=>HandleonChange(e)} value={formdata.password} name="password"   type={"password"}/>
+                      <Input  onChange={(e)=>HandleonChange(e)} value={formdata.pass} name="pass"   type={"password"}/>
                     </InputGroup>
                   </FormControl>
                   <Stack spacing={10} pt={2}>
@@ -78,16 +97,15 @@ console.log(formdata)
                       bg='white'
                       color={"black"}
                       _hover={{
-                        bg:'#63B3ED',
+                        bg:'green.500',
                         color:"black",
                       }}>
-                      Sign up
+                      {userandadmin.userresistorLoad?<Spinner/>:"Sign up"}
                     </Button>
                   </Stack>
-                  
                   <Stack pt={6}>
                     <Text align={'center'}>
-                      Already a user? <Link color="#63B3ED" fontWeight={"bold"}>Login</Link>
+                      Already a user? <Link href="/login" color="green.500" fontWeight={"bold"}>Login</Link>
                     </Text>
                   </Stack>
                 </Stack>

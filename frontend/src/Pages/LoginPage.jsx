@@ -26,16 +26,18 @@ const {name,value}=e.target
   setformdata({...formdata,[name]:value})
 }
 const HandleSubmit=()=>{
-  // console.log(formdata)
+  console.log(formdata) 
 dispatch(user_login(formdata))
 }
-
 if(userandadmin.userloginSuc){
-
   return <Navigate to="/"/>
 }
-if(userandadmin.adminloginSuc){
+if(userandadmin.userloginErr){
 
+
+
+}
+if(userandadmin.adminloginSuc){
   return <Navigate to="/admin/dashboard"/>
 }
     return (
@@ -64,8 +66,8 @@ if(userandadmin.adminloginSuc){
                   direction={{ base: 'column', sm: 'row' }}
                   align={'start'}
                   justify={'space-between'}>
-                  <Checkbox>Remember me</Checkbox>
-                  <Link color={'green.500'}>Forgot password?</Link>
+                  <Text>New to Rakia? Create an account</Text>
+                  <Link href="/signup" color={'green.500'}>SignUp</Link>
                 </Stack>
                 <Button
                    onClick={HandleSubmit}
