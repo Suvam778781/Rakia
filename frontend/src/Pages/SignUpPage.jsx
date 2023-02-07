@@ -24,6 +24,7 @@ import { Navigate } from 'react-router-dom';
 function SignUpPage() {
 const [formdata,setformdata]=useState({firstname:"",lastname:"",email:"",pass:""})
 const userandadmin=useSelector((state)=>state.useradminReducer)
+console.log(userandadmin)
 const toast=useToast();
 const dispatch=useDispatch()
 const HandleonChange=(e)=>{
@@ -39,7 +40,7 @@ if(userandadmin.userresistorSuc){
     title: 'Account created.',
     description: "We've created your account for you please login.",
     status: 'success',
-    duration: 9000,
+    duration: 4000,
     isClosable: true,
   })
   return <Navigate to="/login"/>

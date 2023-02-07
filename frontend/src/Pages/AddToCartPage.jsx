@@ -93,12 +93,11 @@ const AddToCartPage = () => {
     settotal(Total);
   };
   useEffect(() => {
-    handleTotal();
-  }, []);
-
+    if(Cart_Data.length>0){
+    handleTotal();}
+  }, [Cart_Data]);
   const handleDecrease = (item) => {
     const token = localStorage.getItem("token") || "";
-    
     if (item.quantity > 1) {
       let newdata = Cart_Data.map((ele) => {
         if (ele._id === item._id) {
@@ -731,7 +730,7 @@ export const SingleItem = ({
             <span>RS:{totalPrice(item).total.toLocaleString()}</span>
             <Button
               fontSize={"14px"}
-              color="#4299E1"
+              color="green.500"
               w="40px"
               m="auto"
               background={"Background"}
@@ -745,16 +744,16 @@ export const SingleItem = ({
                   borderRadius={"50%"}
                   w="15px"
                   h="15px"
-                  border="1px solid #4299E1"
-                  color={"blue.400"}
+                  border="1px solid #38A169"
+                  color={"green.500"}
                 />
               ) : (
                 <MinusIcon
-                  color={"blue.400"}
+                  color={"green.500"}
                   w="15px"
                   h="15px"
                   borderRadius={"50%"}
-                  border="1px solid #4299E1"
+                  border="1px solid #38A169"
                 />
               )}
             </Button>
@@ -768,7 +767,8 @@ export const SingleItem = ({
               p="10px"
               lineHeight="0.7"
               m="auto"
-              bgColor="#F5F5F5"
+              bgColor="green.500"
+              color={"white"}
             >
               <Box display="flex" w="95%" justifyContent="space-between">
                 <span> Price Rs.</span>

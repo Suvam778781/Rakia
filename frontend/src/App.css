@@ -92,3 +92,13 @@ background: white;
     background-color: #F5F5F5;
   }
 
+  .review_heading{
+width: 30%;
+text-align: left;
+/* margin: auto; */
+  }
+  .review_progress_bar{
+
+    width: 70%;
+margin: auto;
+  }

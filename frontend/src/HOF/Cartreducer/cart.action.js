@@ -1,3 +1,4 @@
+import axios from "axios"
 import { ADD_TO_CART, ADD_TO_CART_LOADING, CARTLIST_DATA, CART_ERROR, CART_LOADING, REMOVE_PRODUCTS_CART } from "./cart.actionTypes"
 export const Cartlist_Getdata=()=>async(dispatch)=>{
     let res=await fetch(`url`)
@@ -5,7 +6,7 @@ export const Cartlist_Getdata=()=>async(dispatch)=>{
     dispatch({type:CARTLIST_DATA,payload:cartlistdata})
  }
 export const Remove_from_Cartlist=(_id)=>async(dispatch)=>{
-    let token=localStorage.token("token")||""
+    let token=localStorage.getItem("token")||""
 try{
     dispatch({type:CART_LOADING,payload:_id})
 await axios.delete(`https://comfortable-bass-poncho.cyclic.app/carts/delete/${_id}`)
@@ -17,30 +18,32 @@ catch(err){
 }
 }   
 export const Addtocart_products=(data)=>async(dispatch)=>{
-    let token=localStorage.token("token")||""
-    try{
-        dispatch({type:ADD_TO_CART_LOADING})
-       await axios.post(`https://comfortable-bass-poncho.cyclic.app/carts/addtocart`,
-       data,{
-        headers: {
-          Authorization:token,
-        },
-      }
-       
+    let token=localStorage.getItem("token")||""
+    try {
+        dispatch({type:CART_LOADING})
+      await axios.post(`https://comfortable-bass-poncho.cyclic.app/carts/addtocart`,
+        data,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
        )
-        dispatch({type:ADD_TO_CART,payload:data})
+       dispatch({type:ADD_TO_CART,payload:data})    
+    
     }
     catch(err){
         
         alert("something went wrong")
         dispatch({type:CART_ERROR})
     }
-    }
+}
+
     export const Update_cart_products=(data)=>async(dispatch)=>{
-        let token=localStorage.token("token")||""
+        let token=localStorage.getItem("token")||""
         try{
             dispatch({type:CART_LOADING})
-           await axios.post(`https://comfortable-bass-poncho.cyclic.app/carts/update/${data_id}`,
+           await axios.post(`https://comfortable-bass-poncho.cyclic.app/carts/update/${data._id}`,
            data,
            {
             headers: {
@@ -51,7 +54,6 @@ export const Addtocart_products=(data)=>async(dispatch)=>{
             dispatch({type:ADD_TO_CART,payload:data})
         }
         catch(err){
-
             alert("something went wrong")
             dispatch({type:CART_ERROR})
         }
