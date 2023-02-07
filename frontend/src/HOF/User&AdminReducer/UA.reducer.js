@@ -6,26 +6,28 @@ let initialState={
     userloginLoad:false,
     userloginSuc:localStorage.getItem("token")?true:false,
     userloginErr:false,
+    userloginErrDetails:"",
     adminloginLoad:false,
     adminloginSuc:localStorage.getItem("admintoken")?true:false,
     adminloginErr:false,
+    adminloginErrDetails:"",
     userresistorErr:false,
+    userresistorErrDetails:"",
     userresistorLoad:false,
     userresistorSuc:false
 }
 export const UserAndAdminReducer=(state=initialState,{type,payload})=>{
-
 switch(type){
     // user login //
-    case USER_LOGIN_ERROR:return{...state,userloginErr:true,userloginLoad:false}
+    case USER_LOGIN_ERROR:return{...state,userloginErr:true,userloginErrDetails:payload,userloginLoad:false}
     case USER_LOGIN_LOADING:return{...state,userloginLoad:true}
     case USER_LOGIN_SUCCES:return{...state,userloginSuc:true,userloginLoad:false,usertoken:payload}
     // user resistor //
-    case USER_RESISTOR_ERROR:return {...state,userresistorErr:true,userresistorLoad:false}
+    case USER_RESISTOR_ERROR:return {...state,userresistorErr:true,userresistorErrDetails:payload,userresistorLoad:false}
     case USER_RESISTOR_LOADING:return{...state,userresistorLoad:true}
     case USER_RESISTOR_SUCCES :return{...state,userresistorSuc:true,userresistorLoad:false}
     // admin login // 
-    case ADMIN_LOGIN_ERROR:return{...state,adminloginErr:true}
+    case ADMIN_LOGIN_ERROR:return{...state,adminloginErr:true,adminloginErrDetails:payload}
     case ADMIN_LOGIN_LOADING:return{...state,adminloginLoad:true,adminloginErr:false}
     case ADMIN_LOGIN_SUCCES:return{...state,adminloginSuc:true,adminloginLoad:false}
 default:

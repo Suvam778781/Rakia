@@ -34,7 +34,7 @@ if(userandadmin.userloginSuc){
 }
 if(userandadmin.userloginErr){
 
-
+alert(userandadmin)
 
 }
 if(userandadmin.adminloginSuc){
