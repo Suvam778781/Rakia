@@ -23,6 +23,9 @@ import {
   Progress,
   HStack,
   Spinner,
+  SkeletonCircle,
+  SkeletonText,
+  Skeleton,
 } from "@chakra-ui/react";
 import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { MdLocalShipping } from "react-icons/md";
@@ -36,20 +39,39 @@ import { StarIcon } from "@chakra-ui/icons";
 import { Addtocart_products } from "../HOF/Cartreducer/cart.action";
 const SingleProductPage = () => {
   const params = useParams();
-  const [product, setproduct] = useState({});
+  const [product, setproduct] = useState(null);
+  const [Loading,setLoading]=useState(true)
   const cartreducer = useSelector((state) => state.CartReducer);
-  console.log(cartreducer)
+  const userandadmin=useSelector((state)=>state.useradminReducer)
   const toast = useToast();
   const dispatch=useDispatch()
   const productsbyId = async () => {
+    try{
+      setLoading(true)
     let data = await axios.get(
       `https://comfortable-bass-poncho.cyclic.app/products/${params._id}`
     );
+    setLoading(false)
     setproduct(data.data);
+    }catch(err){
+
+      setLoading(false)
+    }
   };
   const handleAdd = () => {
 
-    dispatch(Addtocart_products(product))
+   if (userandadmin.userloginSuc){
+    dispatch(Addtocart_products(product))}
+    else {
+      toast({
+        title: 'Add to Cart',
+        description: "Please Login First.",
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+      })
+
+    }
   }
   useEffect(() => {
     productsbyId();
@@ -75,27 +97,35 @@ const SingleProductPage = () => {
   }
   return (
     <div>
-      <Navbar />
-      <Container maxW={"8xl"}>
-        <SimpleGrid
-          columns={{ base: 1, lg: 2 }}
-          spacing={{ base: 8, md: 10 }}
-          py={{ base: 18, md: 24 }}
+      {/* <Navbar /> */}
+
+     {!Loading?<Container maxW={"100%"}  mt={{md:"200px",sm:"200px",base:"100px",lg:"100px",xl:'100px'}}>
+        <Box display={{lg:"flex",xl:"flex",base:"inherit","2xl":"flex"}} 
         >
-          <Stack>
-            <Image
-              mb="100px"
+            <HStack mt="-160px" display={"flex"} w={{lg:"50%",xl:"50%",md:"100%"}} p="3">
+          <Image
               border={"4px solid #38A169"}
               rounded={"20px"}
               alt={"product image"}
-              src={product.image}
+              src={product.allimages[0]}
               fit={"cover"}
               align={"center"}
-              w={"100%"}
-              h={{ base: "100%", sm: "400px", lg: "500px" }}
+              w={"50%"}
+              h={{ base: "50%", sm: "50%", lg: "50%" }}
             />
-          </Stack>
-          <Stack spacing={{ base: 6, md: 10 }}>
+            <Image
+              border={"4px solid #38A169"}
+              rounded={"20px"}
+              alt={"product image"}
+              src={product.allimages[1]}
+              fit={"cover"}
+            
+              w={"50%"}
+              h={{ base: "50%", sm:"50%", lg: "50%" }}
+            />
+            </HStack>
+      
+          <Stack  p="3" spacing={{ base: 6, md: 10 }}  w={{lg:"50%",xl:"50%",md:"100%"}}>
             <Box as={"header"}>
               <Heading
                 lineHeight={1.1}
@@ -211,10 +241,10 @@ const SingleProductPage = () => {
             </Stack>
             <Button
               w={"300px"}
-              size={"md"}
+              size={"md"}      
               py={"7"}
               onClick={handleAdd}
-              bg={useColorModeValue("green.500", "gray.50")}
+              bg="green.500"
               _hover={{
                 transform: "translateY(4px)",
                 boxShadow: "md",
@@ -233,8 +263,12 @@ const SingleProductPage = () => {
               <Text>6-7 business days delivery</Text>
             </Stack>
           </Stack>
-        </SimpleGrid>
-      </Container>
+        </Box>
+      </Container>:
+      <Box mt="100px" padding='6'  boxShadow='xl' justifyContent={"space-between"} bg='white' display={{xl:"flex",lg:"flex","2xl":"flex",base:"inherit"}}>
+  <Skeleton height='450px' w={{xl:"47%",lg:"47%","2xl":"47%",base:"94%"}} ></Skeleton>
+  <SkeletonText mt='4' w={{xl:"47%",lg:"47%","2xl":"47%",base:"94%"}}  h="600px"noOfLines={6} spacing='4' skeletonHeight='10' />
+</Box>}
     </div>
   );
 };

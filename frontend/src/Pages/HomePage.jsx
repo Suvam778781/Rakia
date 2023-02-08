@@ -19,7 +19,9 @@ import {
   SkeletonText,
   
   Text,
-  Flex
+  Flex,
+  Button,
+  useToast
 } from "@chakra-ui/react";
 import {
   Container,
@@ -42,6 +44,7 @@ import { BsHeartFill, BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { Products_Getdata } from "../HOF/Productreducer/product.action";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
+import { Addtocart_products } from "../HOF/Cartreducer/cart.action";
 function HomePage() {
  
   const dispatch = useDispatch();
@@ -49,8 +52,19 @@ function HomePage() {
   
   useEffect(() => {
     dispatch(Products_Getdata());
-
-    
+//     "title":"Relaxed Fit Rugby shirt",
+// "description":"Relaxed-fit rugby shirt in soft cotton jersey with a collar, concealed button placket, long sleeves with ribbed cuffs, and slits in the sides of the hem.",
+// "image":"https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fa8%2F35%2Fa83515af7b9fe1ea8e105401277566838e168478.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D",
+// "review":[],
+// "allimages":["https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fa8%2F35%2Fa83515af7b9fe1ea8e105401277566838e168478.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D","https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Fdb%2F86%2Fdb86c17f6717df65ef3625de324102b8714e92eb.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]","https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fdf%2F9a%2Fdf9ae6d6c695624c2701e8f2bba633a26058c036.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D"],
+// "price":577,"category":"hoodie","quantity":1,
+// "total_quantity":50,
+// "created_at":"8/01/2023",
+// "ordered_at":"null",
+// "cancelled_at":"null",
+// "updated_at":"8/01/2023",
+// "rating":4.5,
+// "brand":"BEAT LONDON"
   }, []);
   const HandleFilterByType = () => {};
   const HandleFilterByBrand = () => {};
@@ -76,23 +90,15 @@ function HomePage() {
             md: "repeat(2, 1fr)",
           }}
           rowGap={1}
-          gap={"2"} 
-          p="20px"
+          gap={"4"} 
+          
         >
           {products.Loading ? (
             <LoadingComponent />
           ) : (
             products.Products.map((ele) => (
               <ProductItem
-                title={ele.title}
-                _id={ele._id}
-                category={ele.category}
-                description={ele.description}
-                image={ele.image}
-                brand={ele.brand}
-                rating={ele.rating}
-                price={ele.price}
-                quantity={ele.quantity}
+               item={ele}
               />
             ))
           )}
@@ -115,6 +121,8 @@ export default HomePage;
 // - See historical order
 // - Payment ,Checkout pages
 // - Login, Register Pages
+
+
 const ProductsLeftSection = ({
   HandleFilterByType,
   HandleFilterByBrand,
@@ -185,33 +193,33 @@ const ProductsLeftSection = ({
               <Link
                 display={"block"}
                 className="Filter_Brand_links"
-                onClick={() => HandleFilterByBrand("Sephora Collection")}
+                onClick={() => HandleFilterByBrand("RM")}
               >
-                Sophera Collection
+                RM
               </Link>
               <Link
-                onClick={() => HandleFilterByBrand("CLINIQUE")}
+                onClick={() => HandleFilterByBrand("levies")}
                 className="Filter_Brand_links"
               >
-                CLINIQUE
+              Levies
               </Link>
               <Link
-                onClick={() => HandleFilterByBrand("Anastasia Beverly Hills")}
+                onClick={() => HandleFilterByBrand("Safari")}
                 className="Filter_Brand_links"
               >
-                Anastasia Beverly Hills
+                Safari
               </Link>
               <Link
-                onClick={() => HandleFilterByBrand("HUDA BEAUTY")}
+                onClick={() => HandleFilterByBrand("peeter england")}
                 className="Filter_Brand_links"
               >
-                HUDA BEAUTY
+               Peeter England
               </Link>
               <Link
-                onClick={() => HandleFilterByBrand("Benefit Cosmetics")}
+                onClick={() => HandleFilterByBrand("HM")}
                 className="Filter_Brand_links"
               >
-                Benefit Cosmetics
+                HM
               </Link>
             </AccordionPanel>
           </AccordionItem>
@@ -307,16 +315,28 @@ const ProductsLeftSection = ({
                 All Types
               </Link>
               <Link
-                onClick={() => HandleFilterByType("Pencil")}
+                onClick={() => HandleFilterByType("Jeans")}
                 className="Filter_TYpe_links"
               >
-                Eye Brows
+                Jeans
               </Link>
               <Link
-                onClick={() => HandleFilterByType("Shadow")}
+                onClick={() => HandleFilterByType("Hoodies")}
                 className="Filter_Type_links"
               >
-                Eye Shadows
+                Hoodies
+              </Link>
+              <Link
+                onClick={() => HandleFilterByType("Shirt")}
+                className="Filter_Type_links"
+              >
+              Shirt
+              </Link>
+              <Link
+                onClick={() => HandleFilterByType("Tshirt")}
+                className="Filter_Type_links"
+              >
+                Tshirt
               </Link>
             </AccordionPanel>
           </AccordionItem>
@@ -325,21 +345,38 @@ const ProductsLeftSection = ({
     </Box>
   );
 };
-const ProductItem = ({
-  title,
-  _id,
-  category,
-  description,
-  image,
-  brand,
-  rating,
-  price,
-  quantity,
-}) => {
+const ProductItem = ({item}) => {
+  const cartreducer = useSelector((state) => state.CartReducer);
+  const userandadmin=useSelector((state)=>state.useradminReducer)
+const dispatch=useDispatch()
+const toast=useToast()
+  const handleAdd = () => {
+    if (userandadmin.userloginSuc){
+     dispatch(Addtocart_products(item))
+     toast({
+      title: 'Add to Cart',
+      description: "Product Added Succesfully.",
+      status: 'success',
+      duration: 4000,
+      isClosable: true,
+    })
+    }
+     else {
+       toast({
+         title: 'Add to Cart',
+         description: "Please Login First.",
+         status: 'error',
+         duration: 4000,
+         isClosable: true,
+       })
+     }
+    }
   return (
-    <Link href={`/products/${_id}`} maxW="sm" borderWidth="1px"  overflow="hidden">
-      <Image h="70%" src={image} alt={image} />
-      <Box p="6">
+    <Box  boxShadow={"md"} >
+    <Link href={`/products/${item._id}`} w="100%"  overflow="hidden">
+      <Image w="100%" src={item.image} alt={item.image} />
+      </Link>
+      <Box p="7">
         <Box display="flex" alignItems="baseline">
           {/* <Badge borderRadius="full" px="2" colorScheme="red">
             New
@@ -353,25 +390,26 @@ const ProductItem = ({
           textAlign={"left"}
           noOfLines={1}
         >
-          {title}
+          {item.title}
         </Box>
         <Box textAlign={"left"}>
-          $:{price}
+        ₹ {item.price}
           <Box as="span" color="gray.600" fontSize="sm">
-          
+           
           </Box>
         </Box>
-        <Box display="flex" mt="2" alignItems="center">
+        <Box display="flex" mt="2" justifyContent={"space-between"} alignItems="center">
+          <Box w="30%" display="flex">
           {Array(5)
             .fill("")
             .map((_, i) => {
-              const roundedRating = Math.round(rating * 2) / 2;
+              const roundedRating = Math.round(item.rating * 2) / 2;
               if (roundedRating - i >= 1) {
                 return (
                   <BsStarFill
                     key={i}
                     style={{ marginLeft: "1" }}
-                    color={i < rating ? "teal" : "gray"}
+                    color={i < item.rating ? "#38A169" : "gray"}
                   />
                 );
               }
@@ -380,12 +418,16 @@ const ProductItem = ({
               }
               return <BsStar key={i} style={{ marginLeft: "1" }} />;
             })}
-          {/* <Box as="span" ml="2" color="gray.600" fontSize="sm">
-            {property.reviewCount} reviews
-          </Box> */}
+            </Box>
+            <Box>{item.rating}</Box>
+          <Box as="span" ml="2" color="gray.600" fontSize="sm">
+           ( {item.review.length} reviews)
+          </Box>
         </Box>
+
+        <Button onClick={handleAdd} my="8px" color={"white"} background="green.500">Add To Cart</Button>
       </Box>
-    </Link>
+      </Box>
   );
 };
 export const LoadingComponent = () => {

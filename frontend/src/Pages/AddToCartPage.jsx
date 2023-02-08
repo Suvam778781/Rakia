@@ -281,6 +281,7 @@ const AddToCartPage = () => {
                 py="10px"
                 bgColor="green.500"
                 m="auto"
+                color={"white"}
                 visibility={scrollHeight-scrollPosition<600?"hidden":""} 
                 position={scrollHeight-scrollPosition>600?"absolute":"fixed"} 
                 // top="0px"
