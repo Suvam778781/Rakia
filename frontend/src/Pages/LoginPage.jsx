@@ -26,16 +26,10 @@ const {name,value}=e.target
   setformdata({...formdata,[name]:value})
 }
 const HandleSubmit=()=>{
-  console.log(formdata) 
 dispatch(user_login(formdata))
 }
 if(userandadmin.userloginSuc){
   return <Navigate to="/"/>
-}
-if(userandadmin.userloginErr){
-
-alert(userandadmin)
-
 }
 if(userandadmin.adminloginSuc){
   return <Navigate to="/admin/dashboard"/>
