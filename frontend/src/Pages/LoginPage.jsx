@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from "react-redux";
 import {Navigate} from "react-router-dom"
-import { user_login } from '../HOF/User&AdminReducer/UA.action';
+import { UserLogin } from '../HOF/User&AdminReducer/UA.action';
 const LoginPage = () => {
 const [formdata,setformdata]=useState({email:"",pass:""})
 const dispatch=useDispatch()
@@ -26,7 +26,7 @@ const {name,value}=e.target
   setformdata({...formdata,[name]:value})
 }
 const HandleSubmit=()=>{
-dispatch(user_login(formdata))
+dispatch(UserLogin(formdata))
 }
 if(userandadmin.userloginSuc){
   return <Navigate to="/"/>

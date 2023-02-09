@@ -17,7 +17,7 @@ import {
   USER_RESISTOR_SUCCES,
 } from "./UA.actionTypes";
 
-export const user_login = (logindata) => async (dispatch) => {
+export const UserLogin = (logindata) => async (dispatch) => {
   console.log(logindata);
   try {
     dispatch({ type: USER_LOGIN_LOADING });
@@ -35,7 +35,7 @@ export const user_login = (logindata) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_ERROR, payload: err.response.data });
   }
 };
-export const user_signup = (signupdata) => async (dispatch) => {
+export const UserSignup = (signupdata) => async (dispatch) => {
   try {
     dispatch({ type: USER_RESISTOR_LOADING });
     let res = await axios.post(
@@ -49,7 +49,7 @@ export const user_signup = (signupdata) => async (dispatch) => {
     dispatch({ type: USER_RESISTOR_ERROR, payload: err.response.data });
   }
 };
-export const admin_login = (adminlogindata) => async (dispatch) => {
+export const AdminLogin = (adminlogindata) => async (dispatch) => {
   try {
     dispatch({ type: ADMIN_LOGIN_LOADING });
     let res = await axios.post(
@@ -64,7 +64,7 @@ export const admin_login = (adminlogindata) => async (dispatch) => {
     dispatch({ type: ADMIN_LOGIN_ERROR, payload: err.response.data });
   }
 };
-export const user_signout = () => {
+export const UserSignout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("admintoken");
 };

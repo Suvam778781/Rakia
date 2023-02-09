@@ -18,8 +18,8 @@ import {
     Spinner,
   } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { user_signup } from '../HOF/User&AdminReducer/UA.action';
 import { Navigate } from 'react-router-dom';
+import { UserSignup } from '../HOF/User&AdminReducer/UA.action';
 
 function SignUpPage() {
 const [formdata,setformdata]=useState({firstname:"",lastname:"",email:"",pass:""})
@@ -32,7 +32,7 @@ const {name,value}=e.target
   setformdata({...formdata,[name]:value})
 }
 const HandleSubmit=()=>{
-dispatch(user_signup(formdata))
+dispatch(UserSignup(formdata))
 }     
 
 if(userandadmin.userresistorSuc){

@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
   Image,
+  Link,
   Flex,
   VStack,
   Button,
@@ -35,8 +36,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import "../App.css"
 import axios from "axios";
-import { StarIcon } from "@chakra-ui/icons";
-import { Addtocart_products } from "../HOF/Cartreducer/cart.action";
+import { ArrowLeftIcon, StarIcon } from "@chakra-ui/icons";
+import { AddtocartProducts } from "../HOF/Cartreducer/cart.action";
 const SingleProductPage = () => {
   const params = useParams();
   const [product, setproduct] = useState(null);
@@ -49,7 +50,7 @@ const SingleProductPage = () => {
     try{
       setLoading(true)
     let data = await axios.get(
-      `https://comfortable-bass-poncho.cyclic.app/products/${params._id}`
+      `${process.env.baseUrl}/products/${params._id}`
     );
     setLoading(false)
     setproduct(data.data);
@@ -61,7 +62,7 @@ const SingleProductPage = () => {
   const handleAdd = () => {
 
    if (userandadmin.userloginSuc){
-    dispatch(Addtocart_products(product))}
+    dispatch(AddtocartProducts(product))}
     else {
       toast({
         title: 'Add to Cart',
@@ -263,12 +264,24 @@ const SingleProductPage = () => {
               <Text>6-7 business days delivery</Text>
             </Stack>
           </Stack>
+
         </Box>
-      </Container>:
+        <Box my="100px" w="100%" lineHeight={9}fontWeight="400"  bgColor="#88998d" h="110px">
+        <Text>By 2030, we aim to only work with recycled, organic or other more sustainably sourced materials.</Text>
+        <Text fontWeight="700"color={"#fff"}>Right now, we're at 80%.</Text>
+        <Link href="/"><ArrowLeftIcon/></Link> 
+        </Box>
+      </Container>
+
+    
+      
+      :
       <Box mt="100px" padding='6'  boxShadow='xl' justifyContent={"space-between"} bg='white' display={{xl:"flex",lg:"flex","2xl":"flex",base:"inherit"}}>
   <Skeleton height='450px' w={{xl:"47%",lg:"47%","2xl":"47%",base:"94%"}} ></Skeleton>
   <SkeletonText mt='4' w={{xl:"47%",lg:"47%","2xl":"47%",base:"94%"}}  h="600px"noOfLines={6} spacing='4' skeletonHeight='10' />
 </Box>}
+
+
     </div>
   );
 };
