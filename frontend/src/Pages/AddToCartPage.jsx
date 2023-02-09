@@ -2,10 +2,9 @@ import React, { useRef } from 'react'
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { ArrowLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
+import env from "react-dotenv"
+
 // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2M2RmOTlkZmY0ODAzY2Q4YTYzMjMzOTUiLCJpYXQiOjE2NzU1OTgzMjMsImV4cCI6MTY3NTY4NDcyM30.chHmPbJN8h9QPtViekmUqs4WbG9DoRgnwXdr2Qbuzzw"
-
-
-
 import {
   Box,
   VStack,
@@ -34,7 +33,7 @@ import Navbar from '../Components/Navbar';
 import "../App.css"
 import { useSelector } from 'react-redux';
 const AddToCartPage = () => {
-  const [Cart_Data, set_Cart_Data] = useState([]);
+  const [Cartdata, setCartdata] = useState([]);
   const [pin, setPin] = useState("");
   const toast = useToast();
   const [error, setError] = useState("");
@@ -58,13 +57,13 @@ const AddToCartPage = () => {
     };
   }, []);
   // colapse function for price details
-  const Get_All_Cart_Data = async () => {
+  const GetAllCartData = async () => {
     // console.log("data")
     const token = localStorage.getItem("token")||""
     console.log(token)
     axios
       .get(
-        `https://comfortable-bass-poncho.cyclic.app/carts`,
+        `${process.env.REACT_APP_BASE_URL}/carts`,
         {
           headers: {
             Authorization:token,
@@ -72,34 +71,33 @@ const AddToCartPage = () => {
         }
       )
       .then((res) => {
-        set_Cart_Data(res.data)
-        console.log(res);
+        setCartdata(res.data)
       })
       .catch((err) => {
         console.log(err);
       });
   };
   useEffect(() => {
-    Get_All_Cart_Data();
+    GetAllCartData();
   }, []);
 
   const handleTotal = () => {
     let Total = 0;
-    Cart_Data.map((ele) => {
-      let addgst = (ele.price / 100) * 18;
-      let singleprice = addgst + ele.price;
-      Total += Math.floor(singleprice * ele.quantity);
+    Cartdata.map((ele) => {
+      let Addgst = (ele.price / 100) * 18;
+      let Singleprice = Addgst + ele.price;
+      Total += Math.floor(Singleprice * ele.quantity);
     });
     settotal(Total);
   };
   useEffect(() => {
-    if(Cart_Data.length>0){
+    if(Cartdata.length>0){
     handleTotal();}
-  }, [Cart_Data]);
+  }, [Cartdata]);
   const handleDecrease = (item) => {
     const token = localStorage.getItem("token") || "";
     if (item.quantity > 1) {
-      let newdata = Cart_Data.map((ele) => {
+      let newdata = Cartdata.map((ele) => {
         if (ele._id === item._id) {
           return { ...ele, quantity: ele.quantity - 1 };
         } else return ele;
@@ -107,7 +105,7 @@ const AddToCartPage = () => {
       item={...item,quantity:item.quantity-1}
       axios
       .patch(
-        `https://comfortable-bass-poncho.cyclic.app/carts/update/${item._id}`,
+        `${process.env.REACT_APP_BASE_URL}/carts/update/${item._id}`,
         item,
         {
           headers: {
@@ -121,7 +119,7 @@ const AddToCartPage = () => {
       .catch((err) => {
         console.log(err);
       });
-      set_Cart_Data(newdata);
+      setCartdata(newdata);
     } else {
       toast({
         title: "Quantity",
@@ -136,7 +134,7 @@ const AddToCartPage = () => {
     const token =localStorage.getItem("token") || "";
     console.log(item)
     if (item.quantity < 5) {
-      let newdata = Cart_Data.map((ele) => {
+      let newdata = Cartdata.map((ele) => {
         if (ele._id === item._id) {
           return { ...ele, quantity: ele.quantity + 1 };
         } else {
@@ -146,7 +144,7 @@ const AddToCartPage = () => {
      item={...item,quantity:item.quantity+1}
       axios
         .patch(
-          `https://comfortable-bass-poncho.cyclic.app/carts/update/${item._id}`,
+          `${process.env.REACT_APP_BASE_URL}/carts/update/${item._id}`,
           item,
           {
             headers: {
@@ -160,7 +158,7 @@ const AddToCartPage = () => {
         .catch((err) => {
           console.log(err);
         });
-        set_Cart_Data(newdata);
+        setCartdata(newdata);
     } else {
       toast({
         title: "Quantity",
@@ -181,12 +179,12 @@ const AddToCartPage = () => {
   };
   const handleRemove = (item) => {
     const token = localStorage.getItem("token") || "";
-    const removedata = Cart_Data.filter((ele) => ele._id !== item._id);
-    set_Cart_Data(removedata);
+    const removedata = Cartdata.filter((ele) => ele._id !== item._id);
+    setCartdata(removedata);
 
     axios
       .delete(
-        `https://comfortable-bass-poncho.cyclic.app/carts/delete/${item._id}`,
+        `${process.env.REACT_APP_BASE_URL}/carts/delete/${item._id}`,
         {
           headers: {
             Authorization:token,
@@ -261,7 +259,7 @@ const AddToCartPage = () => {
           <Text fontWeight={"semibold"} fontSize={"20px"}>
             Products Cart
           </Text>
-          <Text w="70px">({Cart_Data.length}items)</Text>
+          <Text w="70px">({Cartdata.length}items)</Text>
         </Box>
 
         <Box display="flex" mb="30px">
@@ -282,17 +280,18 @@ const AddToCartPage = () => {
                 bgColor="green.500"
                 m="auto"
                 color={"white"}
+
                 visibility={scrollHeight-scrollPosition<600?"hidden":""} 
                 position={scrollHeight-scrollPosition>600?"absolute":"fixed"} 
                 // top="0px"
                 zIndex="1"
               >
                 <Text>Item</Text>
-                <Text>Quantity</Text>
+                <Text >Quantity</Text>
                 <Text>Price (Inclusive of GST)</Text>
               </Box>
               {/*  mapping all the cart data */}
-              {Cart_Data.map((item, index) => (
+              {Cartdata.map((item, index) => (
                 <Box boxShadow={"md"} key={item.id}>
                   <SingleItem
                     key={item._id}
@@ -632,16 +631,14 @@ export const SingleItem = ({
         {item.title}
       </Text>
 
-      <Box display="flex" w="95%" justifyContent="space-between" m="auto">
-        <Box display="flex" fontSize="14px">
-          <Box py="10px" px="10px" w="60%">
+      <Box display="flex" w="100%" justifyContent="space-between" m="auto">
+        <Box display="flex" fontSize="14px"w="40%" >
+          <Box  boxShadow={"sm"} mr="10px">
             <Image
               src={item.image}
               style={{
-                width: "200px",
-
-                height: "200px",
-                objectFit: "cover",
+                width: "100%",
+                height:"200px"                
               }}
             />
           </Box>
@@ -650,8 +647,8 @@ export const SingleItem = ({
             <Text> category:{item.category}</Text>
             {/* <Text> {item.Spindle_Speed}</Text> */}
             {!dd ? (
-              <Link 
-            
+              <Button
+                 mt="40px"
                 style={{
                   textAlign: "left",
                   display: "flex",
@@ -662,20 +659,21 @@ export const SingleItem = ({
                 alignItems={"center"}
                 pl="0px"
                 bg="white"
-                color="green.500"
-                _hover={{ backgroundColor: "background", color: "green.600" }}
+                color="red"
+                _hover={{ backgroundColor: "background", color: "red.700" }}
                 onClick={() => handleRemove(item)}
               >
-                <DeleteIcon color="green.500" />
+                <DeleteIcon color="red" />
                 Remove
-              </Link>
+              </Button>
             ) : null}
           </Box>
         </Box>
         {dd ? null : (
           <Box
             style={{
-              width: "70px",
+              width: "10%",
+              m:"auto",
               display: "flex",
               height: "33px",
               color: "grey",
@@ -687,12 +685,11 @@ export const SingleItem = ({
               style={{
                 alignItems: "center",
                 fontSize: "18px",
-                height: "30px",
-                margin: "auto",
-
                 backgroundColor: "white",
+                border: "none",
                 borderRight: "0.5px solid RGBA(0, 0, 0, 0.16)",
                 cursor: "pointer",
+                margin: "auto",
               }}
               onClick={() => handleDecrease(item)}
             >
@@ -726,7 +723,7 @@ export const SingleItem = ({
           </Box>
         )}
 
-        <Box w="30%">
+        <Box w="50%">
           <HStack w="50%" m="auto" justifyContent={"space-between"}>
             <span>RS:{totalPrice(item).total.toLocaleString()}</span>
             <Button
@@ -795,14 +792,14 @@ export const SingleItem = ({
               </Box>
             </VStack>
           </Collapse>
-          <HStack w="70%" my="20px">
+          <HStack w="50%" m="auto" pt="70px">
             <Image
               w="30px"
               h="30px"
               src="https://www.industrybuying.com/static/svg/delivery-truck-afterdiscount.svg"
               alt="Free Shipping"
             />
-            <Text color={"#4c993e"}>Free shipping</Text>
+            <Text textAlign={"center"} color={"#4c993e"}>Free shipping</Text>
           </HStack>
         </Box>
       </Box>

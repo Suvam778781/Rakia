@@ -2,8 +2,8 @@ import { Search2Icon } from '@chakra-ui/icons'
 import { Box, HStack, Input, Link } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Products_Getdata } from '../HOF/Productreducer/product.action'
-import { user_signout } from '../HOF/User&AdminReducer/UA.action'
+import { ProductsGetdata, Products_Getdata } from '../HOF/Productreducer/product.action'
+import { UserSignout } from '../HOF/User&AdminReducer/UA.action'
 
 export default function Navbar() {
   const [search,setsearch]=useState("")
@@ -12,11 +12,11 @@ export default function Navbar() {
   // const [authstate,setauthstate]=useState(userandadmin.adminloginSuc||userandadmin.userloginSuc)
   console.log(userandadmin)
   const HandleSearch = () => {
-    dispatch(Products_Getdata(search));
+    dispatch(ProductsGetdata(search));
   };
   const handleauth=()=>{
     if(userandadmin.adminloginSuc||userandadmin.userloginSuc){
-      user_signout()
+      UserSignout()
     }
   }
   return (

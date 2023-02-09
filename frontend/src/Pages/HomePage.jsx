@@ -41,30 +41,29 @@ import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { BsHeartFill, BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
-import { Products_Getdata } from "../HOF/Productreducer/product.action";
+import { ProductsGetdata} from "../HOF/Productreducer/product.action";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
-import { Addtocart_products } from "../HOF/Cartreducer/cart.action";
+import { AddtocartProducts, Addtocart_products } from "../HOF/Cartreducer/cart.action";
 function HomePage() {
- 
+ const [page,setpage]=useState(1)
   const dispatch = useDispatch();
-  const products = useSelector((store) => store.ProductsReducer);
-  
+  const products = useSelector((store) => store.ProductsReducer);  
   useEffect(() => {
-    dispatch(Products_Getdata());
-//     "title":"Relaxed Fit Rugby shirt",
-// "description":"Relaxed-fit rugby shirt in soft cotton jersey with a collar, concealed button placket, long sleeves with ribbed cuffs, and slits in the sides of the hem.",
-// "image":"https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fa8%2F35%2Fa83515af7b9fe1ea8e105401277566838e168478.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D",
+    dispatch(ProductsGetdata());
+// "title":"Relaxed Fit Hoodie",
+// "description":"Hoodie in sweatshirt fabric made from a cotton blend with a print motif. Relaxed fit with a double-layered, drawstring hood, long sleeves, kangaroo pocket and ribbing at the cuffs and hem. Soft brushed inside.",
+// "image":"https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F77%2F46%2F7746921f6b3af28793d9f47f65e6872ca7c9422c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]",
 // "review":[],
-// "allimages":["https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fa8%2F35%2Fa83515af7b9fe1ea8e105401277566838e168478.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D","https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Fdb%2F86%2Fdb86c17f6717df65ef3625de324102b8714e92eb.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]","https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fdf%2F9a%2Fdf9ae6d6c695624c2701e8f2bba633a26058c036.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D"],
-// "price":577,"category":"hoodie","quantity":1,
-// "total_quantity":50,
-// "created_at":"8/01/2023",
+// "allimages":["https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F77%2F46%2F7746921f6b3af28793d9f47f65e6872ca7c9422c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]","https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fa5%2F5e%2Fa55e3761ea878b852c35f01b1ad4391ed104368c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D","https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2F88%2F9d%2F889d74088c4bf7c4f52a2aec6f6aed6ae33174af.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D"],
+// "price":499,"category":"hoodie","quantity":1,
+// "total_quantity":58,
+// "created_at":"09/01/2023",
 // "ordered_at":"null",
 // "cancelled_at":"null",
-// "updated_at":"8/01/2023",
-// "rating":4.5,
-// "brand":"BEAT LONDON"
+// "updated_at":"09/01/2023",
+// "rating":4.9,
+// "brand":"peeter england"
   }, []);
   const HandleFilterByType = () => {};
   const HandleFilterByBrand = () => {};
@@ -73,37 +72,41 @@ function HomePage() {
   return (
     <div>
       {/* Navbar started here*/}
-      {/*her filter and sorting will come and some skeleton i will add*/}
+      {/*here filter and sorting will come and some skeleton i will add*/}
 
-      <Flex  p="10px" mt="100px" w="100%">
-        <Box w="20%">
+      <Flex display={{md:"inherit",sm:"inherit"}} p="10px" mt="100px" w="100%">
+        <Box w={"100%"}p="4">
           <ProductsLeftSection />
         </Box>
+        {products.Loading ?
+            <LoadingComponent />:
         <Grid
-          w="100%"
+          w={{md:"100%",lg:"80%",xl:"80%","2xl":"80%",sm:"100%"}}
           m="auto"
           templateColumns={{
             lg: "repeat(3, 1fr)",
             xl: "repeat(3, 1fr)",
-            xl: "repeat(3, 1fr)",
             sm: "repeat(2, 1fr)",
             md: "repeat(2, 1fr)",
+            "2xl":"repeat(3, 1fr)",
+            base:"repeat(1, 1fr)"
           }}
-          rowGap={1}
+          rowGap={5}
           gap={"4"} 
-          
         >
-          {products.Loading ? (
-            <LoadingComponent />
-          ) : (
-            products.Products.map((ele) => (
+           {products.Products.map((ele) => (
               <ProductItem
                item={ele}
               />
-            ))
-          )}
-        </Grid>
+            ))}
+          
+        </Grid>}
       </Flex>
+      <Box my="100px">
+      <Button isDisabled={page==1} onClick={()=>setpage((pg)=>pg-1)}>Prev</Button>
+      <Button>{page}</Button>
+      <Button onClick={()=>setpage((pg)=>pg+1)}>Next</Button>
+      </Box>      
     </div>
   );
 }
@@ -352,7 +355,7 @@ const dispatch=useDispatch()
 const toast=useToast()
   const handleAdd = () => {
     if (userandadmin.userloginSuc){
-     dispatch(Addtocart_products(item))
+     dispatch(AddtocartProducts(item))
      toast({
       title: 'Add to Cart',
       description: "Product Added Succesfully.",
@@ -425,7 +428,7 @@ const toast=useToast()
           </Box>
         </Box>
 
-        <Button onClick={handleAdd} my="8px" color={"white"} background="green.500">Add To Cart</Button>
+        <Button onClick={handleAdd} mt="29px" color={"white"} background="green.500">Add To Cart</Button>
       </Box>
       </Box>
   );
@@ -434,7 +437,7 @@ export const LoadingComponent = () => {
   return (
     <Grid
       ml="20px"
-      w="1000px"
+      w="80%"
       gap="2"
       templateColumns={{
         lg: "repeat(3, 1fr)",
@@ -442,13 +445,14 @@ export const LoadingComponent = () => {
         xl: "repeat(3, 1fr)",
         sm: "repeat(2, 1fr)",
         md: "repeat(2, 1fr)",
+        base:"repeat(1, 1fr)"
       }}
     >
       <Box padding="6" boxShadow="lg" bg="#CBD5E0">
         <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
-      <Box padding="6" boxShadow="lg" bg="#CBD5E0">
+      <Box  boxShadow="lg" bg="#CBD5E0">
         <SkeletonCircle size="10" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>

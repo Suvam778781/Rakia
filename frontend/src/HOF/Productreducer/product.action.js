@@ -1,6 +1,6 @@
 import axios from "axios"
 import { GET_PRODUCTS_DATA, LOADING_PRODUCTS_DATA, PRODUCTS_ERROR } from "./product.actionTypes"
-  export const Products_Getdata=(query)=>async(dispatch)=>{
+  export const ProductsGetdata=(query)=>async(dispatch)=>{
     let res
     try{
         dispatch({type:LOADING_PRODUCTS_DATA})

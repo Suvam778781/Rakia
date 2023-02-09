@@ -1,27 +1,30 @@
 import axios from "axios"
 import { ADD_TO_CART, ADD_TO_CART_LOADING, CARTLIST_DATA, CART_ERROR, CART_LOADING, REMOVE_PRODUCTS_CART } from "./cart.actionTypes"
-export const Cartlist_Getdata=()=>async(dispatch)=>{
-    let res=await fetch(`url`)
+let Api_Url=process.env.REACT_APP_BASE_URL
+export const CartlistGetdata=(UserId)=>async(dispatch)=>{
+    let res=await fetch(`${process.env.REACT_APP_BASE_URL}/carts/${UserId}`)
     let cartlistdata=await res.json()
     dispatch({type:CARTLIST_DATA,payload:cartlistdata})
  }
-export const Remove_from_Cartlist=(_id)=>async(dispatch)=>{
+export const RemoveFromCartlist=(id)=>async(dispatch)=>{
     let token=localStorage.getItem("token")||""
 try{
-    dispatch({type:CART_LOADING,payload:_id})
-await axios.delete(`https://comfortable-bass-poncho.cyclic.app/carts/delete/${_id}`)
-dispatch({type:REMOVE_PRODUCTS_CART,payload:_id})
+    dispatch({type:CART_LOADING,payload:id})
+await axios.delete(`${process.env.REACT_APP_BASE_URL}/carts/delete/${id}`)
+dispatch({type:REMOVE_PRODUCTS_CART,payload:id})
 }
 catch(err){
     alert("something went wrong")
     dispatch({type:CART_ERROR})
 }
 }   
-export const Addtocart_products=(data)=>async(dispatch)=>{
+export const AddtocartProducts=(data)=>async(dispatch)=>{
+
     let token=localStorage.getItem("token")||""
     try {
         dispatch({type:CART_LOADING})
-      await axios.post(`https://comfortable-bass-poncho.cyclic.app/carts/addtocart`,
+      
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/carts/addtocart`,
         data,
         {
           headers: {
@@ -34,16 +37,16 @@ export const Addtocart_products=(data)=>async(dispatch)=>{
     }
     catch(err){
         
-        alert("something went wrong")
+        alert("something went")
         dispatch({type:CART_ERROR})
     }
 }
 
-    export const Update_cart_products=(data)=>async(dispatch)=>{
+    export const UpdateCartProducts=(data)=>async(dispatch)=>{
         let token=localStorage.getItem("token")||""
         try{
             dispatch({type:CART_LOADING})
-           await axios.post(`https://comfortable-bass-poncho.cyclic.app/carts/update/${data._id}`,
+           await axios.post(`${process.env.REACT_APP_BASE_URL}/carts/update/${data._id}`,
            data,
            {
             headers: {
@@ -57,5 +60,4 @@ export const Addtocart_products=(data)=>async(dispatch)=>{
             alert("something went wrong")
             dispatch({type:CART_ERROR})
         }
-       
         }
