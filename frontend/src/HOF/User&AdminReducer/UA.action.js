@@ -23,7 +23,7 @@ export const UserLogin = (logindata) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_LOADING });
 
     let res = await axios.post(
-      `https://comfortable-bass-poncho.cyclic.app/users/login`,
+      `${process.env.REACT_APP_BASE_URL}/users/login`,
       logindata
     );
     localStorage.removeItem("admintoken");
@@ -39,7 +39,7 @@ export const UserSignup = (signupdata) => async (dispatch) => {
   try {
     dispatch({ type: USER_RESISTOR_LOADING });
     let res = await axios.post(
-      `https://comfortable-bass-poncho.cyclic.app/users/resistor`,
+      `${process.env.REACT_APP_BASE_URL}/users/resistor`,
       signupdata
     );
     dispatch({ type: USER_RESISTOR_SUCCES, payload: signupdata });
@@ -53,7 +53,7 @@ export const AdminLogin = (adminlogindata) => async (dispatch) => {
   try {
     dispatch({ type: ADMIN_LOGIN_LOADING });
     let res = await axios.post(
-      `https://comfortable-bass-poncho.cyclic.app/admin/login`,
+      `${process.env.REACT_APP_BASE_URL}/admin/login`,
       adminlogindata
     );
     localStorage.removeItem("token");
