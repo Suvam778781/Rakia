@@ -77,9 +77,11 @@ function HomePage() {
       <Flex display={{md:"inherit",sm:"inherit"}} p="10px" mt="100px" w="100%">
         <Box w={"100%"}p="4">
           <ProductsLeftSection />
-        </Box>
+       </Box>
         {products.Loading ?
-            <LoadingComponent />:
+         <Box w={"100%"}p="4">
+            <LoadingComponent />
+            </Box>:
         <Grid
           w={{md:"100%",lg:"80%",xl:"80%","2xl":"80%",sm:"100%"}}
           m="auto"
@@ -436,7 +438,7 @@ const toast=useToast()
 export const LoadingComponent = () => {
   return (
     <Grid
-      ml="20px"
+      m="auto"
       w="80%"
       gap="2"
       templateColumns={{

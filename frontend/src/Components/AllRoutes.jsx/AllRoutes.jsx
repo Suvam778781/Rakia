@@ -24,7 +24,7 @@ const AllRoutes = () => {
         }
       />
       <Route
-        path="/checkout"
+        path="user/cart/checkout"
         element={
           <PrivateRoute>
            <CheckoutPage /> 
