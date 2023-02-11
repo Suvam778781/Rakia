@@ -50,7 +50,7 @@ const SingleProductPage = () => {
     try{
       setLoading(true)
     let data = await axios.get(
-      `${process.env.baseUrl}/products/${params._id}`
+      `${process.env.REACT_APP_BASE_URL}/products/${params._id}`
     );
     setLoading(false)
     setproduct(data.data);
@@ -59,6 +59,7 @@ const SingleProductPage = () => {
       setLoading(false)
     }
   };
+  console.log(product)
   const handleAdd = () => {
 
    if (userandadmin.userloginSuc){
@@ -238,6 +239,12 @@ const SingleProductPage = () => {
                     </Box>
                   </Box>
                 </Box>
+                <Box>   
+                <Heading color={"green.500"}>Reviews</Heading>
+                <VStack h="200px" overflow={"scroll"}>
+                 
+                </VStack>
+                </Box>
               </Box>
             </Stack>
             <Button
@@ -246,6 +253,7 @@ const SingleProductPage = () => {
               py={"7"}
               onClick={handleAdd}
               bg="green.500"
+              margin={"auto"}
               _hover={{
                 transform: "translateY(4px)",
                 boxShadow: "md",
@@ -271,10 +279,7 @@ const SingleProductPage = () => {
         <Text fontWeight="700"color={"#fff"}>Right now, we're at 80%.</Text>
         <Link href="/"><ArrowLeftIcon/></Link> 
         </Box>
-      </Container>
-
-    
-      
+      </Container>      
       :
       <Box mt="100px" padding='6'  boxShadow='xl' justifyContent={"space-between"} bg='white' display={{xl:"flex",lg:"flex","2xl":"flex",base:"inherit"}}>
   <Skeleton height='450px' w={{xl:"47%",lg:"47%","2xl":"47%",base:"94%"}} ></Skeleton>
