@@ -48,27 +48,10 @@ import { AddtocartProducts, Addtocart_products } from "../HOF/Cartreducer/cart.a
 function HomePage() {
  const [page,setpage]=useState(1)
   const dispatch = useDispatch();
-  const products = useSelector((store) => store.ProductsReducer);  
+  const products = useSelector((store) => store.ProductsReducer);
   useEffect(() => {
     dispatch(ProductsGetdata());
-// "title":"Relaxed Fit Hoodie",
-// "description":"Hoodie in sweatshirt fabric made from a cotton blend with a print motif. Relaxed fit with a double-layered, drawstring hood, long sleeves, kangaroo pocket and ribbing at the cuffs and hem. Soft brushed inside.",
-// "image":"https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F77%2F46%2F7746921f6b3af28793d9f47f65e6872ca7c9422c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]",
-// "review":[],
-// "allimages":["https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F77%2F46%2F7746921f6b3af28793d9f47f65e6872ca7c9422c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]","https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fa5%2F5e%2Fa55e3761ea878b852c35f01b1ad4391ed104368c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D","https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2F88%2F9d%2F889d74088c4bf7c4f52a2aec6f6aed6ae33174af.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D"],
-// "price":499,"category":"hoodie","quantity":1,
-// "total_quantity":58,
-// "created_at":"09/01/2023",
-// "ordered_at":"null",
-// "cancelled_at":"null",
-// "updated_at":"09/01/2023",
-// "rating":4.9,
-// "brand":"peeter england"
   }, []);
-  const HandleFilterByType = () => {};
-  const HandleFilterByBrand = () => {};
-  const HandleFilterByPrice = () => {};
-
   return (
     <div>
       {/* Navbar started here*/}
@@ -126,19 +109,63 @@ export default HomePage;
 // - See historical order
 // - Payment ,Checkout pages
 // - Login, Register Pages
+const ProductsLeftSection = () => {
+const [selectedBrand, setSelectedBrand] = useState([]);
+const [selectedPrice, setSelectedPrice] = useState([]);
+const [selectedType, setSelectedType] = useState([]);
+const dispatch = useDispatch();
+const products = useSelector((store) => store.ProductsReducer);
+  // Price filter start from here==-----
+  const handleFilterByPrice= (price) => {
+   
+    // dispatch(ProductsGetdata());
+  };
+   // Type filter start from here==-----
+  const handleFilterByType = (type) => {
+    if (selectedType.includes(type)) {
+      setSelectedType(selectedType.filter((b) => b !== type));
+    } else {
+      setSelectedType([...selectedType, type]);
+    }
+  };
+   // Brand filter start from here==-----
+  const handleFilterByBrand = (brand) => {
+    if (selectedBrand.includes(brand)) {
+      setSelectedBrand(selectedBrand.filter((b) => b !== brand));
+    } else {
+      setSelectedBrand([...selectedBrand, brand]);
+    }
+    // dispatch(ProductsGetdata(selectedBrand));
+  };
+const handleFilter=()=>{
+  let alltype="";
+  let allbrand="";
+  selectedType.map((type)=>{
+    alltype+=type+","
+  })
+  selectedBrand.map((brand)=>{
+    allbrand+=brand+","
+  })
+  alltype=alltype.replace(/,\s*$/,"");
+  allbrand=allbrand.replace(/,\s*$/,"");
+let allquery={category:alltype,brand:allbrand}
+console.log(allquery)
+dispatch(ProductsGetdata("",allquery));
+}
+  const brands = ["RM", "levies", "safari", "peeter england", "HM"];
+  const prices = ["450-900", "900-1500", "1500-2000", "2000 & Above"];
+  const types = [ "jean", "shirt", "tshirt", "jacket", "shoe","hoodie"];
+useEffect(()=>{
+handleFilter()
+},[selectedPrice,selectedBrand,selectedType])
 
 
-const ProductsLeftSection = ({
-  HandleFilterByType,
-  HandleFilterByBrand,
-  HandleFilterByPrice,
-}) => {
   return (
     <Box
       display={{
-        lg: "inherit",
-        xl: "inherit",
-        "2xl": "inherit",
+        lg: "flex",
+        xl: "flex",
+        "2xl": "flex",
         md: "flex",
         sm: "flex",
       }}
@@ -148,11 +175,13 @@ const ProductsLeftSection = ({
         paddingLeft: "10px",
         fontSize: "15px",
         lineHeight: "25px",
+        width:"30%"
       }}
+
+
     >
       {/* <Box></Box> */}
       {/* accordian start fron here */}
-
       <Box
         lineHeight={2}
         w="100%"
@@ -165,187 +194,120 @@ const ProductsLeftSection = ({
         }}
         mt="10px"
       >
-        <Accordion allowToggle w="100%">
-          <AccordionItem w="100%">
-            <h2>
-              <AccordionButton
-                backgroundColor="white"
-                _expanded={{
-                  bg: "rgb(167, 173, 173)",
-                  color: "white",
-                  borderBottom: "1px solid",
-                }}
+<Accordion allowToggle w="100%">
+        <AccordionItem w="100%">
+          <h2>
+            <AccordionButton
+              backgroundColor="white"
+              _expanded={{
+                bg: "rgb(167, 173, 173)",
+                color: "white",
+                borderBottom: "1px solid",
+              }}
+            >
+              <Box
+                w="180px"
+                className="Accordian_eyecare_left_dection"
+                as="span"
+                flex="1"
+                textAlign="left"
               >
-                <Box
-                  w="180px"
-                  className="Accordian_eyecare_left_dection"
-                  as="span"
-                  flex="1"
-                  textAlign="left"
-                >
-                  Brand
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel bg="rgb(167, 173, 173)" className="Filter_Parents">
-              <Link
-                className="Filter_Brand_links"
-                onClick={() => HandleFilterByBrand("All")}
+                Brand
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+          </h2>
+          <AccordionPanel bg="rgb(167, 173, 173)" className="Filter_Parents">
+            {brands.map((brand) => (
+              <div key={brand}>
+                <input
+                  type="checkbox"
+                  value={brand}
+                  onChange={() => handleFilterByBrand(brand)}
+                  checked={selectedBrand.includes(brand)}
+                />
+                {brand}
+              </div>
+            ))}
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+      <Accordion allowToggle w="100%">
+        <AccordionItem w="100%">
+          <h2>
+            <AccordionButton
+              backgroundColor="white"
+              _expanded={{
+                bg: "rgb(167, 173, 173)",
+                color: "white",
+                borderBottom: "1px solid",
+              }}
+            >
+              <Box
+                w="180px"
+                className="Accordian_eyecare_left_dection"
+                as="span"
+                flex="1"
+                textAlign="left"
               >
-                All
-              </Link>
-              <Link
-                display={"block"}
-                className="Filter_Brand_links"
-                onClick={() => HandleFilterByBrand("RM")}
+                Types
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+          </h2>
+          <AccordionPanel bg="rgb(167, 173, 173)" className="Filter_Parents">
+            {types.map((type) => (
+              <div key={type}>
+                <input
+                  type="checkbox"
+                  value={type}
+                  onChange={() => handleFilterByType(type)}
+                  checked={selectedType.includes(type)}
+                />
+                {type}
+              </div>
+            ))}
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+      <Accordion allowToggle w="100%">
+        <AccordionItem w="100%">
+          <h2>
+            <AccordionButton
+              backgroundColor="white"
+              _expanded={{
+                bg: "rgb(167, 173, 173)",
+                color: "white",
+                borderBottom: "1px solid",
+              }}
+            >
+              <Box
+                w="180px"
+                className="Accordian_eyecare_left_dection"
+                as="span"
+                flex="1"
+                textAlign="left"
               >
-                RM
-              </Link>
-              <Link
-                onClick={() => HandleFilterByBrand("levies")}
-                className="Filter_Brand_links"
-              >
-              Levies
-              </Link>
-              <Link
-                onClick={() => HandleFilterByBrand("Safari")}
-                className="Filter_Brand_links"
-              >
-                Safari
-              </Link>
-              <Link
-                onClick={() => HandleFilterByBrand("peeter england")}
-                className="Filter_Brand_links"
-              >
-               Peeter England
-              </Link>
-              <Link
-                onClick={() => HandleFilterByBrand("HM")}
-                className="Filter_Brand_links"
-              >
-                HM
-              </Link>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
-        {/* Price Accordian here */}
-        <Accordion allowToggle>
-          <AccordionItem>
-            <h2>
-              <AccordionButton
-                backgroundColor="white" 
-                _expanded={{
-                  bg: "rgb(167, 173, 173)",
-                  color: "white",
-                  borderBottom: "1px solid",
-                }}
-              >
-                <Box
-                  className="Accordian_eyecare_left_dection"
-                  as="span"
-                  flex="1"
-                  textAlign="left"
-                >
-                  Price
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel className="Filter_Parents">
-              <Link
-                className="Filter_Price_links"
-                onClick={() => HandleFilterByPrice("price")}
-              >
-                All Price
-              </Link>
-              <Link
-                className="Filter_Price_links"
-                onClick={() => HandleFilterByPrice("price1")}
-              >
-                450-900
-              </Link>
-              <Link
-                className="Filter_Price_links"
-                onClick={() => HandleFilterByPrice("price2")}
-              >
-                900-1500
-              </Link>
-              <Link
-                className="Filter_Price_links"
-                onClick={() => HandleFilterByPrice("price3")}
-              >
-                1500-2000
-              </Link>
-              <Link
-                className="Filter_Price_links"
-                onClick={() => HandleFilterByPrice("price4")}
-              >
-                2000 & Above
-              </Link>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
-        {/* Type Accordian here */}
-
-        <Accordion allowToggle>
-          <AccordionItem>
-            <h2>
-              <AccordionButton
-                backgroundColor="white"
-                _expanded={{
-                  bg: "rgb(167, 173, 173)",
-                  color: "white",
-                  borderBottom: "1px solid",
-                }}
-              >
-                <Box
-                  className="Accordian_eyecare_left_dection"
-                  m="auto"
-                  as="span"
-                  flex="1"
-                  textAlign="left"
-                >
-                  Type
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-
-            <AccordionPanel className="Filter_Parents">
-              <Link
-                className="Filter_Type_links"
-                onClick={() => HandleFilterByType("All")}
-              >
-                All Types
-              </Link>
-              <Link
-                onClick={() => HandleFilterByType("Jeans")}
-                className="Filter_TYpe_links"
-              >
-                Jeans
-              </Link>
-              <Link
-                onClick={() => HandleFilterByType("Hoodies")}
-                className="Filter_Type_links"
-              >
-                Hoodies
-              </Link>
-              <Link
-                onClick={() => HandleFilterByType("Shirt")}
-                className="Filter_Type_links"
-              >
-              Shirt
-              </Link>
-              <Link
-                onClick={() => HandleFilterByType("Tshirt")}
-                className="Filter_Type_links"
-              >
-                Tshirt
-              </Link>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
+                Price
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+          </h2>
+          <AccordionPanel bg="rgb(167, 173, 173)" className="Filter_Parents">
+            {prices.map((price) => (
+              <div key={price}>
+                <input
+                  type="checkbox"
+                  value={price}
+                  onChange={() => handleFilterByPrice(price)}
+                  checked={selectedPrice.includes(price)}
+                />
+                {price}
+              </div>
+            ))}
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
       </Box>
     </Box>
   );
@@ -455,49 +417,63 @@ export const LoadingComponent = () => {
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
       <Box  boxShadow="lg" bg="#CBD5E0">
-        <SkeletonCircle size="10" />
+      <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
       <Box padding="6" boxShadow="lg" bg="#CBD5E0">
-        <SkeletonCircle size="10" />
+      <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
       <Box padding="6" boxShadow="lg" bg="#CBD5E0">
-        <SkeletonCircle size="10" />
+      <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
       <Box padding="6" boxShadow="lg" bg="#CBD5E0">
-        <SkeletonCircle size="10" />
+      <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
       <Box padding="6" boxShadow="lg" bg="#CBD5E0">
-        <SkeletonCircle size="10" />
+      <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
       <Box padding="6" boxShadow="lg" bg="#CBD5E0">
-        <SkeletonCircle size="10" />
+      <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
       <Box padding="6" boxShadow="lg" bg="#CBD5E0">
-        <SkeletonCircle size="10" />
+      <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
       <Box padding="6" boxShadow="lg" bg="#CBD5E0">
-        <SkeletonCircle size="10" />
+      <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
       <Box padding="6" boxShadow="lg" bg="#CBD5E0">
-        <SkeletonCircle size="10" />
+      <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
       <Box padding="6" boxShadow="lg" bg="#CBD5E0">
-        <SkeletonCircle size="10" />
+      <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
       <Box padding="6" boxShadow="lg" bg="#CBD5E0">
-        <SkeletonCircle size="10" />
+      <SkeletonCircle size="20" />
         <SkeletonText mt="6" noOfLines={4} spacing="8" skeletonHeight="4" />
       </Box>
     </Grid>
   );
 };
+
+// "title":"Relaxed Fit Hoodie",
+// "description":"Hoodie in sweatshirt fabric made from a cotton blend with a print motif. Relaxed fit with a double-layered, drawstring hood, long sleeves, kangaroo pocket and ribbing at the cuffs and hem. Soft brushed inside.",
+// "image":"https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F77%2F46%2F7746921f6b3af28793d9f47f65e6872ca7c9422c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]",
+// "review":[],
+// "allimages":["https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F77%2F46%2F7746921f6b3af28793d9f47f65e6872ca7c9422c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]","https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fa5%2F5e%2Fa55e3761ea878b852c35f01b1ad4391ed104368c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D","https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2F88%2F9d%2F889d74088c4bf7c4f52a2aec6f6aed6ae33174af.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D"],
+// "price":499,"category":"hoodie","quantity":1,
+// "total_quantity":58,
+// "created_at":"09/01/2023",
+// "ordered_at":"null",
+// "cancelled_at":"null",
+// "updated_at":"09/01/2023",
+// "rating":4.9,
+// "brand":"peeter england"

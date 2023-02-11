@@ -7,21 +7,57 @@ productsRouter.use(express.json());
 productsRouter.use("/create", Adminauthenticate);
 productsRouter.use("/delete/:id", Adminauthenticate);
 productsRouter.use("/update/:id", Adminauthenticate);
+productsRouter.use("/addreview/:id",authenticate);
 productsRouter.get("/", async (req, res) => {
+let {brand,category,price,limit,page,q}=req.query
+if(category&&brand){
+  brand=brand.split(",")
+category=category.split(",")
   try{
-    let {power,limit,page,sortBy,rating,q}=req.query
-  // const data=await HeroModel.find({language,power})
-  if(q){
-  var data =await ProductsModel.find({ category: { $regex:`${q}`,$options:"$i" }}).skip(page||1).limit(limit||10)
-  res.send(data)
+    var data =await ProductsModel.find({brand:{$in:brand},category:{$in:category}}).skip(page||1).limit(limit||12)
+    res.send(data)
+    }
+    catch(err){
+      console.log(err)
+      res.send("err:something went wrong")
+    }
+}
+  else if(brand){
+    brand=brand.split(",")
+    try{
+      var data =await ProductsModel.find({brand:{$in:brand}}).skip(page||1).limit(limit||12)
+      res.send(data)
+      }
+      catch(err){
+        console.log(err)
+        res.send("err:something went wrong")
+      }
+  }
+  else if(category){
+    category=category.split(",")
+    try{
+      var data =await ProductsModel.find({category:{$in:category}}).skip(page||1).limit(limit||12)
+      res.send(data)
+      }
+      catch(err){
+        console.log(err)
+        res.status(500).send("err:something went wrong")
+      }
   }
   else {
-    var data =await ProductsModel.find().skip(page||1).limit(limit||10)
-        res.send(data)
-  }}
-  catch(err){
-    console.log(err)
-    res.send("err:something went wrong")
+    try{
+    if(q){
+    var data =await ProductsModel.find({ category: { $regex:`${q}`,$options:"$i" }}).skip(page||1).limit(limit||12)
+    res.send(data)
+    }
+    else {
+      var data =await ProductsModel.find().skip(page||1).limit(limit||12)
+          res.send(data)
+    }}
+    catch(err){
+      console.log(err)
+      res.status(500).send("err:something went wrong")
+    }
   }
 });
 productsRouter.get("/:id", async (req, res) => {
@@ -32,6 +68,17 @@ productsRouter.get("/:id", async (req, res) => {
   }
   catch(err){
     res.send({"err":"something went wrong","err":err})
+  }
+});
+productsRouter.post("/addreview/:id", async (req, res) => {
+  const id = req.params.id;
+  const payload=req.body;
+  try{
+    var data =await ProductsModel.updateOne({_id:id},{$push :{review:payload}})
+        res.status(200).send([{"msg":"Review Added Succesfully"}])
+  }
+  catch(err){
+    res.status(400).send([{"err":"something went wrong","err":err}])
   }
 });
 productsRouter.post("/create", async (req, res) => {

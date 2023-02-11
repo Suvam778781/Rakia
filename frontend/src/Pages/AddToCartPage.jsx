@@ -67,7 +67,7 @@ const AddToCartPage = () => {
         {
           headers: {
             Authorization:token,
-          },
+          }, 
         }
       )
       .then((res) => {
