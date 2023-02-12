@@ -80,7 +80,6 @@ const AddToCartPage = () => {
   useEffect(() => {
     GetAllCartData();
   }, []);
-
   const handleTotal = () => {
     let Total = 0;
     Cartdata.map((ele) => {
@@ -91,8 +90,7 @@ const AddToCartPage = () => {
     settotal(Total);
   };
   useEffect(() => {
-    if(Cartdata.length>0){
-    handleTotal();}
+    handleTotal();
   }, [Cartdata]);
   const handleDecrease = (item) => {
     const token = localStorage.getItem("token") || "";
@@ -291,7 +289,7 @@ const AddToCartPage = () => {
                 <Text>Price (Inclusive of GST)</Text>
               </Box>
               {/*  mapping all the cart data */}
-              {Cartdata.map((item, index) => (
+              {Cartdata.length>0&&Cartdata.map((item, index) => (
                 <Box boxShadow={"md"} key={item.id}>
                   <SingleItem
                     key={item._id}
