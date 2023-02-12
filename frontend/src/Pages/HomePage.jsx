@@ -44,11 +44,12 @@ import { BsHeartFill, BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { ProductsGetdata} from "../HOF/Productreducer/product.action";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
-import { AddtocartProducts, Addtocart_products } from "../HOF/Cartreducer/cart.action";
+import { AddtocartProducts, Addtocart_products, CartlistGetdata } from "../HOF/Cartreducer/cart.action";
 function HomePage() {
  const [page,setpage]=useState(1)
   const dispatch = useDispatch();
   const products = useSelector((store) => store.ProductsReducer);
+  console.log(products)
   useEffect(() => {
     dispatch(ProductsGetdata());
   }, []);
@@ -59,7 +60,7 @@ function HomePage() {
 
       <Flex display={{md:"inherit",sm:"inherit"}} p="10px" mt="100px" w="100%">
         <Box w={"100%"}p="4">
-          <ProductsLeftSection />
+          <ProductsLeftSection  page={page}/>
        </Box>
         {products.Loading ?
          <Box w={"100%"}p="4">
@@ -109,17 +110,19 @@ export default HomePage;
 // - See historical order
 // - Payment ,Checkout pages
 // - Login, Register Pages
-const ProductsLeftSection = () => {
+const ProductsLeftSection = ({page}) => {
 const [selectedBrand, setSelectedBrand] = useState([]);
 const [selectedPrice, setSelectedPrice] = useState([]);
 const [selectedType, setSelectedType] = useState([]);
 const dispatch = useDispatch();
 const products = useSelector((store) => store.ProductsReducer);
+const cartdata=useSelector((store)=>store.CartReducer)
+console.log(cartdata)
   // Price filter start from here==-----
-  const handleFilterByPrice= (price) => {
-   
-    // dispatch(ProductsGetdata());
-  };
+
+useEffect(()=>{
+  // dispatch(CartlistGetdata())
+},[])
    // Type filter start from here==-----
   const handleFilterByType = (type) => {
     if (selectedType.includes(type)) {
@@ -150,16 +153,14 @@ const handleFilter=()=>{
   allbrand=allbrand.replace(/,\s*$/,"");
 let allquery={category:alltype,brand:allbrand}
 console.log(allquery)
-dispatch(ProductsGetdata("",allquery));
+dispatch(ProductsGetdata("",allquery,page));
 }
   const brands = ["RM", "levies", "safari", "peeter england", "HM"];
   const prices = ["450-900", "900-1500", "1500-2000", "2000 & Above"];
   const types = [ "jean", "shirt", "tshirt", "jacket", "shoe","hoodie"];
 useEffect(()=>{
 handleFilter()
-},[selectedPrice,selectedBrand,selectedType])
-
-
+},[selectedPrice,selectedBrand,selectedType,page])
   return (
     <Box
       display={{
@@ -169,14 +170,24 @@ handleFilter()
         md: "flex",
         sm: "flex",
       }}
+      width={{
+        lg: "30%",
+        xl: "30%",
+        "2xl": "30%",
+        md: "40%",
+        sm: "100%",
+        base:"100%"
+      }}
       style={{
         alignItems: "left",
         textAlign: "start",
         paddingLeft: "10px",
         fontSize: "15px",
         lineHeight: "25px",
-        width:"30%"
+        // margin:"auto",
+        // alignSelf:"flex-start"
       }}
+
 
 
     >
@@ -195,7 +206,7 @@ handleFilter()
         mt="10px"
       >
 <Accordion allowToggle w="100%">
-        <AccordionItem w="100%">
+        <AccordionItem w="145px">
           <h2>
             <AccordionButton
               backgroundColor="white"
@@ -217,7 +228,7 @@ handleFilter()
               <AccordionIcon />
             </AccordionButton>
           </h2>
-          <AccordionPanel bg="rgb(167, 173, 173)" className="Filter_Parents">
+          <AccordionPanel position={"absolute"} bg="rgb(167, 173, 173)" className="Filter_Parents">
             {brands.map((brand) => (
               <div key={brand}>
                 <input
@@ -232,7 +243,7 @@ handleFilter()
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
-      <Accordion allowToggle w="100%">
+      <Accordion allowToggle w="30%">
         <AccordionItem w="100%">
           <h2>
             <AccordionButton
@@ -244,7 +255,7 @@ handleFilter()
               }}
             >
               <Box
-                w="180px"
+                w="100%"
                 className="Accordian_eyecare_left_dection"
                 as="span"
                 flex="1"
@@ -255,7 +266,7 @@ handleFilter()
               <AccordionIcon />
             </AccordionButton>
           </h2>
-          <AccordionPanel bg="rgb(167, 173, 173)" className="Filter_Parents">
+          <AccordionPanel position={"absolute"} bg="rgb(167, 173, 173)" className="Filter_Parents">
             {types.map((type) => (
               <div key={type}>
                 <input
@@ -265,44 +276,6 @@ handleFilter()
                   checked={selectedType.includes(type)}
                 />
                 {type}
-              </div>
-            ))}
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-      <Accordion allowToggle w="100%">
-        <AccordionItem w="100%">
-          <h2>
-            <AccordionButton
-              backgroundColor="white"
-              _expanded={{
-                bg: "rgb(167, 173, 173)",
-                color: "white",
-                borderBottom: "1px solid",
-              }}
-            >
-              <Box
-                w="180px"
-                className="Accordian_eyecare_left_dection"
-                as="span"
-                flex="1"
-                textAlign="left"
-              >
-                Price
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel bg="rgb(167, 173, 173)" className="Filter_Parents">
-            {prices.map((price) => (
-              <div key={price}>
-                <input
-                  type="checkbox"
-                  value={price}
-                  onChange={() => handleFilterByPrice(price)}
-                  checked={selectedPrice.includes(price)}
-                />
-                {price}
               </div>
             ))}
           </AccordionPanel>

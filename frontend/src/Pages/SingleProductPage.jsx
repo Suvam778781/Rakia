@@ -27,6 +27,8 @@ import {
   SkeletonCircle,
   SkeletonText,
   Skeleton,
+  Grid,
+  Badge,
 } from "@chakra-ui/react";
 import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { MdLocalShipping } from "react-icons/md";
@@ -38,6 +40,7 @@ import "../App.css"
 import axios from "axios";
 import { ArrowLeftIcon, StarIcon } from "@chakra-ui/icons";
 import { AddtocartProducts } from "../HOF/Cartreducer/cart.action";
+import { BiDislike, BiLike } from "react-icons/bi";
 const SingleProductPage = () => {
   const params = useParams();
   const [product, setproduct] = useState(null);
@@ -59,7 +62,7 @@ const SingleProductPage = () => {
       setLoading(false)
     }
   };
-  console.log(product)
+  // console.log(product.review)
   const handleAdd = () => {
 
    if (userandadmin.userloginSuc){
@@ -96,6 +99,13 @@ const SingleProductPage = () => {
       duration: 4000,
       isClosable: true,
     })
+  }
+  const converttoUpper=(str)=>{
+str=str.split(" ").map((ele)=>{
+return ele.charAt(0).toUpperCase()+ele.slice(1)
+}).join(" ")
+    return str
+
   }
   return (
     <div>
@@ -241,9 +251,38 @@ const SingleProductPage = () => {
                 </Box>
                 <Box>   
                 <Heading color={"green.500"}>Reviews</Heading>
-                <VStack h="200px" overflow={"scroll"}>
-                 
-                </VStack>
+                <Box h="200px" id="scrollbar"  overflowY={"scroll"}>  
+                <Box>
+                  {product.review.length==0?
+                  <Badge w="100%" fontSize={"20px"} h='100%' color={"red.300"} alignItems="center" py="80px" justifyContent={"center"} m="auto">No Review Found</Badge>:
+                  <Grid templateColumns={"repeat(1,1fr)"} w="100%">
+                 {product.review.map((review) => (
+                  <VStack key={review.email} p={5} shadow="md" borderWidth="1px" borderRadius="10px" my={5} textAlign="left" transition="all 0.2s ease-in-out">
+                  <Box mr={5} w="100%">
+                    <Text mt={2} textAlign="left" fontWeight="bold" color="black">{converttoUpper(review.name)}</Text>
+                  </Box>
+                    <Heading textAlign={"left"} w="100%"size="sm" color="RGBA(0, 0, 0, 0.24)">{review.title}</Heading>
+                  <Flex >
+                  <Flex alignItems="center">
+                    <Button bg="green.500"  mr={3}  color="#ffffff"  borderRadius="20%" px={2} py={2} transition="all 0.2s ease-in-out">
+                      <BiLike name="like" mr={2} /> {review.like}
+                    </Button>
+                    <Button bg="red.500" color="#ffffff"  borderRadius="20%" px={2} py={2} transition="all 0.2s ease-in-out">
+                      <BiDislike  name="dislike" _hover={{color:"green"}} mr={2} /> {review.dislike}
+                    </Button>
+                  </Flex>
+                  </Flex>
+                  <VStack >
+                  <Text mt={2} color="grey"> {converttoUpper(review.description)}</Text>
+                  </VStack>
+               </VStack>
+                ))
+                 }
+                 </Grid>
+                 }
+                </Box>
+                </Box>
+                <Button color={"green.500"} mt="10px">Add New</Button>
                 </Box>
               </Box>
             </Stack>

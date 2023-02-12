@@ -1,5 +1,6 @@
-import { HamburgerIcon, Search2Icon } from "@chakra-ui/icons";
+import { HamburgerIcon, Search2Icon, SearchIcon } from "@chakra-ui/icons";
 import {
+  Badge,
   Box,
   Button,
   Drawer,
@@ -12,11 +13,21 @@ import {
   HStack,
   Input,
   Link,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   useDisclosure,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { BsLinkedin } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
 import {
   ProductsGetdata,
   Products_Getdata,
@@ -25,12 +36,30 @@ import { UserSignout } from "../HOF/User&AdminReducer/UA.action";
 
 export default function Navbar() {
   const [search, setsearch] = useState("");
+  const [openModal, setopenModal] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const toast=useToast();
   const userandadmin = useSelector((state) => state.useradminReducer);
   // const [authstate,setauthstate]=useState(userandadmin.adminloginSuc||userandadmin.userloginSuc)
   console.log(userandadmin);
   const HandleSearch = () => {
-    dispatch(ProductsGetdata(search));
+    navigate("/");
+    if(search!==""){
+    dispatch(ProductsGetdata(search, "", ""));}
+    else {
+      toast({
+        title: 'Please Enter.',
+        description: "Please Enter A Category.",
+        status: 'error',
+        position:"top-left",
+        variant:"top-accent",
+        duration: 6000,
+        colorScheme:"yellow",
+        isClosable: true,
+      })
+
+    }
   };
   const Handleauth = () => {
     if (userandadmin.adminloginSuc || userandadmin.userloginSuc) {
@@ -88,14 +117,20 @@ export default function Navbar() {
               placeholder="Enter..."
               borderRadius={"0px"}
               border="none"
-              onChange={(e) => setsearch(e.target.value)}
               value={search}
               borderBottom="1px solid white"
               h="30px"
               color="gray"
               _placeholder={{ color: "grey" }}
+              onClick={() => setopenModal(true)}
             />
-            {/* </InputAddon> */}
+            <SearchModal
+              openModal={openModal}
+              setopenModal={setopenModal}
+              search={search}
+              setsearch={setsearch}
+              HandleSearch={HandleSearch}
+            />
             <Search2Icon ml="10px" color={"white"} onClick={HandleSearch} />
           </Box>
           <HStack
@@ -138,14 +173,21 @@ export default function Navbar() {
     </div>
   );
 }
-export const NavbarDrawer = ({ setsearch, search, HandleSearch,userandadmin }) => {
+export const NavbarDrawer = ({
+  setsearch,
+  search,
+  HandleSearch,
+  userandadmin,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [openModal, setopenModal] = useState(false);
   const btnRef = React.useRef();
   const Handleauth = () => {
     if (userandadmin.adminloginSuc || userandadmin.userloginSuc) {
       UserSignout();
     }
   };
+
   return (
     <>
       <HamburgerIcon ref={btnRef} color="green.500" onClick={onOpen} />
@@ -186,7 +228,6 @@ export const NavbarDrawer = ({ setsearch, search, HandleSearch,userandadmin }) =
                 color="gray"
                 _placeholder={{ color: "grey" }}
               />
-              {/* </InputAddon> */}
               <Search2Icon
                 ml="10px"
                 boxSize={"30px"}
@@ -203,7 +244,6 @@ export const NavbarDrawer = ({ setsearch, search, HandleSearch,userandadmin }) =
               </Link>
             </VStack>
           </DrawerBody>
-
           <DrawerFooter>
             <Button variant="outline" mr={3} onClick={onClose}>
               Cancel
@@ -215,3 +255,84 @@ export const NavbarDrawer = ({ setsearch, search, HandleSearch,userandadmin }) =
     </>
   );
 };
+const SearchModal = ({
+  openModal,
+  setopenModal,
+  HandleSearch,
+  search,
+  setsearch,
+}) => {
+  return (
+    <>
+      <Modal
+        isOpen={openModal}
+        size="5xl"
+        rounded="md"
+        width="90%"
+        onClose={() => setopenModal(false)}
+        height="110px"
+      >
+        <ModalOverlay
+          bg="blackAlpha.600"
+          backdropFilter="auto"
+          backdropInvert="20%"
+          backdropBlur="4px"
+        />
+        <ModalContent
+          p={1}
+          rounded="md"
+          height={"100px"}
+          minH="70px"
+          maxH="70px"
+          backgroundColor="white"
+          boxShadow="lg"
+        >
+          <ModalCloseButton />
+          <ModalBody m="auto" w="70%">
+            <Box display={"flex"} margin="auto" justifyContent={"center"}>
+              {/* <InputAddon> */}
+              <Input
+                type={"text"}
+                _focus={{ boxShadow: "none", borderBottom: "1px solid grey" }}
+                placeholder="Enter..."
+                borderRadius={"0px"}
+                border="none"
+                onChange={(e) => setsearch(e.target.value)}
+                value={search}
+                borderBottom="1px solid white"
+                h="30px"
+                color="gray"
+                _placeholder={{ color: "grey" }}
+              />
+              <Search2Icon
+                onClick={() => {
+                  HandleSearch();
+                  setopenModal(false);
+                }}
+                m="auto"
+                ml="10px"
+                color={"grey"}
+              />
+            </Box>
+          </ModalBody>
+
+          <Box
+            color="green.400"
+            display={"flex"}
+            w="40%"
+            m="auto"
+            justifyContent={"space-between"}
+          >
+            <Badge color="green.400">Jeans</Badge>
+            <Badge color="red.400">Tshirt</Badge>
+            <Badge color="yellow.400">Hoodie</Badge>
+            <Badge color="blackAlpha.900">Shirt</Badge>
+            <Badge color={"pink.300"}>Shoe</Badge>
+          </Box>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
+export { SearchModal };

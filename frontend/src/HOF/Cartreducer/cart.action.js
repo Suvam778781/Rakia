@@ -1,11 +1,25 @@
 import axios from "axios"
 import { ADD_TO_CART, ADD_TO_CART_LOADING, CARTLIST_DATA, CART_ERROR, CART_LOADING, REMOVE_PRODUCTS_CART } from "./cart.actionTypes"
 let Api_Url=process.env.REACT_APP_BASE_URL
-export const CartlistGetdata=(UserId)=>async(dispatch)=>{
-    let res=await fetch(`${process.env.REACT_APP_BASE_URL}/carts/${UserId}`)
-    let cartlistdata=await res.json()
-    dispatch({type:CARTLIST_DATA,payload:cartlistdata})
- }
+export const CartlistGetdata=()=>async(dispatch)=>{
+  const token = localStorage.getItem("token")||""
+  let cartlistdata
+  try{
+    dispatch({type:CART_LOADING});
+cartlistdata=await axios.get(
+      `${process.env.REACT_APP_BASE_URL}/carts`,
+      {
+        headers: {
+          Authorization:token,
+        }, 
+      }
+    )
+      dispatch({type:CARTLIST_DATA,payload:cartlistdata})}
+    catch(err){
+      dispatch({type:CART_ERROR,payload:err})
+      console.log(err);
+    };
+}
 export const RemoveFromCartlist=(id)=>async(dispatch)=>{
     let token=localStorage.getItem("token")||""
 try{
