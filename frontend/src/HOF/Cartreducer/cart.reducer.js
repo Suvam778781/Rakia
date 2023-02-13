@@ -10,6 +10,7 @@ const initialstate = {
   CartLoading: false,
   Error: false,
   CartSucces:false,
+  CartTotal:0
 };
 export const CartReducer = (state = initialstate, { type, payload }) => {
   switch (type) {

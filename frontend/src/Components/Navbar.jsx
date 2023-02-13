@@ -13,6 +13,12 @@ import {
   HStack,
   Input,
   Link,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuGroup,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -27,7 +33,7 @@ import {
 import React, { useState } from "react";
 import { BsLinkedin } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import {
   ProductsGetdata,
   Products_Getdata,
@@ -39,26 +45,26 @@ export default function Navbar() {
   const [openModal, setopenModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const toast=useToast();
+  const toast = useToast();
+  const location = useLocation();
   const userandadmin = useSelector((state) => state.useradminReducer);
   // const [authstate,setauthstate]=useState(userandadmin.adminloginSuc||userandadmin.userloginSuc)
   console.log(userandadmin);
   const HandleSearch = () => {
     navigate("/");
-    if(search!==""){
-    dispatch(ProductsGetdata(search, "", ""));}
-    else {
+    if (search !== "") {
+      dispatch(ProductsGetdata(search, "", ""));
+    } else {
       toast({
-        title: 'Please Enter.',
+        title: "Please Enter.",
         description: "Please Enter A Category.",
-        status: 'error',
-        position:"top-left",
-        variant:"top-accent",
+        status: "error",
+        position: "top-left",
+        variant: "top-accent",
         duration: 6000,
-        colorScheme:"yellow",
+        colorScheme: "yellow",
         isClosable: true,
-      })
-
+      });
     }
   };
   const Handleauth = () => {
@@ -108,30 +114,37 @@ export default function Navbar() {
           pr="60px"
           justifyContent={"space-between"}
         >
-          <Box>
+          <Box w="50%">
             {/* <InputAddon> */}
-            <Input
-              w="400px"
-              type={"text"}
-              _focus={{ boxShadow: "none", borderBottom: "1px solid white" }}
-              placeholder="Enter..."
-              borderRadius={"0px"}
-              border="none"
-              value={search}
-              borderBottom="1px solid white"
-              h="30px"
-              color="gray"
-              _placeholder={{ color: "grey" }}
-              onClick={() => setopenModal(true)}
-            />
-            <SearchModal
-              openModal={openModal}
-              setopenModal={setopenModal}
-              search={search}
-              setsearch={setsearch}
-              HandleSearch={HandleSearch}
-            />
-            <Search2Icon ml="10px" color={"white"} onClick={HandleSearch} />
+            {location.pathname == "/" && (
+              <Box>
+                <Input
+                  w="400px"
+                  type={"text"}
+                  _focus={{
+                    boxShadow: "none",
+                    borderBottom: "1px solid white",
+                  }}
+                  placeholder="Enter..."
+                  borderRadius={"0px"}
+                  border="none"
+                  value={search}
+                  borderBottom="1px solid white"
+                  h="30px"
+                  color="gray"
+                  _placeholder={{ color: "grey" }}
+                  onClick={() => setopenModal(true)}
+                />
+                <SearchModal
+                  openModal={openModal}
+                  setopenModal={setopenModal}
+                  search={search}
+                  setsearch={setsearch}
+                  HandleSearch={HandleSearch}
+                />
+                <Search2Icon ml="10px" color={"white"} onClick={HandleSearch} />
+              </Box>
+            )}
           </Box>
           <HStack
             justifyContent={"space-between"}
@@ -140,14 +153,32 @@ export default function Navbar() {
             color={"white"}
           >
             <Box>
+              <Link href="/user/help">Help</Link>
+            </Box>
+            <Box>
               <Link href="/user/cart">Cart</Link>
             </Box>
             <Box>
-              <Link href="/login" onClick={Handleauth}>
-                {userandadmin.adminloginSuc || userandadmin.userloginSuc
-                  ? "Logout"
-                  : "Login"}
-              </Link>
+              <Menu isLazy >
+                <MenuButton as={Link} >
+                  Profile
+                </MenuButton>
+                <MenuList  bg={"rgb(167, 173, 173)"} >
+                  <MenuGroup fontWeight={"700"} fontSize="20px" color={"green.500"}  bg={"rgb(167, 173, 173)"} title="Profile">
+                    <MenuItem bg={"rgb(167, 173, 173)"} as={"a"} href="/login" onClick={Handleauth}>
+                      {userandadmin.adminloginSuc || userandadmin.userloginSuc
+                        ? "Logout"
+                        : "Login"}
+                    </MenuItem>
+                    <MenuItem bg={"rgb(167, 173, 173)"} as={"a"} href="/user/order">My Order</MenuItem>
+                  </MenuGroup>
+                  <MenuDivider />
+                  <MenuGroup fontWeight={"700"} fontSize="20px" color={"green.500"}  title="Help">
+                    <MenuItem bg={"rgb(167, 173, 173)"} as="a">Docs</MenuItem>
+                    <MenuItem  bg={"rgb(167, 173, 173)"} as="a">FAQ</MenuItem>
+                  </MenuGroup>
+                </MenuList>
+              </Menu>
             </Box>
           </HStack>
         </Box>

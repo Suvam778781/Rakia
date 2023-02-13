@@ -49,7 +49,12 @@ function HomePage() {
  const [page,setpage]=useState(1)
   const dispatch = useDispatch();
   const products = useSelector((store) => store.ProductsReducer);
-  console.log(products)
+  const ToknowWishlist = (Eyedata) => {
+  //   if (cartdata.find((item) => Eyedata.id === item.id)) {
+  //     return true;
+  //   }
+  //   return false;
+  };
   useEffect(() => {
     dispatch(ProductsGetdata());
   }, []);
