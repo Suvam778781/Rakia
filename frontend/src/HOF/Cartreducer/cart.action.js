@@ -1,9 +1,9 @@
 import axios from "axios"
-import { ADD_TO_CART, ADD_TO_CART_LOADING, CARTLIST_DATA, CART_ERROR, CART_LOADING, REMOVE_PRODUCTS_CART } from "./cart.actionTypes"
-let Api_Url=process.env.REACT_APP_BASE_URL
+import { ADD_TO_CART,  CARTLIST_DATA, CART_ERROR, CART_LOADING, CART_UPDATE, REMOVE_PRODUCTS_CART } from "./cart.actionTypes"
 export const CartlistGetdata=()=>async(dispatch)=>{
   const token = localStorage.getItem("token")||""
   let cartlistdata
+  console.log(cartlistdata)
   try{
     dispatch({type:CART_LOADING});
 cartlistdata=await axios.get(
@@ -14,17 +14,24 @@ cartlistdata=await axios.get(
         }, 
       }
     )
-      dispatch({type:CARTLIST_DATA,payload:cartlistdata})}
+      dispatch({type:CARTLIST_DATA,payload:cartlistdata.data})
+    }
     catch(err){
+      alert("something went wrong")
       dispatch({type:CART_ERROR,payload:err})
-      console.log(err);
     };
 }
 export const RemoveFromCartlist=(id)=>async(dispatch)=>{
     let token=localStorage.getItem("token")||""
+console.log(id)
 try{
     dispatch({type:CART_LOADING,payload:id})
-await axios.delete(`${process.env.REACT_APP_BASE_URL}/carts/delete/${id}`)
+await axios.delete(`${process.env.REACT_APP_BASE_URL}/carts/delete/${id}`,{
+  headers: {
+    Authorization: token,
+  },
+
+})
 dispatch({type:REMOVE_PRODUCTS_CART,payload:id})
 }
 catch(err){
@@ -57,21 +64,24 @@ export const AddtocartProducts=(data)=>async(dispatch)=>{
 }
 
     export const UpdateCartProducts=(data)=>async(dispatch)=>{
-        let token=localStorage.getItem("token")||""
+
+      console.log(data)
+        let token=localStorage.getItem("token")||"";
         try{
-            dispatch({type:CART_LOADING})
-           await axios.post(`${process.env.REACT_APP_BASE_URL}/carts/update/${data._id}`,
-           data,
-           {
+            
+          await axios.patch(`${process.env.REACT_APP_BASE_URL}/carts/update/${data._id}`,
+          data,
+          {
             headers: {
-              Authorization:token,
+              Authorization: token,
             },
           }
-           )
-            dispatch({type:ADD_TO_CART,payload:data})
+         )
+            dispatch({type:CART_UPDATE,payload:data})
         }
         catch(err){
             alert("something went wrong")
+            console.log(err)
             dispatch({type:CART_ERROR})
         }
         }
