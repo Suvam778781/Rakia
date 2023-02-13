@@ -102,3 +102,27 @@ text-align: left;
     width: 70%;
 margin: auto;
   }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .checkbox-label:before {
+  
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #000;
+    border-radius: 3px;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 20px;
+  }
+  
+  /* .checkbox-input:checked + .checkbox-label:before {
+    content: "\2713";
+    background-color: #000;
+    color: #fff;
+  } */

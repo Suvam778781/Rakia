@@ -1,8 +1,8 @@
-import React, { useRef } from 'react'
+import React, { useRef } from "react";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { ArrowLeftIcon, Search2Icon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
-import env from "react-dotenv"
+import env from "react-dotenv";
 
 // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2M2RmOTlkZmY0ODAzY2Q4YTYzMjMzOTUiLCJpYXQiOjE2NzU1OTgzMjMsImV4cCI6MTY3NTY4NDcyM30.chHmPbJN8h9QPtViekmUqs4WbG9DoRgnwXdr2Qbuzzw"
 import {
@@ -29,12 +29,16 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon, MinusIcon } from "@chakra-ui/icons";
 import axios from "axios";
-import Navbar from '../Components/Navbar';
-import "../App.css"
-import { useDispatch, useSelector } from 'react-redux';
-import { CartlistGetdata } from '../HOF/Cartreducer/cart.action';
+import Navbar from "../Components/Navbar";
+import "../App.css";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  CartlistGetdata,
+  RemoveFromCartlist,
+  UpdateCartProducts,
+} from "../HOF/Cartreducer/cart.action";
 const AddToCartPage = () => {
-  const [Cartdata, setCartdata] = useState([]);
+  const cartdata = useSelector((state) => state.CartReducer);
   const [pin, setPin] = useState("");
   const toast = useToast();
   const [error, setError] = useState("");
@@ -43,50 +47,29 @@ const AddToCartPage = () => {
   const [coupon, setcoupon] = useState("");
   const [couponCount, setcouponCount] = useState(0);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [scrollHeight,setscrollHeight]=useState(0)
+  const [scrollHeight, setscrollHeight] = useState(0);
   const navigate = useNavigate();
   const cartRef = useRef(null);
-  const dispatch=useDispatch();
-  const userandadmin=useSelector((state)=>state.useradminReducer)
-  const cartdata=useSelector((state)=>state.CartReducer)
+  const dispatch = useDispatch();
+  const userandadmin = useSelector((state) => state.useradminReducer);
   const handleScroll = () => {
     setScrollPosition(cartRef.current.scrollTop);
-    setscrollHeight(cartRef.current.scrollHeight)
+    setscrollHeight(cartRef.current.scrollHeight);
   };
   useEffect(() => {
-    cartRef.current.addEventListener('scroll', handleScroll);
+    cartRef.current.addEventListener("scroll", handleScroll);
     return () => {
-      cartRef.current.removeEventListener('scroll', handleScroll);
+      cartRef.current.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  console.log(cartdata);
   // colapse function for price details
-  const GetAllCartData = async () => {
-    // console.log("data")
-    const token = localStorage.getItem("token")||""
-    console.log(token)
-    axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/carts`,
-        {
-          headers: {
-            Authorization:token,
-          }, 
-        }
-      )
-      .then((res) => {
-        setCartdata(res.data)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   useEffect(() => {
-    GetAllCartData()
-    // dispatch(CartlistGetdata())
+    dispatch(CartlistGetdata());
   }, []);
   const handleTotal = () => {
     let Total = 0;
-    Cartdata.map((ele) => {
+    cartdata.Cart.map((ele) => {
       let Addgst = (ele.price / 100) * 18;
       let Singleprice = Addgst + ele.price;
       Total += Math.floor(Singleprice * ele.quantity);
@@ -95,33 +78,12 @@ const AddToCartPage = () => {
   };
   useEffect(() => {
     handleTotal();
-  }, [Cartdata]);
+  }, [cartdata]);
   const handleDecrease = (item) => {
     const token = localStorage.getItem("token") || "";
     if (item.quantity > 1) {
-      let newdata = Cartdata.map((ele) => {
-        if (ele._id === item._id) {
-          return { ...ele, quantity: ele.quantity - 1 };
-        } else return ele;
-      });
-      item={...item,quantity:item.quantity-1}
-      axios
-      .patch(
-        `${process.env.REACT_APP_BASE_URL}/carts/update/${item._id}`,
-        item,
-        {
-          headers: {
-            Authorization:token,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-      setCartdata(newdata);
+      item = { ...item, quantity: item.quantity - 1 };
+      dispatch(UpdateCartProducts(item));
     } else {
       toast({
         title: "Quantity",
@@ -133,34 +95,12 @@ const AddToCartPage = () => {
     }
   };
   const handleIncrease = (item) => {
-    const token =localStorage.getItem("token") || "";
-    console.log(item)
+    const token = localStorage.getItem("token") || "";
     if (item.quantity < 5) {
-      let newdata = Cartdata.map((ele) => {
-        if (ele._id === item._id) {
-          return { ...ele, quantity: ele.quantity + 1 };
-        } else {
-          return ele;
-        }
-      });
-     item={...item,quantity:item.quantity+1}
-      axios
-        .patch(
-          `${process.env.REACT_APP_BASE_URL}/carts/update/${item._id}`,
-          item,
-          {
-            headers: {
-              Authorization:token,
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-        setCartdata(newdata);
+      item = { ...item, quantity: item.quantity + 1 };
+
+      dispatch(UpdateCartProducts(item));
+      // setCartdata(newdata);
     } else {
       toast({
         title: "Quantity",
@@ -180,31 +120,15 @@ const AddToCartPage = () => {
     }
   };
   const handleRemove = (item) => {
-    const token = localStorage.getItem("token") || "";
-    const removedata = Cartdata.filter((ele) => ele._id !== item._id);
-    setCartdata(removedata);
-
-    axios
-      .delete(
-        `${process.env.REACT_APP_BASE_URL}/carts/delete/${item._id}`,
-        {
-          headers: {
-            Authorization:token,
-           
-          },
-        }
-      )
-      .then((res) => {
-        toast({
-          title: "Remove Data",
-          description: "Remove Succesfully",
-          status: "success",
-          position: "top",
-          duration: 2000,
-          isClosable: true,
-        });
-      })
-      .catch((err) => console.log(err));
+    dispatch(RemoveFromCartlist(item._id));
+    toast({
+      title: "Remove Data",
+      description: "Remove Succesfully",
+      status: "success",
+      position: "top",
+      duration: 2000,
+      isClosable: true,
+    });
   };
   const handleRedirected = () => {
     navigate("/cart/checkout");
@@ -241,9 +165,9 @@ const AddToCartPage = () => {
       });
     }
   };
-    if(!userandadmin.userloginSuc){
-  return (<Navigate to="/login"/>)
-    }
+  if (!userandadmin.userloginSuc) {
+    return <Navigate to="/login" />;
+  }
   return (
     <>
       <Box mt="90px">
@@ -251,11 +175,9 @@ const AddToCartPage = () => {
           display="flex"
           w="88%"
           h="50px"
-
           alignItems={"center"}
           borderBottom={"0.5px solid RGBA(0, 0, 0, 0.08)"}
           borderTop="0.5px solid RGBA(0, 0, 0, 0.08)"
-          
           mt="70px"
           m="auto"
         >
@@ -263,15 +185,15 @@ const AddToCartPage = () => {
           <Text fontWeight={"semibold"} fontSize={"20px"}>
             Products Cart
           </Text>
-          <Text w="70px">({Cartdata.length}items)</Text>
+          <Text w="70px">({cartdata.Cart.length}items)</Text>
         </Box>
 
         <Box display="inherit" mb="30px" w="90%" m="auto">
-          <Box  overflow={"hidden"}>
-          
-            <Box id="scrollbar"
-             ref={cartRef}
-              style={{ height: "500px", overflowY: "scroll", }}
+          <Box overflow={"hidden"}>
+            <Box
+              id="scrollbar"
+              ref={cartRef}
+              style={{ height: "500px", overflowY: "scroll" }}
               w="98%"
               m="10px"
             >
@@ -284,31 +206,33 @@ const AddToCartPage = () => {
                 bgColor="green.500"
                 m="auto"
                 color={"white"}
-
-                visibility={scrollHeight-scrollPosition<600?"hidden":""} 
-                position={scrollHeight-scrollPosition>600?"absolute":"fixed"} 
+                visibility={scrollHeight - scrollPosition < 600 ? "hidden" : ""}
+                position={
+                  scrollHeight - scrollPosition > 600 ? "absolute" : "fixed"
+                }
                 // top="0px"
                 zIndex="1"
               >
                 <Text>Item</Text>
-                <Text >Quantity</Text>
+                <Text>Quantity</Text>
                 <Text>Price (Inclusive of GST)</Text>
               </Box>
               {/*  mapping all the cart data */}
-              {Cartdata.length>0&&Cartdata.map((item, index) => (
-                <Box boxShadow={"md"} key={item.id}>
-                  <SingleItem
-                    key={item._id}
-                    item={item}
-                    handleDecrease={handleDecrease}
-                    handleIncrease={handleIncrease}
-                    handleRemove={handleRemove}
-                  />
-              
-                </Box>
-              ))}
+              {cartdata.Cart.length > 0 &&
+                cartdata.Cart.map((item, index) => (
+                  <Box boxShadow={"md"} key={item.id}>
+                    <SingleItem
+                      key={item._id}
+                      item={item}
+                      handleDecrease={handleDecrease}
+                      handleIncrease={handleIncrease}
+                      handleRemove={handleRemove}
+                    />
+                  </Box>
+                ))}
             </Box>
           </Box>
+          <Button bgColor={"green.500"} my="20px" as="a" href="/user/cart/checkout">CHECKOUT</Button>
           <VStack w="100%" my="10px" mx="10px" mb="100px">
             <Box
               h="auto"
@@ -331,7 +255,6 @@ const AddToCartPage = () => {
                   alignItems={"center"}
                   textAlign="left"
                   pt="5px"
-                  
                 >
                   Payment Summary
                 </Text>
@@ -351,23 +274,30 @@ const AddToCartPage = () => {
               </Text>
               <HStack px="20px" w="100%">
                 <Input
-               w="80%"
-               type={"text"}
-               _focus={{ boxShadow: "none", borderBottom: "2px solid green" }}
-               borderRadius={"0px"}
-               border="none"
-               value={pin}
-               borderBottom="1px solid green" 
-               h="30px"
-               color="gray"
-               _placeholder={{ color: "grey" }}               
+                  w="80%"
+                  type={"text"}
+                  _focus={{
+                    boxShadow: "none",
+                    borderBottom: "2px solid green",
+                  }}
+                  borderRadius={"0px"}
+                  border="none"
+                  value={pin}
+                  borderBottom="1px solid green"
+                  h="30px"
+                  color="gray"
+                  _placeholder={{ color: "grey" }}
                   fontSize={"12px"}
                   placeholder="ENTER YOUR PINCODE"
                   rounded="xs"
-                  _hover={{borderBotton:"2px solid green"}}
+                  _hover={{ borderBotton: "2px solid green" }}
                   onChange={(e) => setPin(e.target.value)}
                 />
-                <Search2Icon    onClick={findDelivery} verticalAlign="middle" zIndex="10"/>
+                <Search2Icon
+                  onClick={findDelivery}
+                  verticalAlign="middle"
+                  zIndex="10"
+                />
               </HStack>
               <Text
                 pl="20px"
@@ -486,7 +416,6 @@ const AddToCartPage = () => {
                 >
                   View More
                 </Link>
-               
               </VStack>
             </Box>
 
@@ -551,7 +480,6 @@ const AddToCartPage = () => {
               id="scrollbar"
               fontSize={"14px"}
               overflowY="scroll"
-              
             >
               <Box>
                 <Box display={"flex"}>
@@ -635,13 +563,13 @@ export const SingleItem = ({
       </Text>
 
       <Box display="flex" w="100%" justifyContent="space-between" m="auto">
-        <Box display="flex" fontSize="14px"w="40%" >
-          <Box  boxShadow={"sm"} mr="10px">
+        <Box display="flex" fontSize="14px" w="40%">
+          <Box boxShadow={"sm"} mr="10px">
             <Image
               src={item.image}
               style={{
                 width: "100%",
-                height:"200px"                
+                height: "200px",
               }}
             />
           </Box>
@@ -651,14 +579,13 @@ export const SingleItem = ({
             {/* <Text> {item.Spindle_Speed}</Text> */}
             {!dd ? (
               <Button
-                 mt="40px"
+                mt="40px"
                 style={{
                   textAlign: "left",
                   display: "flex",
                   fontSize: "13px",
                 }}
                 verticalAlign="middle"
-                
                 alignItems={"center"}
                 pl="0px"
                 bg="white"
@@ -676,7 +603,7 @@ export const SingleItem = ({
           <Box
             style={{
               width: "10%",
-              m:"auto",
+              m: "auto",
               display: "flex",
               height: "33px",
               color: "grey",
@@ -802,7 +729,9 @@ export const SingleItem = ({
               src="https://www.industrybuying.com/static/svg/delivery-truck-afterdiscount.svg"
               alt="Free Shipping"
             />
-            <Text textAlign={"center"} color={"#4c993e"}>Free shipping</Text>
+            <Text textAlign={"center"} color={"#4c993e"}>
+              Free shipping
+            </Text>
           </HStack>
         </Box>
       </Box>
@@ -810,7 +739,7 @@ export const SingleItem = ({
   );
 };
 // model for t&c checking
-export default AddToCartPage
+export default AddToCartPage;
 
 const QuantityButton = () => {
   const [quantity, setQuantity] = useState(1);
@@ -825,16 +754,16 @@ const QuantityButton = () => {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div style={{ display: "flex", alignItems: "center" }}>
       <button
         style={{
-          width: '30px',
-          height: '30px',
-          borderRadius: '50%',
-          backgroundColor: '#F1F1F1',
-          color: '#333',
-          fontWeight: 'bold',
-          cursor: 'pointer'
+          width: "30px",
+          height: "30px",
+          borderRadius: "50%",
+          backgroundColor: "#F1F1F1",
+          color: "#333",
+          fontWeight: "bold",
+          cursor: "pointer",
         }}
         onClick={decreaseQuantity}
       >
@@ -844,22 +773,22 @@ const QuantityButton = () => {
         type="text"
         value={quantity}
         style={{
-          width: '40px',
-          textAlign: 'center',
-          border: 'none',
-          borderRadius: '4px'
+          width: "40px",
+          textAlign: "center",
+          border: "none",
+          borderRadius: "4px",
         }}
         readOnly
       />
       <button
         style={{
-          width: '30px',
-          height: '30px',
-          borderRadius: '50%',
-          backgroundColor: '#F1F1F1',
-          color: '#333',
-          fontWeight: 'bold',
-          cursor: 'pointer'
+          width: "30px",
+          height: "30px",
+          borderRadius: "50%",
+          backgroundColor: "#F1F1F1",
+          color: "#333",
+          fontWeight: "bold",
+          cursor: "pointer",
         }}
         onClick={increaseQuantity}
       >
@@ -869,4 +798,4 @@ const QuantityButton = () => {
   );
 };
 
-export {QuantityButton} ;
+export { QuantityButton };

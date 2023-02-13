@@ -21,7 +21,8 @@ import {
   Text,
   Flex,
   Button,
-  useToast
+  useToast,
+  Checkbox
 } from "@chakra-ui/react";
 import {
   Container,
@@ -60,7 +61,7 @@ function HomePage() {
   }, []);
   return (
     <div>
-      {/* Navbar started here*/}
+     {/* <Carousel/> */}
       {/*here filter and sorting will come and some skeleton i will add*/}
 
       <Flex display={{md:"inherit",sm:"inherit"}} p="10px" mt="100px" w="100%">
@@ -122,7 +123,18 @@ const [selectedType, setSelectedType] = useState([]);
 const dispatch = useDispatch();
 const products = useSelector((store) => store.ProductsReducer);
 const cartdata=useSelector((store)=>store.CartReducer)
-console.log(cartdata)
+let allfilter=[...selectedBrand,...selectedType];
+
+console.log(allfilter)
+const converttoUpper = (str) => {
+  str = str
+    .split(" ")
+    .map((ele) => {
+      return ele.charAt(0).toUpperCase() + ele.slice(1);
+    })
+    .join(" ");
+  return str;
+};
   // Price filter start from here==-----
 
 useEffect(()=>{
@@ -136,6 +148,16 @@ useEffect(()=>{
       setSelectedType([...selectedType, type]);
     }
   };
+// generate random color
+const generateRandomColor=()=> {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
    // Brand filter start from here==-----
   const handleFilterByBrand = (brand) => {
     if (selectedBrand.includes(brand)) {
@@ -157,7 +179,6 @@ const handleFilter=()=>{
   alltype=alltype.replace(/,\s*$/,"");
   allbrand=allbrand.replace(/,\s*$/,"");
 let allquery={category:alltype,brand:allbrand}
-console.log(allquery)
 dispatch(ProductsGetdata("",allquery,page));
 }
   const brands = ["RM", "levies", "safari", "peeter england", "HM"];
@@ -167,6 +188,18 @@ useEffect(()=>{
 handleFilter()
 },[selectedPrice,selectedBrand,selectedType,page])
   return (
+    <>
+<Box h="100px" display={"flex"} w="17%" fontSize="17px"  >
+  {allfilter.map((ele)=>
+  <Box w="auto" m="auto" display={"flex"} >
+  <Checkbox isChecked="true"style={{color:generateRandomColor(),height:"20px",margin:"auto"  }} /> 
+  <Box alignItems={"center"} display="flex" overflow={"auto"}  minWidth={"127px"} maxWidth="120px">
+  {converttoUpper(ele)}
+  </Box>
+   </Box>
+  )}
+</Box>
+
     <Box
       display={{
         lg: "flex",
@@ -179,9 +212,9 @@ handleFilter()
         lg: "30%",
         xl: "30%",
         "2xl": "30%",
-        md: "40%",
-        sm: "100%",
-        base:"100%"
+        md: "30%",
+        sm: "30%",
+        base:"30%"
       }}
       style={{
         alignItems: "left",
@@ -235,14 +268,14 @@ handleFilter()
           </h2>
           <AccordionPanel position={"absolute"} bg="rgb(167, 173, 173)" className="Filter_Parents">
             {brands.map((brand) => (
-              <div key={brand}>
-                <input
+              <div className="checkbox-container" key={brand}>
+                <input id="checkbox" className="checkbox-input"
                   type="checkbox"
                   value={brand}
                   onChange={() => handleFilterByBrand(brand)}
                   checked={selectedBrand.includes(brand)}
                 />
-                {brand}
+                 <Box className="checkbox-label"> {converttoUpper(brand)}</Box>
               </div>
             ))}
           </AccordionPanel>
@@ -280,7 +313,7 @@ handleFilter()
                   onChange={() => handleFilterByType(type)}
                   checked={selectedType.includes(type)}
                 />
-                {type}
+                {converttoUpper(type)}
               </div>
             ))}
           </AccordionPanel>
@@ -288,6 +321,7 @@ handleFilter()
       </Accordion>
       </Box>
     </Box>
+    </>
   );
 };
 const ProductItem = ({item}) => {
@@ -455,3 +489,110 @@ export const LoadingComponent = () => {
 // "updated_at":"09/01/2023",
 // "rating":4.9,
 // "brand":"peeter england"
+
+// const Carousel = () => {
+//   const products = useSelector((store) => store.ProductsReducer);
+//   const [index, setIndex] = useState(0);
+//   console.log(products)
+//   const images = [
+//     "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F4a%2F8c%2F4a8c6f1ab0ed1faaff64dbc6a237006b99bcf6b2.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]",
+//     "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Ffa%2Fd3%2Ffad3994a451262dd8e8b7be727cfb7ab0bc86b18.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]",
+//     "https://picsum.photos/id/102/900/500"
+//   ];
+
+//   return (
+//     <Box  position="relative">
+//       <Flex height="100px">
+//         {products.Products.map((item, i) => (
+//           <Box h="200px" border={"1px solid"}
+//             key={i}
+//             width="100%"
+//             height="100%"
+//             position="absolute"
+//             top={0}
+//             left={index === i ? 0 : "100%"} 
+//             transition="all 0.8s ease-in-out"
+//           >
+//          <Box  boxShadow={"md"} >
+//     <Link href={`/products/${item._id}`} w="100%"  overflow="hidden">
+//       <Image w="200px" src={item.image} alt={item.image} />
+//       </Link>
+//       <Box p="7">
+//         <Box display="flex" alignItems="baseline">
+//           {/* <Badge borderRadius="full" px="2" colorScheme="red">
+//             New
+//           </Badge> */}
+//         </Box>
+//         <Box
+//           mt="1"
+//           fontWeight="semibold"
+//           as="h4"
+//           lineHeight="tight"
+//           textAlign={"left"}
+//           noOfLines={1}
+//         >
+//           {item.title}
+//         </Box>
+//         <Box textAlign={"left"}>
+//         ₹ {item.price}
+//           <Box as="span" color="gray.600" fontSize="sm">
+           
+//           </Box>
+//         </Box>
+//         <Box display="flex" mt="2" justifyContent={"space-between"} alignItems="center">
+//           <Box w="30%" display="flex">
+//           {Array(5)
+//             .fill("")
+//             .map((_, i) => {
+//               const roundedRating = Math.round(item.rating * 2) / 2;
+//               if (roundedRating - i >= 1) {
+//                 return (
+//                   <BsStarFill
+//                     key={i}
+//                     style={{ marginLeft: "1" }}
+//                     color={i < item.rating ? "#38A169" : "gray"}
+//                   />
+//                 );
+//               }
+//               if (roundedRating - i === 0.5) {
+//                 return <BsStarHalf   key={i} style={{ marginLeft: "1" }} />;
+//               }
+//               return <BsStar key={i} style={{ marginLeft: "1" }} />;
+//             })}
+//             </Box>
+//             <Box>{item.rating}</Box>
+//           <Box as="span" ml="2" color="gray.600" fontSize="sm">
+//            ( {item.review.length} reviews)
+//           </Box>
+//         </Box>
+
+       
+//       </Box>
+//       </Box>
+//           </Box>
+//         ))}
+//       </Flex>
+//       <Button
+//         onClick={() =>
+//           setIndex(index === 0 ? images.length - 1 : index - 1)
+//         }
+//         position="absolute"
+//         left={10}
+//         top="45%"
+//       >
+//         Prev
+//       </Button>
+//       <Button
+//         onClick={() => setIndex(index === images.length - 1 ? 0 : index + 1)}
+//         position="absolute"
+//         right={10}
+//         top="45%"
+//         transform="translateY(-50%)"
+//       >
+//         Next
+//       </Button>
+//     </Box>
+//   );
+// };
+
+// export {Carousel};
