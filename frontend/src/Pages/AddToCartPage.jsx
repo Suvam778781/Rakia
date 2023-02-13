@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
-import { ArrowLeftIcon } from "@chakra-ui/icons";
+import { ArrowLeftIcon, Search2Icon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import env from "react-dotenv"
 
@@ -31,7 +31,8 @@ import { AddIcon, DeleteIcon, MinusIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import Navbar from '../Components/Navbar';
 import "../App.css"
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { CartlistGetdata } from '../HOF/Cartreducer/cart.action';
 const AddToCartPage = () => {
   const [Cartdata, setCartdata] = useState([]);
   const [pin, setPin] = useState("");
@@ -41,11 +42,13 @@ const AddToCartPage = () => {
   const [total, settotal] = useState(0);
   const [coupon, setcoupon] = useState("");
   const [couponCount, setcouponCount] = useState(0);
-  const navigate = useNavigate();
-  const cartRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scrollHeight,setscrollHeight]=useState(0)
+  const navigate = useNavigate();
+  const cartRef = useRef(null);
+  const dispatch=useDispatch();
   const userandadmin=useSelector((state)=>state.useradminReducer)
+  const cartdata=useSelector((state)=>state.CartReducer)
   const handleScroll = () => {
     setScrollPosition(cartRef.current.scrollTop);
     setscrollHeight(cartRef.current.scrollHeight)
@@ -78,7 +81,8 @@ const AddToCartPage = () => {
       });
   };
   useEffect(() => {
-    GetAllCartData();
+    GetAllCartData()
+    // dispatch(CartlistGetdata())
   }, []);
   const handleTotal = () => {
     let Total = 0;
@@ -245,13 +249,15 @@ const AddToCartPage = () => {
       <Box mt="90px">
         <Box
           display="flex"
-          w="67%"
+          w="88%"
           h="50px"
+
           alignItems={"center"}
           borderBottom={"0.5px solid RGBA(0, 0, 0, 0.08)"}
           borderTop="0.5px solid RGBA(0, 0, 0, 0.08)"
-          ml="10px"
+          
           mt="70px"
+          m="auto"
         >
           {/* cart page startting from here */}
           <Text fontWeight={"semibold"} fontSize={"20px"}>
@@ -260,8 +266,8 @@ const AddToCartPage = () => {
           <Text w="70px">({Cartdata.length}items)</Text>
         </Box>
 
-        <Box display="flex" mb="30px">
-          <Box w="70%" overflow={"hidden"}>
+        <Box display="inherit" mb="30px" w="90%" m="auto">
+          <Box  overflow={"hidden"}>
           
             <Box id="scrollbar"
              ref={cartRef}
@@ -272,7 +278,7 @@ const AddToCartPage = () => {
               <Box
                 justifyContent="space-between"
                 display="flex"
-                w="67%"
+                w="88%"
                 px="50px"
                 py="10px"
                 bgColor="green.500"
@@ -302,10 +308,8 @@ const AddToCartPage = () => {
                 </Box>
               ))}
             </Box>
-           
-           
           </Box>
-          <VStack w="30%" my="10px" mx="10px">
+          <VStack w="100%" my="10px" mx="10px" mb="100px">
             <Box
               h="auto"
               pb="20px"
@@ -347,22 +351,23 @@ const AddToCartPage = () => {
               </Text>
               <HStack px="20px" w="100%">
                 <Input
+               w="80%"
+               type={"text"}
+               _focus={{ boxShadow: "none", borderBottom: "2px solid green" }}
+               borderRadius={"0px"}
+               border="none"
+               value={pin}
+               borderBottom="1px solid green" 
+               h="30px"
+               color="gray"
+               _placeholder={{ color: "grey" }}               
                   fontSize={"12px"}
-                  w="100%"
                   placeholder="ENTER YOUR PINCODE"
-                  _hover={{ border: "none" }}
-                  value={pin}
+                  rounded="xs"
+                  _hover={{borderBotton:"2px solid green"}}
                   onChange={(e) => setPin(e.target.value)}
                 />
-                <Button
-                  position={"relative"}
-                  left="-77px"
-                  verticalAlign="middle"
-                  zIndex="10"
-                  onClick={findDelivery}
-                >
-                  CHECK
-                </Button>
+                <Search2Icon    onClick={findDelivery} verticalAlign="middle" zIndex="10"/>
               </HStack>
               <Text
                 pl="20px"
