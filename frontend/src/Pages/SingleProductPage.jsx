@@ -39,7 +39,7 @@ import { useEffect } from "react";
 import "../App.css";
 import axios from "axios";
 import { ArrowLeftIcon, StarIcon } from "@chakra-ui/icons";
-import { AddtocartProducts } from "../HOF/Cartreducer/cart.action";
+import { AddtocartProducts, CartlistGetdata } from "../HOF/Cartreducer/cart.action";
 import { BiDislike, BiLike } from "react-icons/bi";
 const SingleProductPage = () => {
   const params = useParams();
@@ -65,6 +65,13 @@ const SingleProductPage = () => {
   const handleAdd = () => {
     if (userandadmin.userloginSuc) {
       dispatch(AddtocartProducts(product));
+      toast({
+        title: "Add to cart.",
+        description: "Product added succesfully to your cart.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
     } else {
       toast({
         title: "Add to Cart",
@@ -75,29 +82,21 @@ const SingleProductPage = () => {
       });
     }
   };
+  const ToknowWishlist = (data) => {
+  console.log(cartreducer)
+      // if (cartreducer.Cart((item) => data._id === item._id)) {
+      //   return true;
+      // }
+      // return false;
+  };
+  useEffect(() => {
+    dispatch(CartlistGetdata());
+  }, []);
   useEffect(() => {
     productsbyId();
   }, []);
 
-  if (cartreducer.CartSucces) {
-    toast({
-      title: "Add to cart.",
-      description: "Product added succesfully to your cart.",
-      status: "success",
-      duration: 4000,
-      isClosable: true,
-    });
-  }
-  if (cartreducer.Error) {
-    toast({
-      title: "Add to cart.",
-      description:
-        "Somethiong went wrong while add product to the cart try again.",
-      status: "error",
-      duration: 4000,
-      isClosable: true,
-    });
-  }
+
   const converttoUpper = (str) => {
     str = str
       .split(" ")
@@ -376,7 +375,7 @@ const SingleProductPage = () => {
                         )}
                       </Box>
                     </Box>
-                    <Button color={"green.500"} mt="10px">
+                    <Button isDisabled={ToknowWishlist(product)} color={"green.500"} mt="10px">
                       Add New
                     </Button>
                   </Box>

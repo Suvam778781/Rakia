@@ -165,17 +165,17 @@ export default function Navbar() {
                 </MenuButton>
                 <MenuList  bg={"rgb(167, 173, 173)"} >
                   <MenuGroup fontWeight={"700"} fontSize="20px" color={"green.500"}  bg={"rgb(167, 173, 173)"} title="Profile">
-                    <MenuItem bg={"rgb(167, 173, 173)"} as={"a"} href="/login" onClick={Handleauth}>
+                    <MenuItem bg={"rgb(167, 173, 173)"} _hover={{color:"green.500"}} as={"a"} href="/login" onClick={Handleauth}>
                       {userandadmin.adminloginSuc || userandadmin.userloginSuc
                         ? "Logout"
                         : "Login"}
                     </MenuItem>
-                    <MenuItem bg={"rgb(167, 173, 173)"} as={"a"} href="/user/order">My Order</MenuItem>
+                    <MenuItem bg={"rgb(167, 173, 173)"}_hover={{color:"green.500"}}  as={"a"} href="/user/order">My Order</MenuItem>
                   </MenuGroup>
                   <MenuDivider />
                   <MenuGroup fontWeight={"700"} fontSize="20px" color={"green.500"}  title="Help">
-                    <MenuItem bg={"rgb(167, 173, 173)"} as="a">Docs</MenuItem>
-                    <MenuItem  bg={"rgb(167, 173, 173)"} as="a">FAQ</MenuItem>
+                    <MenuItem _hover={{color:"green.500"}} bg={"rgb(167, 173, 173)"} as="a">Docs</MenuItem>
+                    <MenuItem _hover={{color:"green.500"}}  bg={"rgb(167, 173, 173)"} as="a">FAQ</MenuItem>
                   </MenuGroup>
                 </MenuList>
               </Menu>
@@ -330,7 +330,7 @@ const SearchModal = ({
                 border="none"
                 onChange={(e) => setsearch(e.target.value)}
                 value={search}
-                borderBottom="1px solid white"
+                borderBottom="1px solid black"
                 h="30px"
                 color="gray"
                 _placeholder={{ color: "grey" }}

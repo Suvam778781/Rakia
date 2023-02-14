@@ -51,7 +51,7 @@ function CheckoutPage() {
     const token = localStorage.getItem("token") || "";
     let data;
     try {
-      data = await axios.get(`${process.env.REACT_APP_BASE_URL}/address`, {
+      data = await axios.get(`http://localhost:8080/address`, {
         headers: {
           Authorization: token,
         },
@@ -99,7 +99,7 @@ if(address.length<2){
     let token = localStorage.getItem("token") || "";
     try {
       let res=await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/address/addaddress`,
+        `http://localhost:8080/address/addaddress`,
         data,
         {
           headers: {
