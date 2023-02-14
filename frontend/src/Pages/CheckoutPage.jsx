@@ -51,7 +51,7 @@ function CheckoutPage() {
     const token = localStorage.getItem("token") || "";
     let data;
     try {
-      data = await axios.get(`http://localhost:8080/address`, {
+      data = await axios.get(`${process.env.REACT_APP_BASE_URL}/address`, {
         headers: {
           Authorization: token,
         },
@@ -361,6 +361,7 @@ if(address.length<2){
                 bg="gray.100"
                 textAlign="center"
               >
+                 <Badge position={"relative"} color="white" backgroundColor={"green.500"} right="-231px" top="-41px">{ele.isPrimary ? "Primary" : ""}</Badge>
                 <Box
                   onClick={() => RemoveAddress(ele._id)}
                   borderRadius={"50%"}
@@ -371,9 +372,10 @@ if(address.length<2){
                   py="5px"
                   position={"absolute"}
                 >
+                  
                   <DeleteIcon />
                 </Box>
-                <Text>{ele.isPrimary ? "Primary" : ""}</Text>
+               
                 <Text fontWeight="bold" mb={2} color="gray.800">
                   {ele.name.toUpperCase()}
                 </Text>
