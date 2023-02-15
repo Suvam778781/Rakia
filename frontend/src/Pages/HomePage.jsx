@@ -56,13 +56,13 @@ import {
   Addtocart_products,
   CartlistGetdata,
 } from "../HOF/Cartreducer/cart.action";
+import { converttoUpper } from "../HOF/AllSmallFunction";
 function HomePage() {
   const [page, setpage] = useState(1);
   const dispatch = useDispatch();
   const products = useSelector((store) => store.ProductsReducer);
   const cartdata = useSelector((state) => state.CartReducer);
   const ToknowWishlist = (data) => {
-    console.log(data)
       if (cartdata.Cart.find((item) => data._id === item._id)) {
         return true;
       }
@@ -113,13 +113,7 @@ function HomePage() {
           </Grid>
         )}
       </Flex>
-      <Box my="100px">
-        <Button isDisabled={page == 1} onClick={() => setpage((pg) => pg - 1)}>
-          Prev
-        </Button>
-        <Button>{page}</Button>
-        <Button onClick={() => setpage((pg) => pg + 1)}>Next</Button>
-      </Box>
+     
       <Box w="80%" mx="auto" overflow={"hidden"}>
         <Carousel />
       </Box>
@@ -148,17 +142,6 @@ const ProductsLeftSection = ({ page }) => {
   const products = useSelector((store) => store.ProductsReducer);
   const cartdata = useSelector((store) => store.CartReducer);
   let allfilter = [...selectedBrand, ...selectedType];
-
-  console.log(allfilter);
-  const converttoUpper = (str) => {
-    str = str
-      .split(" ")
-      .map((ele) => {
-        return ele.charAt(0).toUpperCase() + ele.slice(1);
-      })
-      .join(" ");
-    return str;
-  };
   // Price filter start from here==-----
 
   useEffect(() => {
@@ -218,7 +201,7 @@ const ProductsLeftSection = ({ page }) => {
          
          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',marginLeft:"10px" }}>
          <input style={{margin:"auto",height:"17px",width:"14px"}} type="checkbox"  value="checkbox2" checked="true" />
-         <label htmlFor="checkbox2">{converttoUpper(ele)}</label>
+         <Badge ml={"3px"} fontSize="14px" color={"blackAlpha.700"} htmlFor="checkbox2">{converttoUpper(ele)}</Badge>
        </div>
           
         ))}
@@ -233,12 +216,12 @@ const ProductsLeftSection = ({ page }) => {
           sm: "flex",
         }}
         width={{
-          lg: "40%",
-          xl: "40%",
+          lg: "60%",
+          xl: "50%",
           "2xl": "40%",
-          md: "40%",
-          sm: "40%",
-          base: "40%",
+          md: "66%",
+          sm: "65%",
+          base: "60%",
         }}
         style={{
           alignItems: "left",
@@ -251,7 +234,7 @@ const ProductsLeftSection = ({ page }) => {
         {/* <Box></Box> */}
         {/* accordian start fron here */}
 
-        <Text alignItems={"center"} fontSize="20px"  color ="green.500"w="100px" display={"flex"} m="auto" my="20px" mr="12px">FILTER :</Text>
+        <Text alignItems={"center"} fontSize="16px"  color ="green.500"w="30%" display={"flex"} m="auto" my="20px" mr="19px">FILTER :</Text>
         <Box
           lineHeight={2}
           w="100%"
@@ -520,33 +503,21 @@ export const LoadingComponent = () => {
   );
 };
 
-// "title":"Relaxed Fit Hoodie",
-// "description":"Hoodie in sweatshirt fabric made from a cotton blend with a print motif. Relaxed fit with a double-layered, drawstring hood, long sleeves, kangaroo pocket and ribbing at the cuffs and hem. Soft brushed inside.",
-// "image":"https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F77%2F46%2F7746921f6b3af28793d9f47f65e6872ca7c9422c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]",
-// "review":[],
-// "allimages":["https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F77%2F46%2F7746921f6b3af28793d9f47f65e6872ca7c9422c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]","https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fa5%2F5e%2Fa55e3761ea878b852c35f01b1ad4391ed104368c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D","https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2F88%2F9d%2F889d74088c4bf7c4f52a2aec6f6aed6ae33174af.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D"],
-// "price":499,"category":"hoodie","quantity":1,
-// "total_quantity":58,
-// "created_at":"09/01/2023",
-// "ordered_at":"null",
-// "cancelled_at":"null",
-// "updated_at":"09/01/2023",
-// "rating":4.9,
-// "brand":"peeter england"
-
 const Carousel = () => {
   const products = useSelector((store) => store.ProductsReducer);
   const [index, setIndex] = useState(0);
 
   const images = [
     "https://lp2.hm.com/hmgoepprod?set=width[1200],quality[80],options[limit]&source=url[https://www2.hm.com/content/dam/global_campaigns/season_07/kids/4057c/4057C-3x2-style-staples-powered-by-denim.jpg]&scale=width[global.width],height[15000],options[global.options]&sink=format[jpg],quality[global.quality]",
+    "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Fde%2Fa9%2Fdea99ee01fe443d7fc5a27c3025c06e67dbdfec4.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]",
     "https://lp2.hm.com/hmgoepprod?set=width[1200],quality[80],options[limit]&source=url[https://www2.hm.com/content/dam/global_campaigns/season_07/sport/7437c/7437C-3x2-hmmove-action-ready-tshirts.jpg]&scale=width[global.width],height[15000],options[global.options]&sink=format[jpg],quality[global.quality]",
-    "https://lp2.hm.com/hmgoepprod?set=width[1200],quality[80],options[limit]&source=url[https://www2.hm.com/content/dam/global_campaigns/season_07/divided/5017a/5017A-3x2-baggy-fit-denim.jpg]&scale=width[global.width],height[15000],options[global.options]&sink=format[jpg],quality[global.quality]",
+   
+    "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Fa1%2F54%2Fa154c62e67aea8a08ca8a158802e6d5ed5c913ae.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]"
   ];
 
   return (
     <Box position="relative" w="100%" my="100px">
-      <Flex height="600px">
+      <Flex height="400px">
         {images.map((image, idx) => (
           <Box
             key={idx}
@@ -559,7 +530,7 @@ const Carousel = () => {
           >
             <Image
               isLazy
-              h="600px"
+              h="400px"
               w="100%"
               src={image}
               objectFit="cover"
@@ -596,3 +567,27 @@ const Carousel = () => {
 };
 
 export { Carousel };
+
+
+// "title":"Regular Fit Resort shirt",
+// "description":"Regular-fit shirt in a soft viscose weave with a resort collar, French front and a yoke at the back. Short sleeves and a straight-cut hem.",
+// "image":"https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Ff5%2F66%2Ff566d98223de9ddb6cb1e4b6928090c27a77f476.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]",
+// "review":[],
+// "allimages":["https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Ff5%2F66%2Ff566d98223de9ddb6cb1e4b6928090c27a77f476.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]","https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Ff5%2F66%2Ff566d98223de9ddb6cb1e4b6928090c27a77f476.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]"],
+// "price":1499,"category":"shirt","quantity":1,
+// "total_quantity":50,
+// "created_at":"14/02/2023",
+// "ordered_at":"null",
+// "cancelled_at":"null",
+// "updated_at":"14/02/2023",
+// "rating":4.9,
+// "brand":"safari"
+
+
+
+
+
+
+
+
+
