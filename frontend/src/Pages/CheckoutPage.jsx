@@ -24,6 +24,7 @@ import {
   Badge,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { converttoUpper } from "../HOF/AllSmallFunction";
 
 function CheckoutPage() {
   const [total, settotal] = useState(0);
@@ -51,7 +52,7 @@ function CheckoutPage() {
     const token = localStorage.getItem("token") || "";
     let data;
     try {
-      data = await axios.get(`http://localhost:8080/address`, {
+      data = await axios.get(`${process.env.REACT_APP_BASE_URL}/address`, {
         headers: {
           Authorization: token,
         },
@@ -99,7 +100,7 @@ if(address.length<2){
     let token = localStorage.getItem("token") || "";
     try {
       let res=await axios.post(
-        `http://localhost:8080/address/addaddress`,
+        `${process.env.REACT_APP_BASE_URL}/address/addaddress`,
         data,
         {
           headers: {
@@ -192,15 +193,6 @@ if(address.length<2){
       AddAddress(formData);
     }
     // Perform form submission logic here, such as sending data to an API or server
-  };
-  const converttoUpper = (str) => {
-    str = str
-      .split(" ")
-      .map((ele) => {
-        return ele.charAt(0).toUpperCase() + ele.slice(1);
-      })
-      .join(" ");
-    return str;
   };
 
   return (
@@ -353,7 +345,7 @@ if(address.length<2){
           </Badge>
           {address.length > 0 &&
             address.map((ele) => (
-              <Box
+              <Box onClick={()=>navigate("/user/cart/payment")}
                 p={5}
                 borderWidth="1px"
                 borderRadius="lg"

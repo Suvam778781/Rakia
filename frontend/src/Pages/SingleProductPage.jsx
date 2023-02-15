@@ -375,7 +375,7 @@ const SingleProductPage = () => {
                         )}
                       </Box>
                     </Box>
-                    <Button isDisabled={ToknowWishlist(product)} color={"green.500"} mt="10px">
+                    <Button  color={"green.500"} mt="10px">
                       Add New
                     </Button>
                   </Box>
@@ -393,6 +393,7 @@ const SingleProductPage = () => {
                   boxShadow: "md",
                 }}
                 color="white"
+                isDisabled={ToknowWishlist(product)}
               >
                 {cartreducer.CartLoading ? <Spinner /> : "ADD TO CART"}
               </Button>

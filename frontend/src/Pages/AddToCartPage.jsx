@@ -62,7 +62,6 @@ const AddToCartPage = () => {
       cartRef.current.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  console.log(cartdata);
   // colapse function for price details
   useEffect(() => {
     dispatch(CartlistGetdata());
@@ -100,7 +99,6 @@ const AddToCartPage = () => {
       item = { ...item, quantity: item.quantity + 1 };
 
       dispatch(UpdateCartProducts(item));
-      // setCartdata(newdata);
     } else {
       toast({
         title: "Quantity",
@@ -168,72 +166,98 @@ const AddToCartPage = () => {
   if (!userandadmin.userloginSuc) {
     return <Navigate to="/login" />;
   }
+
   return (
     <>
-      <Box mt="90px">
-        <Box
-          display="flex"
-          w="88%"
-          h="50px"
-          alignItems={"center"}
-          borderBottom={"0.5px solid RGBA(0, 0, 0, 0.08)"}
-          borderTop="0.5px solid RGBA(0, 0, 0, 0.08)"
-          mt="70px"
-          m="auto"
-        >
-          {/* cart page startting from here */}
-          <Text fontWeight={"semibold"} fontSize={"20px"}>
-            Products Cart
-          </Text>
-          <Text w="70px">({cartdata.Cart.length}items)</Text>
-        </Box>
+      {/* cart product section */}
 
-        <Box display="inherit" mb="30px" w="90%" m="auto">
-          <Box overflow={"hidden"}>
-            <Box
-              id="scrollbar"
-              ref={cartRef}
-              style={{ height: "500px", overflowY: "scroll" }}
-              w="98%"
-              m="10px"
-            >
+      {/* {cartdata.Cart.length >0&& */}
+      <Box>
+        <Box mt="90px">
+          <Box
+            display="flex"
+            w="88%"
+            h="50px"
+            alignItems={"center"}
+            borderBottom={"0.5px solid RGBA(0, 0, 0, 0.08)"}
+            borderTop="0.5px solid RGBA(0, 0, 0, 0.08)"
+            mt="70px"
+            m="auto"
+          >
+            {/* cart page startting from here */}
+            <Text fontWeight={"semibold"} fontSize={"20px"}>
+              Products Cart
+            </Text>
+            <Text w="70px">({cartdata.Cart.length}items)</Text>
+          </Box>
+
+          <Box display="inherit" mb="30px" w="90%" m="auto">
+            <Box overflow={"hidden"}>
               <Box
-                justifyContent="space-between"
-                display="flex"
-                w="88%"
-                px="50px"
-                py="10px"
-                bgColor="green.500"
-                m="auto"
-                color={"white"}
-                visibility={scrollHeight - scrollPosition < 600 ? "hidden" : ""}
-                position={
-                  scrollHeight - scrollPosition > 600 ? "absolute" : "fixed"
-                }
-                // top="0px"
-                zIndex="1"
+                id="scrollbar"
+                ref={cartRef}
+                style={{ height: "500px", overflowY: "scroll" }}
+                w="98%"
+                m="10px"
               >
-                <Text>Item</Text>
-                <Text>Quantity</Text>
-                <Text>Price (Inclusive of GST)</Text>
+                <Box
+                  justifyContent="space-between"
+                  display="flex"
+                  w="88%"
+                  px="50px"
+                  py="10px"
+                  bgColor="green.500"
+                  m="auto"
+                  color={"white"}
+                  visibility={
+                    scrollHeight - scrollPosition < 600 ? "hidden" : ""
+                  }
+                  position={
+                    scrollHeight - scrollPosition > 600 ? "absolute" : "fixed"
+                  }
+                  // top="0px"
+                  zIndex="1"
+                >
+                  <Text>Item</Text>
+                  <Text>Quantity</Text>
+                  <Text>Price (Inclusive of GST)</Text>
+                </Box>
+                {/*  mapping all the cart data */}
+                {cartdata.Cart.length > 0 ? (
+                  cartdata.Cart.map((item, index) => (
+                    <Box boxShadow={"md"} key={item.id}>
+                      <SingleItem
+                        key={item._id}
+                        item={item}
+                        handleDecrease={handleDecrease}
+                        handleIncrease={handleIncrease}
+                        handleRemove={handleRemove}
+                      />
+                    </Box>
+                  ))
+                ) : (
+                  <EmptyCart />
+                )}
               </Box>
-              {/*  mapping all the cart data */}
-              {cartdata.Cart.length > 0 &&
-                cartdata.Cart.map((item, index) => (
-                  <Box boxShadow={"md"} key={item.id}>
-                    <SingleItem
-                      key={item._id}
-                      item={item}
-                      handleDecrease={handleDecrease}
-                      handleIncrease={handleIncrease}
-                      handleRemove={handleRemove}
-                    />
-                  </Box>
-                ))}
             </Box>
           </Box>
-          <Button bgColor={"green.500"} my="20px" as="a" href="/user/cart/checkout">CHECKOUT</Button>
-          <VStack w="100%" my="10px" mx="10px" mb="100px">
+
+          {cartdata.Cart.length > 0 && (
+            <Button
+              bgColor={"green.500"}
+              my="20px"
+              as="a"
+              href="/user/cart/checkout"
+            >
+              CHECKOUT
+            </Button>
+          )}
+
+          {/*cart total and offer section*/}
+         {cartdata.Cart.length>0&&
+        
+         
+         <VStack w="88%"  m="auto" my="50px"  >
             <Box
               h="auto"
               pb="20px"
@@ -525,7 +549,7 @@ const AddToCartPage = () => {
                 <Link>T&C Apply</Link>
               </Flex>
             </Box>
-          </VStack>
+          </VStack>}
         </Box>
       </Box>
     </>
@@ -799,3 +823,33 @@ const QuantityButton = () => {
 };
 
 export { QuantityButton };
+function EmptyCart() {
+  return (
+    <Box
+      p={4}
+      borderWidth={1}
+      borderRadius={8}
+      shadow="md"
+      transition="all 0.2s"
+    >
+      <Text fontSize="xl" fontWeight="bold" mb={4}>
+        Your Cart
+      </Text>
+      <Box
+        borderWidth={1}
+        borderRadius={8}
+        p={4}
+        height="200px"
+        bgColor="white"
+        shadow="sm"
+      >
+        <Text color="gray.500">Your cart is empty.</Text>
+      </Box>
+      <Link href="/" color="blue.500" mt={4} display="block">
+        Back to Home
+      </Link>
+    </Box>
+  );
+}
+
+export { EmptyCart };

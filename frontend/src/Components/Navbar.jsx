@@ -1,10 +1,12 @@
 import { HamburgerIcon, Search2Icon, SearchIcon } from "@chakra-ui/icons";
 import {
+  Avatar,
   Badge,
   Box,
   Button,
   Drawer,
   DrawerBody,
+  Text,
   DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
@@ -30,10 +32,13 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
+import axios from "axios";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { BsLinkedin } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { converttoUpper } from "../HOF/AllSmallFunction";
 import {
   ProductsGetdata,
   Products_Getdata,
@@ -41,6 +46,7 @@ import {
 import { UserSignout } from "../HOF/User&AdminReducer/UA.action";
 
 export default function Navbar() {
+ const [userdata,setuserdata]=useState({})
   const [search, setsearch] = useState("");
   const [openModal, setopenModal] = useState(false);
   const dispatch = useDispatch();
@@ -49,7 +55,23 @@ export default function Navbar() {
   const location = useLocation();
   const userandadmin = useSelector((state) => state.useradminReducer);
   // const [authstate,setauthstate]=useState(userandadmin.adminloginSuc||userandadmin.userloginSuc)
-  console.log(userandadmin);
+
+  const SingleUser=async()=>{
+let token=localStorage.getItem("token")||"";
+let user=await axios(`${process.env.REACT_APP_BASE_URL}/users/singleuser`,{
+
+headers:{
+
+  Authorization:token
+}
+
+})
+setuserdata(user.data);
+  }
+console.log(userdata)
+  useEffect(()=>{
+SingleUser()
+  },[userandadmin])
   const HandleSearch = () => {
     navigate("/");
     if (search !== "") {
@@ -164,18 +186,21 @@ export default function Navbar() {
                   Profile
                 </MenuButton>
                 <MenuList  bg={"rgb(167, 173, 173)"} >
-                  <MenuGroup fontWeight={"700"} fontSize="20px" color={"green.500"}  bg={"rgb(167, 173, 173)"} title="Profile">
-                    <MenuItem bg={"rgb(167, 173, 173)"} _hover={{color:"green.500"}} as={"a"} href="/login" onClick={Handleauth}>
+                  <Avatar/>
+                  <Text fontWeight={"700"} fontSize="20px" color={"grey"}  bg={"rgb(167, 173, 173)"}>
+                  {userdata.firstname&&converttoUpper((userdata.firstname+" "+userdata.lastname))}
+                  </Text>
+                    <MenuItem bg={"rgb(167, 173, 173)"} _hover={{color:"grey  "}} as={"a"} href="/login" onClick={Handleauth}>
                       {userandadmin.adminloginSuc || userandadmin.userloginSuc
                         ? "Logout"
                         : "Login"}
                     </MenuItem>
-                    <MenuItem bg={"rgb(167, 173, 173)"}_hover={{color:"green.500"}}  as={"a"} href="/user/order">My Order</MenuItem>
-                  </MenuGroup>
+                    <MenuItem bg={"rgb(167, 173, 173)"}_hover={{color:"grey"}}  as={"a"} href="/user/order">My Order</MenuItem>
+               
                   <MenuDivider />
-                  <MenuGroup fontWeight={"700"} fontSize="20px" color={"green.500"}  title="Help">
-                    <MenuItem _hover={{color:"green.500"}} bg={"rgb(167, 173, 173)"} as="a">Docs</MenuItem>
-                    <MenuItem _hover={{color:"green.500"}}  bg={"rgb(167, 173, 173)"} as="a">FAQ</MenuItem>
+                  <MenuGroup fontWeight={"700"} fontSize="20px" color={"grey"}  title="Help">
+                    <MenuItem _hover={{color:"grey"}} bg={"rgb(167, 173, 173)"} as="a">Docs</MenuItem>
+                    <MenuItem _hover={{color:"grey"}}  bg={"rgb(167, 173, 173)"} as="a">FAQ</MenuItem>
                   </MenuGroup>
                 </MenuList>
               </Menu>
