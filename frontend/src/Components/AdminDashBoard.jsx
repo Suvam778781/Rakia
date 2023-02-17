@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Image,
   Button,
   Text,
   chakra,
@@ -11,15 +12,40 @@ import {
   StatNumber,
   useColorModeValue,
   VStack,
+  Grid,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Input,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { BsPerson } from "react-icons/bs";
-import { FiServer } from "react-icons/fi";
+import {
+  BsCloudRain,
+  BsCloudUpload,
+  BsPerson,
+  BsSuitSpade,
+  BsThreeDots,
+  BsThreeDotsVertical,
+} from "react-icons/bs";
+import { FiEdit, FiEdit2, FiEdit3, FiGitMerge, FiServer } from "react-icons/fi";
 import { GoLocation } from "react-icons/go";
 import React from "react";
 import Navbar from "./Navbar";
 import "../App.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { GetProductForAdmin } from "../HOF/Adminproductsreducer/Admin.products.action";
+import { DeleteIcon, Search2Icon } from "@chakra-ui/icons";
 const AdminDashBoard = () => {
+  const dispatch = useDispatch();
+  const productsadmin = useSelector((state) => state.AdminReducer);
+  console.log(productsadmin);
+  useEffect(() => {
+    dispatch(GetProductForAdmin());
+  }, []);
+
   return (
     <div>
       <Box
@@ -45,6 +71,33 @@ const AdminDashBoard = () => {
         >
           RAKIA
         </Box>
+        <Box m="auto" alignItems={"center"}>
+            <Input
+                  w="400px"
+                  type={"text"}
+                  _focus={{
+                    boxShadow: "none",
+                    borderBottom: "1px solid white",
+                  }}
+                  placeholder="Enter..."
+                  borderRadius={"0px"}
+                  border="none"
+                  // value={search}
+                  borderBottom="1px solid white"
+                  h="30px"
+                  color="gray"
+                  _placeholder={{ color: "grey" }}
+                  // onClick={() => setopenModal(true)}
+                />
+                {/* <SearchModal */}
+                {/* //   openModal={openModal}
+                //   setopenModal={setopenModal}
+                //   search={search}
+                //   setsearch={setsearch}
+                //   HandleSearch={HandleSearch} */}
+                {/* // /> */}
+                <Search2Icon ml="10px" color={"grey"} />
+              </Box>
         <Box display={"flex"}>
           <Avatar size={"sm"} margin="auto 0px auto 0px" />
           <VStack
@@ -124,26 +177,90 @@ const AdminDashBoard = () => {
             Update Product
           </Button>
         </VStack>
-        <Box
-        
-          justifyContent={"flex-end"}
-          w="86%"
-        
-        >
-
-<OrderData/>
+        <Box justifyContent={"flex-end"} w="86%">
+          <OrderData product={productsadmin.Products} />
+          <Grid
+            gridAutoColumns={"repeat(1 1fr)"}
+            h="500px"
+            p="20px"
+            w="95%"
+            m="auto"
+            gap="20px"
+            id="scrollbar"
+            overflowY={"scroll"}
+          >
+            {!productsadmin.GetLoading &&
+              productsadmin.Products.map((ele) => (
+                <SingleProduct product={ele} />
+              ))}
+          </Grid>
         </Box>
       </Flex>
-      <Flex>
-      
-
-</Flex>
+      <Flex></Flex>
     </div>
   );
 };
+
+const SingleProduct = ({ product }) => {
+  console.log(product);
+  return (
+    <>
+      <Box
+        bg="#f6f6f6"
+        shadow={"md"}
+        alignItems="center"
+        borderRadius="5px"
+        border="1px solid"
+        h="70px"
+        p="10px"
+      >
+        <Flex alignItems={"center"} justifyContent={"space-between"}>
+          <HStack>
+            <Image h="50px" src={product.image} alt={product.image} />
+            <Text> {product.title}</Text>
+          </HStack>
+
+          <Menu>
+            <MenuButton
+              as={Button}
+              _active={{bg:"none"}}
+              bg="none"
+              _hover={{ bg: "none" }}
+              rightIcon={<BsThreeDotsVertical />}
+            ></MenuButton>
+            <MenuList
+              fontSize={"xs"}
+              minW="100px"
+              w="80px"
+              h="80px"
+              p="0"
+              m="auto"
+            >
+              <MenuItem p="10px">
+                
+                <Box mr="10px">
+                  <DeleteIcon />
+                </Box>
+                Delete
+              </MenuItem>
+              <MenuItem p="10px">
+                
+                <Box mr="10px" >
+                  <FiEdit />
+                </Box>
+                Update
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Flex>
+      </Box>
+    </>
+  );
+};
+
 export default AdminDashBoard;
 
-export function Card({stat,icon,title}) {
+export function Card({ stat, icon, title }) {
   return (
     <Stat
       px={{ base: 2, md: 4 }}
@@ -173,8 +290,7 @@ export function Card({stat,icon,title}) {
     </Stat>
   );
 }
-
-export function OrderData() {
+export function OrderData({ product }) {
   return (
     <Box maxW="7xl" mx={"auto"} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
       <h1
@@ -182,24 +298,14 @@ export function OrderData() {
         fontSize={"4xl"}
         py={10}
         fontWeight={"bold"}
-      >
-     
-      </h1>
+      ></h1>
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }}>
-        <Card
-          title={"Users"}
-          stat={"5,000"}
-          icon={<BsPerson size={"3em"} />}
-        />
-          <Card
-            title={"Admins"}
-            stat={"7"}
-            icon={<BsPerson size={"3em"} />}
-          />
+        <Card title={"Users"} stat={"5,000"} icon={<BsPerson size={"3em"} />} />
+        <Card title={"Admins"} stat={"7"} icon={<BsPerson size={"3em"} />} />
         <Card
           title={"Products"}
-          stat={"1,000"}
-          icon={<FiServer size={"3em"} />}
+          stat={product.length}
+          icon={<FiEdit size={"3em"} />}
         />
       </SimpleGrid>
     </Box>
