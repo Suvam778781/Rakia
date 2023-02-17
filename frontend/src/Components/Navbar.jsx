@@ -95,6 +95,8 @@ SingleUser()
     }
   };
   return (
+    <>{location.pathname !== "/admin/dashboard"&&
+    
     <div style={{ height: "60px" }} mb="10px">
       <HStack
         // display={{md:"none"}}
@@ -226,7 +228,8 @@ SingleUser()
           />
         </Box>
       </HStack>
-    </div>
+    </div>}
+    </>
   );
 }
 export const NavbarDrawer = ({
