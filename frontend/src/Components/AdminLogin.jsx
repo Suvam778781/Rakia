@@ -16,8 +16,8 @@ import {
   } from '@chakra-ui/react';
   import { useDispatch, useSelector } from "react-redux";
   import {Navigate} from "react-router-dom"
-  import { admin_login,} from '../HOF/User&AdminReducer/UA.action';
 import Navbar from './Navbar';
+import { AdminLoginF } from '../HOF/User&AdminReducer/UA.action';
 function AdminLogin() {
 const [formdata,setformdata]=useState({email:"",pass:""})
 const dispatch=useDispatch()
@@ -29,19 +29,12 @@ const {name,value}=e.target
 }
 const HandleSubmit=()=>{
 
-    if(formdata.email&&formdata.pass){
 
-    toast({
-        title: 'Login Succesfully.',
-        description: "Redirected To Home Page.",
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
+    if(formdata.email!==""&&formdata.pass!==""){
+
 
     }
     else{
-
         toast({
             title: 'Login Faild.',
             description: "Fill All The Fields.",
@@ -51,16 +44,23 @@ const HandleSubmit=()=>{
           })
     }
 
-  // console.log(formdata)
-// dispatch(admin_login(formdata))
+  console.log(formdata)
+dispatch(AdminLoginF(formdata))
 }
 // if(userandadmin.userloginSuc){
 
 //   return <Navigate to="/"/>
 // }
-// if(userandadmin.adminloginSuc){
-//   return <Navigate to="/admin/dashboard"/>
-// }
+if(userandadmin.adminloginSuc){
+  toast({
+    title: 'Login Succesfully.',
+    description: "Redirected To Home Page.",
+    status: 'success',
+    duration: 3000,
+    isClosable: true,
+  })
+  return <Navigate to="/admin/dashboard"/>
+}
     return (
         <>
       <Flex
