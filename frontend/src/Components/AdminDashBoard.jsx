@@ -19,6 +19,7 @@ import {
   MenuList,
   MenuItem,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import {
@@ -38,13 +39,44 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { GetProductForAdmin } from "../HOF/Adminproductsreducer/Admin.products.action";
 import { DeleteIcon, Search2Icon } from "@chakra-ui/icons";
+import axios from "axios";
+import { useState } from "react";
+import { converttoUpper } from "../HOF/AllSmallFunction";
 const AdminDashBoard = () => {
+  const [admindetails,setadmindetails]=useState({});
   const dispatch = useDispatch();
   const productsadmin = useSelector((state) => state.AdminReducer);
-  console.log(productsadmin);
+  const toast=useToast(); 
+const GetAdminDetails=async()=>{
+let admintoken=localStorage.getItem("admintoken")||"";
+
+try {
+let res=await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/singleadmin`,
+  {
+    headers: {
+      Authorization: admintoken,
+    },
+
+  }
+  )
+  setadmindetails(res.data)
+}catch(err){
+  toast({
+    title: 'Admin Fetch Error.',
+    description: "",
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  })
+}
+}
   useEffect(() => {
     dispatch(GetProductForAdmin());
+
   }, []);
+  useEffect(()=>{
+GetAdminDetails()
+  },[])
 
   return (
     <div>
@@ -72,32 +104,32 @@ const AdminDashBoard = () => {
           RAKIA
         </Box>
         <Box m="auto" alignItems={"center"}>
-            <Input
-                  w="400px"
-                  type={"text"}
-                  _focus={{
-                    boxShadow: "none",
-                    borderBottom: "1px solid white",
-                  }}
-                  placeholder="Enter..."
-                  borderRadius={"0px"}
-                  border="none"
-                  // value={search}
-                  borderBottom="1px solid white"
-                  h="30px"
-                  color="gray"
-                  _placeholder={{ color: "grey" }}
-                  // onClick={() => setopenModal(true)}
-                />
-                {/* <SearchModal */}
-                {/* //   openModal={openModal}
+          <Input
+            w="400px"
+            type={"text"}
+            _focus={{
+              boxShadow: "none",
+              borderBottom: "1px solid white",
+            }}
+            placeholder="Enter..."
+            borderRadius={"0px"}
+            border="none"
+            // value={search}
+            borderBottom="1px solid white"
+            h="30px"
+            color="gray"
+            _placeholder={{ color: "grey" }}
+            // onClick={() => setopenModal(true)}
+          />
+          {/* <SearchModal */}
+          {/* //   openModal={openModal}
                 //   setopenModal={setopenModal}
                 //   search={search}
                 //   setsearch={setsearch}
                 //   HandleSearch={HandleSearch} */}
-                {/* // /> */}
-                <Search2Icon ml="10px" color={"grey"} />
-              </Box>
+          {/* // /> */}
+          <Search2Icon ml="10px" color={"grey"} />
+        </Box>
         <Box display={"flex"}>
           <Avatar size={"sm"} margin="auto 0px auto 0px" />
           <VStack
@@ -107,14 +139,13 @@ const AdminDashBoard = () => {
             margin="auto 0px auto 0px"
             ml="2"
           >
-            <Text fontSize="sm">Suvam Panda</Text>
+            <Text fontSize="sm">{converttoUpper(admindetails.name)}</Text>
             <Text fontSize="xs" color="gray.600">
               Admin
             </Text>
           </VStack>
         </Box>
       </Box>
-
       <Flex pt="70px">
         <VStack
           transition="all 0.5s"
@@ -202,59 +233,55 @@ const AdminDashBoard = () => {
 };
 
 const SingleProduct = ({ product }) => {
-  console.log(product);
   return (
-    <>
-      <Box
-        bg="#f6f6f6"
-        shadow={"md"}
-        alignItems="center"
-        borderRadius="5px"
-        border="1px solid"
-        h="70px"
-        p="10px"
-      >
-        <Flex alignItems={"center"} justifyContent={"space-between"}>
-          <HStack>
-            <Image h="50px" src={product.image} alt={product.image} />
-            <Text> {product.title}</Text>
-          </HStack>
+    <Box
+      key={product._id}
+      bg="#f6f6f6"
+      shadow={"md"}
+      alignItems="center"
+      borderRadius="5px"
+      border="1px solid"
+      h="70px"
+      p="10px"
+    >
+      <Flex alignItems={"center"} justifyContent={"space-between"}>
+        <HStack>
+          <Image h="50px" src={product.image} alt={product.image} />
+          <Text> {product.title}</Text>
+        </HStack>
 
-          <Menu>
-            <MenuButton
-              as={Button}
-              _active={{bg:"none"}}
-              bg="none"
-              _hover={{ bg: "none" }}
-              rightIcon={<BsThreeDotsVertical />}
-            ></MenuButton>
-            <MenuList
-              fontSize={"xs"}
-              minW="100px"
-              w="80px"
-              h="80px"
-              p="0"
-              m="auto"
-            >
-              <MenuItem p="10px">
-                
-                <Box mr="10px">
-                  <DeleteIcon />
-                </Box>
-                Delete
-              </MenuItem>
-              <MenuItem p="10px">
-                
-                <Box mr="10px" >
-                  <FiEdit />
-                </Box>
-                Update
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        </Flex>
-      </Box>
-    </>
+        <Menu>
+          <MenuButton
+            as={Button}
+            _active={{ bg: "none" }}
+            bg="none"
+            _hover={{ bg: "none" }}
+            rightIcon={<BsThreeDotsVertical />}
+          ></MenuButton>
+          <MenuList
+            fontSize={"xs"}
+            minW="100px"
+            w="80px"
+            h="80px"
+            p="0"
+            m="auto"
+          >
+            <MenuItem p="10px">
+              <Box mr="10px">
+                <DeleteIcon />
+              </Box>
+              Delete
+            </MenuItem>
+            <MenuItem p="10px">
+              <Box mr="10px">
+                <FiEdit />
+              </Box>
+              Update
+            </MenuItem>
+          </MenuList>
+        </Menu>
+      </Flex>
+    </Box>
   );
 };
 

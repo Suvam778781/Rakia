@@ -49,7 +49,7 @@ export const UserSignup = (signupdata) => async (dispatch) => {
     dispatch({ type: USER_RESISTOR_ERROR, payload: err.response.data });
   }
 };
-export const AdminLogin = (adminlogindata) => async (dispatch) => {
+export const AdminLoginF = (adminlogindata) => async (dispatch) => {
   try {
     dispatch({ type: ADMIN_LOGIN_LOADING });
     let res = await axios.post(
@@ -57,7 +57,7 @@ export const AdminLogin = (adminlogindata) => async (dispatch) => {
       adminlogindata
     );
     localStorage.removeItem("token");
-    localStorage.setItem("admintoken", res.data.token);
+    localStorage.setItem("admintoken", res.data.admintoken);
     dispatch({ type: ADMIN_LOGIN_SUCCES, payload: res.data.token });
   } catch (err) {
     alert(`${err.response.data[0].msg}`);

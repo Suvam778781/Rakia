@@ -62,11 +62,14 @@ function HomePage() {
   const dispatch = useDispatch();
   const products = useSelector((store) => store.ProductsReducer);
   const cartdata = useSelector((state) => state.CartReducer);
+  const userandadmin=useSelector((state)=>state.useradminReducer)
   const ToknowWishlist = (data) => {
+if(userandadmin.userloginSuc){
       if (cartdata.Cart.find((item) => data._id === item._id)) {
         return true;
       }
       return false;
+    }
   };
   useEffect(() => {
     dispatch(CartlistGetdata());
@@ -78,7 +81,6 @@ function HomePage() {
     <div>
       {/* <Carousel/> */}
       {/*here filter and sorting will come and some skeleton i will add*/}
-
       <Flex
         display={{ md: "inherit", sm: "inherit" }}
         p="10px"
