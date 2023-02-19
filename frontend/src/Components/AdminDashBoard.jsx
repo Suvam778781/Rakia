@@ -20,6 +20,17 @@ import {
   MenuItem,
   Input,
   useToast,
+  Progress,
+  ModalOverlay,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  FormControl,
+  FormLabel,
+  ModalFooter,
+  useDisclosure,
+  Badge,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import {
@@ -37,20 +48,27 @@ import Navbar from "./Navbar";
 import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { GetProductForAdmin } from "../HOF/Adminproductsreducer/Admin.products.action";
+import { DeleteProductForAdmin, GetProductForAdmin, UpdateProductForAdmin } from "../HOF/Adminproductsreducer/Admin.products.action";
 import { DeleteIcon, Search2Icon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useState } from "react";
 import { converttoUpper } from "../HOF/AllSmallFunction";
 const AdminDashBoard = () => {
   const [admindetails,setadmindetails]=useState({});
+  const [search,setsearch]=useState("")
+  const [adminloading,setadminloading]=useState(true)
   const dispatch = useDispatch();
   const productsadmin = useSelector((state) => state.AdminReducer);
+  const userandadmin=useSelector((state)=>state.useradminReducer)
   const toast=useToast(); 
+  const HandleSearch=()=>{
+
+  }
 const GetAdminDetails=async()=>{
 let admintoken=localStorage.getItem("admintoken")||"";
 
 try {
+  setadminloading(true)
 let res=await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/singleadmin`,
   {
     headers: {
@@ -59,8 +77,10 @@ let res=await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/singleadmin`,
 
   }
   )
+  setadmindetails(false)
   setadmindetails(res.data)
 }catch(err){
+  setadmindetails(false)
   toast({
     title: 'Admin Fetch Error.',
     description: "",
@@ -111,27 +131,22 @@ GetAdminDetails()
               boxShadow: "none",
               borderBottom: "1px solid white",
             }}
+            onChange={(e)=>setsearch(e.target.value)}
             placeholder="Enter..."
             borderRadius={"0px"}
             border="none"
-            // value={search}
+            value={search}
             borderBottom="1px solid white"
             h="30px"
             color="gray"
             _placeholder={{ color: "grey" }}
-            // onClick={() => setopenModal(true)}
+            
           />
-          {/* <SearchModal */}
-          {/* //   openModal={openModal}
-                //   setopenModal={setopenModal}
-                //   search={search}
-                //   setsearch={setsearch}
-                //   HandleSearch={HandleSearch} */}
-          {/* // /> */}
-          <Search2Icon ml="10px" color={"grey"} />
+          <Search2Icon onClick={HandleSearch} ml="10px" color={"grey"} />
         </Box>
         <Box display={"flex"}>
           <Avatar size={"sm"} margin="auto 0px auto 0px" />
+          {!adminloading?<Progress/>:
           <VStack
             display={{ base: "none", md: "flex" }}
             alignItems="flex-start"
@@ -139,11 +154,11 @@ GetAdminDetails()
             margin="auto 0px auto 0px"
             ml="2"
           >
-            <Text fontSize="sm">{converttoUpper(admindetails.name)}</Text>
+            <Text fontSize="sm">{admindetails.name}</Text>
             <Text fontSize="xs" color="gray.600">
               Admin
             </Text>
-          </VStack>
+          </VStack>}
         </Box>
       </Box>
       <Flex pt="70px">
@@ -233,6 +248,12 @@ GetAdminDetails()
 };
 
 const SingleProduct = ({ product }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const dispatch=useDispatch();
+  const HandleDelete=(id)=>{
+    dispatch(DeleteProductForAdmin(id))
+  }
+
   return (
     <Box
       key={product._id}
@@ -247,7 +268,9 @@ const SingleProduct = ({ product }) => {
       <Flex alignItems={"center"} justifyContent={"space-between"}>
         <HStack>
           <Image h="50px" src={product.image} alt={product.image} />
-          <Text> {product.title}</Text>
+          <Text marginRight="100px"> {product.title}</Text>
+
+          <Badge >₹{product.price}</Badge>
         </HStack>
 
         <Menu>
@@ -266,18 +289,19 @@ const SingleProduct = ({ product }) => {
             p="0"
             m="auto"
           >
-            <MenuItem p="10px">
+            <MenuItem onClick={()=>HandleDelete(product._id)} p="10px">
               <Box mr="10px">
                 <DeleteIcon />
               </Box>
               Delete
             </MenuItem>
-            <MenuItem p="10px">
+            <MenuItem onClick={()=>onOpen()} p="10px">
               <Box mr="10px">
                 <FiEdit />
               </Box>
               Update
             </MenuItem>
+            <UpdateModal onOpen={onOpen} onClose={onClose} isOpen={isOpen} product={product}/>
           </MenuList>
         </Menu>
       </Flex>
@@ -338,3 +362,118 @@ export function OrderData({ product }) {
     </Box>
   );
 }
+
+const UpdateModal = ({ isOpen, onClose, product }) => { 
+  const [title, setTitle] = useState(product.title);
+  const [description, setDescription] = useState(product.description);
+  const [price, setPrice] = useState(product.price);
+  const [category, setCategory] = useState(product.category);
+  const [image, setImage] = useState(product.image);
+  const [allimages, setallImages] = useState(product.allimages);
+  const [total_quantity, setTotalQuantity] = useState(product.total_quantity);
+  const [quantity, setQuantity] = useState(product.quantity);
+  const [brand, setBrand] = useState(product.brand);
+  const [rating,setRating]=useState(product.rating)
+  let dispatch=useDispatch(); 
+  const handleSubmit = () => {
+    let newDate=new Date()
+    let day=newDate.getDate()
+    let year=newDate.getFullYear()
+    let month=newDate.getMonth()
+    let data={
+      _id:product._id,
+      title,
+      description,
+      price,
+      category,
+      image,
+      allimages,
+      quantity,
+      brand,
+      review:[],
+      total_quantity,
+      created_at:"",
+      ordered_at:"",
+      cancelled_at:"",
+      updated_at:`${day}/${month+1}/${year}`,
+      rating:rating,
+    }
+//  console.log(data)   
+    dispatch(UpdateProductForAdmin(data))
+  };
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Update Product</ModalHeader>
+        <ModalBody>
+          <FormControl>
+            <FormLabel>Title</FormLabel>
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Description</FormLabel>
+            <Input
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Price</FormLabel>
+            <Input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(parseFloat(e.target.value))}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Category</FormLabel>
+            <Input
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Image</FormLabel>
+            <Input value={image} onChange={(e) => setImage(e.target.value)} />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Images</FormLabel>
+            <Input
+              value={allimages.join(',')}
+              onChange={(e) => setallImages(e.target.value.split(','))}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Total Quantity</FormLabel>
+            <Input
+              type="number"
+              value={total_quantity}
+              onChange={(e) => setTotalQuantity(parseInt(e.target.value))}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Quantity</FormLabel>
+            <Input
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(parseInt(e.target.value))}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Brand</FormLabel>
+            <Input value={brand} onChange={(e) => setBrand(e.target.value)} />
+          </FormControl>
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme="blue" mr={3} onClick={()=>{handleSubmit();onClose()}}>
+            Update
+          </Button>
+          <Button onClick={onClose}>Cancel</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};
+
+export {UpdateModal};

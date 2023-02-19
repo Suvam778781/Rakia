@@ -44,7 +44,7 @@ export const AdminReducer = (state = initialstate, { type, payload }) => {
     case DELETE_PRODUCT_ADMIN:
       let filterdata = state.Products.filter((ele) => ele._id !== payload);
 
-      return { ...state, DeleteLoading: false, filterdata };
+      return { ...state, DeleteLoading: false, Products:filterdata };
 
     case DELETE_PRODUCT_ERROR_ADMIN:
       return { ...state, Error: true, DeleteLoading: false };
@@ -54,12 +54,16 @@ export const AdminReducer = (state = initialstate, { type, payload }) => {
       return { ...state, UpdateLoading: true };
 
     case UPDATE_PRODUCT_ADMIN:
-      let updatedata = state.Products.map((ele) => {
-        if (ele._id == payload._id) {
-          return { ...ele, payload };
-        } else return ele;
+
+    
+    
+      let updatedata=state.Products.map((ele)=>{
+        if(ele._id==payload._id){
+         ele={...ele,...payload}
+   return ele
+        }else return ele
       });
-      return { ...state, UpdateLoading: false, Products: updatedata };
+      return { ...state, UpdateLoading: false,Products:updatedata};
 
     case UPDATE_PRODUCT_ERROR_ADMIN:
       return { ...state, UpdateError: true, UpdateLoading: false };
@@ -82,6 +86,5 @@ export const AdminReducer = (state = initialstate, { type, payload }) => {
       return state;
   }
 };
-
 // let today=new Date();
 // console.log(today.getDate(),today.getMonth(),today.getFullYear())
