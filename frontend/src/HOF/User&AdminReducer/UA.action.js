@@ -50,17 +50,20 @@ export const UserSignup = (signupdata) => async (dispatch) => {
   }
 };
 export const AdminLoginF = (adminlogindata) => async (dispatch) => {
+
   try {
     dispatch({ type: ADMIN_LOGIN_LOADING });
     let res = await axios.post(
-      `${process.env.REACT_APP_BASE_URL}/admin/login`,
+      `http://localhost:8080/admin/login`,
       adminlogindata
     );
+    console.log(res)
     localStorage.removeItem("token");
     localStorage.setItem("admintoken", res.data.admintoken);
     dispatch({ type: ADMIN_LOGIN_SUCCES, payload: res.data.token });
   } catch (err) {
-    alert(`${err.response.data[0].msg}`);
+  
+    alert(`${err.response.data}`);
     dispatch({ type: ADMIN_LOGIN_ERROR, payload: err.response.data });
   }
 };

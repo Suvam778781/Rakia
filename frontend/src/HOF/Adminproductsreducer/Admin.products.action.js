@@ -44,7 +44,13 @@ export const DeleteProductForAdmin = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_PRODUCT_LOADING_ADMIN });
     await axios.delete(
-      `${process.env.REACT_APP_BASE_URL}/products/delete/${id}`
+      `${process.env.REACT_APP_BASE_URL}/products/delete/${id}`,{
+
+        headers: {
+          Authorization: admintoken,
+        },
+
+      }
     );
     dispatch({ type: DELETE_PRODUCT_ADMIN, payload: id });
   } catch (err) {
@@ -53,10 +59,9 @@ export const DeleteProductForAdmin = (id) => async (dispatch) => {
 };
 export const UpdateProductForAdmin = (data) => async (dispatch) => {
   let admintoken = localStorage.getItem("admintoken") || "";
-
   try {
     dispatch({ type: UPDATE_PRODUCT_LOADING_ADMIN });
-    await axios(
+    await axios.patch(
       `${process.env.REACT_APP_BASE_URL}/products/update/${data._id}`,
       data,
       {
@@ -65,8 +70,10 @@ export const UpdateProductForAdmin = (data) => async (dispatch) => {
         },
       }
     );
+    alert("Product Update Succesfully")
     dispatch({ type: UPDATE_PRODUCT_ADMIN, payload: data });
   } catch (err) {
+    alert("Something Went Wrong")
     dispatch({ type: UPDATE_PRODUCT_ERROR_ADMIN, payload: err });
   }
 };

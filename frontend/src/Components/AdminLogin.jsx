@@ -28,11 +28,8 @@ const {name,value}=e.target
   setformdata({...formdata,[name]:value})
 }
 const HandleSubmit=()=>{
-
-
     if(formdata.email!==""&&formdata.pass!==""){
-
-
+      dispatch(AdminLoginF(formdata))
     }
     else{
         toast({
@@ -44,8 +41,6 @@ const HandleSubmit=()=>{
           })
     }
 
-  console.log(formdata)
-dispatch(AdminLoginF(formdata))
 }
 // if(userandadmin.userloginSuc){
 
