@@ -81,13 +81,16 @@ export const AddProductForAdmin = (data) => async (dispatch) => {
   let admintoken = localStorage.getItem("admintoken") || "";
   try {
     dispatch({ type: ADD_PRODUCT_LOADING_ADMIN });
-    await axios(`${process.env.REACT_APP_BASE_URL}/products/create`, data, {
+    await axios.post(`${process.env.REACT_APP_BASE_URL}/products/create`, data, {
       headers: {
         Authorization: admintoken,
       },
     });
+    alert("Product Add Succesfully")
     dispatch({ type: ADD_PRODUCT_ADMIN, payload: data });
   } catch (err) {
+    console.log(err)
+    alert("Something Went Wrong")
     dispatch({ type: ADD_PRODUCT_ERROR_ADMIN, payload: err });
   }
 };

@@ -31,6 +31,7 @@ import {
   ModalFooter,
   useDisclosure,
   Badge,
+  Textarea,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import {
@@ -48,7 +49,7 @@ import Navbar from "./Navbar";
 import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { DeleteProductForAdmin, GetProductForAdmin, UpdateProductForAdmin } from "../HOF/Adminproductsreducer/Admin.products.action";
+import { AddProductForAdmin, DeleteProductForAdmin, GetProductForAdmin, UpdateProductForAdmin } from "../HOF/Adminproductsreducer/Admin.products.action";
 import { DeleteIcon, Search2Icon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useState } from "react";
@@ -57,6 +58,7 @@ const AdminDashBoard = () => {
   const [admindetails,setadmindetails]=useState({});
   const [search,setsearch]=useState("")
   const [adminloading,setadminloading]=useState(true)
+  const [addmodal,setaddmodal]=useState(false);
   const dispatch = useDispatch();
   const productsadmin = useSelector((state) => state.AdminReducer);
   const userandadmin=useSelector((state)=>state.useradminReducer)
@@ -100,13 +102,14 @@ GetAdminDetails()
 
   return (
     <div>
-      <Box
+      <Box 
+     
         w="100%"
         px="20px"
         lineHeight={""}
         zIndex="21"
         boxShadow={"lg"}
-        backgroundColor="white"
+        backgroundColor="#f6f6f6"
         position="fixed"
         h="60px"
         display={"flex"}
@@ -136,11 +139,12 @@ GetAdminDetails()
             borderRadius={"0px"}
             border="none"
             value={search}
-            borderBottom="1px solid white"
+            borderBottom="1px solid black"
+            _hover={{borderBottom:"1px solid black"}}
+            _after={{borderBottom:"1px solid black"}}
             h="30px"
             color="gray"
             _placeholder={{ color: "grey" }}
-            
           />
           <Search2Icon onClick={HandleSearch} ml="10px" color={"grey"} />
         </Box>
@@ -170,9 +174,30 @@ GetAdminDetails()
           h="250px"
           mt="60px"
           zIndex={20}
-          shadow="sm"
         >
+          <Button 
+            shadow={"sm"}
+            transition="all 0.5s"
+            _hover={{ bg: "green.500", color: "white" }}
+            justifyContent={"flex-start"}
+            rounded="md"
+            background={"white"}
+            className="admin_left_button"
+          >
+            Cancelled Orders
+          </Button>
+          <Button shadow={"sm"}
+            transition="all 0.5s"
+            _hover={{ bg: "green.500", color: "white" }}
+            justifyContent={"flex-start"}
+            rounded="md"
+            background={"white"}
+            className="admin_left_button"
+          >
+            Placed Orders
+          </Button>
           <Button
+            shadow={"sm"}
             transition="all 0.5s"
             _hover={{ bg: "green.500", color: "white" }}
             justifyContent={"flex-start"}
@@ -182,17 +207,12 @@ GetAdminDetails()
           >
             Order History
           </Button>
-          <Button
-            transition="all 0.5s"
-            _hover={{ bg: "green.500", color: "white" }}
-            justifyContent={"flex-start"}
-            rounded="md"
-            background={"white"}
-            className="admin_left_button"
-          >
-            Cancelled orders
-          </Button>
-          <Button
+        </VStack>
+        <Box justifyContent={"flex-end"} w="86%">
+          <OrderData product={productsadmin.Products} />
+          <Button  
+            onClick={()=>setaddmodal(true)}
+            shadow={"sm"} my="20px"
             transition="all 0.5s"
             _hover={{ bg: "green.500", color: "white" }}
             justifyContent={"flex-start"}
@@ -202,29 +222,7 @@ GetAdminDetails()
           >
             Add New Product
           </Button>
-          <Button
-            transition="all 0.5s"
-            _hover={{ bg: "green.500", color: "white" }}
-            justifyContent={"flex-start"}
-            rounded="md"
-            background={"white"}
-            className="admin_left_button"
-          >
-            Delete Product
-          </Button>
-          <Button
-            transition="all 0.5s"
-            _hover={{ bg: "green.500", color: "white" }}
-            justifyContent={"flex-start"}
-            rounded="md"
-            background={"white"}
-            className="admin_left_button"
-          >
-            Update Product
-          </Button>
-        </VStack>
-        <Box justifyContent={"flex-end"} w="86%">
-          <OrderData product={productsadmin.Products} />
+          <AddModal addmodal={addmodal} setaddmodal={setaddmodal}/>
           <Grid
             gridAutoColumns={"repeat(1 1fr)"}
             h="500px"
@@ -402,7 +400,7 @@ const UpdateModal = ({ isOpen, onClose, product }) => {
     dispatch(UpdateProductForAdmin(data))
   };
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Update Product</ModalHeader>
@@ -476,4 +474,131 @@ const UpdateModal = ({ isOpen, onClose, product }) => {
   );
 };
 
-export {UpdateModal};
+const AddModal=({addmodal,setaddmodal})=>{
+  const dispatch=useDispatch();
+  let newDate=new Date()
+  let day=newDate.getDate()
+  let year=newDate.getFullYear()
+  let month=newDate.getMonth()
+
+const initialData={
+  title: "",
+description: "",
+price: "",
+category: "",
+image: "",
+allimages: [],
+quantity: "",
+brand: "",
+review: [],
+total_quantity: "",
+created_at: `${day}/${month+1}/${year}`,
+ordered_at: "",
+cancelled_at: "",
+updated_at: "",
+rating: "",
+};
+
+  const [formData, setFormData] = useState(initialData);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // handle form submission here
+   dispatch(AddProductForAdmin(formData))
+   setaddmodal(false)
+   setFormData(initialData)
+  };
+  return (
+    <Modal isOpen={addmodal} size="xl" onClose={()=>setaddmodal(false)}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Add New Product</ModalHeader>
+        <ModalBody>
+          <form onSubmit={handleSubmit}>
+          <Grid gridAutoColumns={"repeat(2 1fr)"}>
+            <FormControl>
+              <FormLabel>Title</FormLabel>
+              <Input name="title" value={formData.title} onChange={handleChange} />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Description</FormLabel>
+              <Input
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Price</FormLabel>
+              <Input name="price" value={formData.price} onChange={handleChange} />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Category</FormLabel>
+              <Input
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Image</FormLabel>
+              <Input name="image" value={formData.image} onChange={handleChange} />
+            </FormControl>
+            <FormControl>
+              <FormLabel>All Images</FormLabel>
+              <Textarea
+                name="allimages"
+                value={formData.allimages.join(",")}
+                onChange={(e) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    allimages: e.target.value.split(","),
+                  }));
+                }}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Quantity</FormLabel>
+              <Input
+                name="quantity"
+                value={formData.quantity}
+                onChange={handleChange}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Brand</FormLabel>
+              <Input name="brand" value={formData.brand} onChange={handleChange} />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Total Quantity</FormLabel>
+              <Input
+                name="total_quantity"
+                value={formData.total_quantity}
+                onChange={handleChange}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Rating</FormLabel>
+              <Input name="rating" value={formData.rating} onChange={handleChange} />
+            </FormControl>
+            </Grid>
+          </form>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button  colorScheme="blue" mr={3} onClick={handleSubmit}>
+            Add Product
+          </Button>
+          <Button onClick={()=>setaddmodal(false)}>Cancel</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+}
+export {UpdateModal,AddModal};
+
