@@ -66,5 +66,19 @@ else {
 }
 
     })
+    UserRouter.post("/checkout/:id", async (req, res) => {
+      const id = req.params.id;
+    // all cart item came through the body and push the item;
+      const payload=req.body;
+      try{
+        await UserModel.updateOne({_id:id},{$push :{allorders:payload}})
+            res.status(200).send([{"msg":"Order Placed Succesfully"}])
+      }
+      catch(err){
+        res.status(500).send([{"err":"something went wrong","err":err}])
+      }
+    });
+
+
     module.exports={UserRouter}
     // 63c0328b1cf87dc5efcc7d5e

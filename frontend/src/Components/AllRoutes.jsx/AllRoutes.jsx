@@ -4,6 +4,7 @@ import AddToCartPage from "../../Pages/AddToCartPage";
 import CheckoutPage from "../../Pages/CheckoutPage";
 import HomePage from "../../Pages/HomePage";
 import LoginPage from "../../Pages/LoginPage";
+import PaymentPage from "../../Pages/PaymentPage";
 import SignUpPage from "../../Pages/SignUpPage";
 import SingleProductPage from "../../Pages/SingleProductPage";
 import AdminDashBoard from "../AdminDashBoard";
@@ -34,6 +35,7 @@ const AllRoutes = () => {
       <Route path="/products/:_id" element={<SingleProductPage />} />
       <Route path="/admin/dashboard" element={<AdminDashBoard />} />
       <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/user/cart/payment" element={<PaymentPage />} />
     </Routes>
   );
 };
