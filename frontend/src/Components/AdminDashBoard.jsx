@@ -264,44 +264,51 @@ const SingleProduct = ({ product }) => {
       p="10px"
     >
       <Flex alignItems={"center"} justifyContent={"space-between"}>
-        <HStack>
+        <HStack textAlign={"left"} w="50%" justifyContent={"space-between"}>
           <Image h="50px" src={product.image} alt={product.image} />
-          <Text marginRight="100px"> {product.title}</Text>
+          <Text textAlign={"left"} marginRight="100px"> {product.title}</Text>
 
-          <Badge >₹{product.price}</Badge>
+          <Badge >₹ {product.price}</Badge>
+       
         </HStack>
+<HStack>
+   <Badge>Stock : {product.total_quantity}</Badge>
+   <Menu w="20%">
+         
+         <MenuButton
+           as={Button}
+           _active={{ bg: "none" }}
+           bg="none"
+           _hover={{ bg: "none" }}
+           rightIcon={<BsThreeDotsVertical />}
+         ></MenuButton>
 
-        <Menu>
-          <MenuButton
-            as={Button}
-            _active={{ bg: "none" }}
-            bg="none"
-            _hover={{ bg: "none" }}
-            rightIcon={<BsThreeDotsVertical />}
-          ></MenuButton>
-          <MenuList
-            fontSize={"xs"}
-            minW="100px"
-            w="80px"
-            h="80px"
-            p="0"
-            m="auto"
-          >
-            <MenuItem onClick={()=>HandleDelete(product._id)} p="10px">
-              <Box mr="10px">
-                <DeleteIcon />
-              </Box>
-              Delete
-            </MenuItem>
-            <MenuItem onClick={()=>onOpen()} p="10px">
-              <Box mr="10px">
-                <FiEdit />
-              </Box>
-              Update
-            </MenuItem>
-            <UpdateModal onOpen={onOpen} onClose={onClose} isOpen={isOpen} product={product}/>
-          </MenuList>
-        </Menu>
+
+         <MenuList
+           fontSize={"xs"}
+           minW="100px"
+           w="80px"
+           h="80px"
+           p="0"
+           m="auto"
+         >
+           <MenuItem onClick={()=>HandleDelete(product._id)} p="10px">
+             <Box mr="10px">
+               <DeleteIcon />
+             </Box>
+             Delete
+           </MenuItem>
+           <MenuItem onClick={()=>onOpen()} p="10px">
+             <Box mr="10px">
+               <FiEdit />
+             </Box>
+             Update
+           </MenuItem>
+           <UpdateModal onOpen={onOpen} onClose={onClose} isOpen={isOpen} product={product}/>
+         </MenuList>
+       </Menu>
+</HStack>
+
       </Flex>
     </Box>
   );
