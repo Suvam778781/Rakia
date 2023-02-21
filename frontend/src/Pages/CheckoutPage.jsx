@@ -22,6 +22,7 @@ import {
   Divider,
   Select,
   Badge,
+  SelectField,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { converttoUpper } from "../HOF/AllSmallFunction";
@@ -47,7 +48,20 @@ function CheckoutPage() {
     isPrimary: false,
     terms: false,
   });
-  console.log(address);
+
+  const MakePayment=()=>{
+
+// {
+    //  here i will take
+//  user data
+// firstname:"",
+// lastname:"",
+// email:"",
+// _id
+// allOrders:[{...products,status:cancelled},{...products,status:placed},{...products,status:refund}]
+
+  // }
+  }
   const AddressGetdata = async () => {
     const token = localStorage.getItem("token") || "";
     let data;
@@ -198,13 +212,6 @@ if(address.length<2){
   return (
     <>
       <Box w="100%" my="30px">
-        <Progress
-          colorScheme="green"
-          size="sm"
-          w="58%"
-          m={"auto"}
-          value={progress}
-        />
       </Box>
       <Box
         p={5}
@@ -345,7 +352,7 @@ if(address.length<2){
           </Badge>
           {address.length > 0 &&
             address.map((ele) => (
-              <Box onClick={()=>navigate("/user/cart/payment")}
+              <Box 
                 p={5}
                 borderWidth="1px"
                 borderRadius="lg"
@@ -360,13 +367,14 @@ if(address.length<2){
                   bgColor="red.100"
                   w="40px"
                   h="40px"
+                  top={"-29px"}
                   color={"red"}
                   py="5px"
-                  position={"absolute"}
+                  position={"relative"}
                 >
-                  
                   <DeleteIcon />
                 </Box>
+
                
                 <Text fontWeight="bold" mb={2} color="gray.800">
                   {ele.name.toUpperCase()}
@@ -383,11 +391,28 @@ if(address.length<2){
                 >
                   View on Google Maps
                 </a>
+                <Box>
+                <Button
+                shadow={"sm"}
+                borderRadius="4px"
+                  bgColor="green.500"
+                  w="60px"
+                  h="26px"
+                  color={"white"}
+                  m="auto"
+                 alignItems={"center"}
+                  mt='10px'
+                  position={"relative"}
+                  onClick={()=>navigate("/user/cart/payment")}
+                  _hover={{ bgColor:"green.600"}}
+                >
+                SELECT
+                </Button>
+                </Box>
               </Box>
             ))}
         </Box>
       </Box>
-      {/* </Box> */}
     </>
   );
 }
