@@ -5,13 +5,15 @@ const {
   CART_LOADING,
   CART_ERROR,
   CART_UPDATE,
+  
 } = require("./cart.actionTypes");
 const initialstate = {
   Cart: [],
   CartLoading: false,
   Error: false,
   CartSucces:false,
-  CartTotal:0
+  CartTotal:0,
+  CheckoutAddress:{},
 };
 export const CartReducer = (state = initialstate, { type, payload }) => {
   switch (type) {
