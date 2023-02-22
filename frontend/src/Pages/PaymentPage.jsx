@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   FormControl,
@@ -11,9 +11,20 @@ import {
   HStack,
   PinInputField,
   PinInput,
+  Modal,
+  ModalBody,
+  ModalOverlay,
+  ModalContent,
+  VStack,
+  Text,
+  Checkbox,
+  Collapse,
 } from "@chakra-ui/react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { CartlistGetdata } from "../HOF/Cartreducer/cart.action";
+import { CloseIcon } from "@chakra-ui/icons";
 const firebaseConfig = {
   apiKey: "AIzaSyBG-3TqMxHdc_Mjlhqa2w3JnBmrDgkONB0",
   authDomain: "otp-prdb-authentication.firebaseapp.com",
@@ -26,12 +37,29 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const PaymentPage = () => {
+const PaymentPage = ({ paymentmodal, setpaymentmodal, address }) => {
+  const cartdata = useSelector((state) => state.CartReducer);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [verificationId, setVerificationId] = useState("");
   const [code, setCode] = useState("");
+  const [total, settotal] = useState(0);
   const toast = useToast();
-
+  const dispatch = useDispatch();
+  const handleTotal = () => {
+    let Total = 0;
+    cartdata.Cart.map((ele) => {
+      let Addgst = (ele.price / 100) * 18;
+      let Singleprice = Addgst + ele.price;
+      Total += Math.floor(Singleprice * ele.quantity);
+    });
+    settotal(Total);
+  };
+  useEffect(() => {
+    dispatch(CartlistGetdata());
+  }, []);
+  useEffect(() => {
+    handleTotal();
+  }, [cartdata]);
   const HandleSendCode = () => {
     const phoneProvider = new firebase.auth.PhoneAuthProvider();
     phoneProvider
@@ -85,49 +113,80 @@ const PaymentPage = () => {
       });
   };
   return (
-    <Box
-      w="xl"
+    <Modal
+      isClosable={true}
+      isOpen={paymentmodal}
+      size="sm"
       p="4"
       borderWidth="2px"
       borderRadius="sm"
       m="auto"
       my="50px"
     >
-      <Badge> price $776</Badge>
-      <Box h="300px"></Box>
-      <Stack w="60%" m="auto" spacing="4">
-        <FormControl id="phone">
-          <FormLabel>Phone number</FormLabel>
-          <Input
-             borderRadius={"sm"}
-            type="phone"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
-        </FormControl>
-        <Button borderRadius={"sm"} onClick={HandleSendCode}>Send code</Button>
-        {verificationId && (
-          <>
-            {/* <FormControl id="code"> */}
-              <FormLabel>Verification code</FormLabel>
-            <HStack>
-              <PinInput  type='alphanumeric' otp onChange={(e) => setCode(e.target.value)} defaultValue={code}>
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-              </PinInput>
-            </HStack>
-            {/* </FormControl> */}
+      <ModalBody>
+        <ModalContent>
+          <Box position={"absolute"} right="-22px" top="-22px">
+            <CloseIcon
+              onClick={() => setpaymentmodal(false)}
+              p="1px"
+              w="28px"
+              h="28px"
+              color={"white"}
+              backgroundColor="red.400"
+              border={"1px solid white"}
+              borderRadius="50%"
+            />
+          </Box>
+          <Badge w="40%" p="auto" m="auto" mt="20px">
+            Total Price: ₹ {total}
+          </Badge>
+          <VStack h="200px">
+            <Box>
+              Deliver To :
+              <Collapse>
+                <Text>{address.name}</Text>
+              </Collapse>
+            </Box>
 
-            <Button onClick={HandleVerifyCode}>Placed Order</Button>
-          </>
-        )}
-        <div id="recaptcha-container"></div>
-      </Stack>
-    </Box>
+            <VStack>
+              <Checkbox>Cash Dn Delivery.</Checkbox>
+              <Checkbox>Net Banking</Checkbox>
+            </VStack>
+          </VStack>
+          <Stack w="60%" m="auto" spacing="4">
+            <FormControl id="phone">
+              <FormLabel>Phone number</FormLabel>
+              <Input
+                borderRadius={"sm"}
+                type="phone"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </FormControl>
+            <Button borderRadius={"sm"} onClick={HandleSendCode}>
+              Send code
+            </Button>
+            {verificationId && (
+              <>
+                {/* <FormControl id="code"> */}
+                <FormLabel>Verification code</FormLabel>
+                <HStack>
+                  <Input
+                    type="alphanumeric"
+                    otp
+                    onChange={(e) => setCode(e.target.value)}
+                    value={code}
+                  />
+                </HStack>
+                {/* </FormControl> */}
+                <Button onClick={HandleVerifyCode}>Placed Order</Button>
+              </>
+            )}
+            <div id="recaptcha-container"></div>
+          </Stack>
+        </ModalContent>
+      </ModalBody>
+    </Modal>
   );
 };
 

@@ -9,6 +9,7 @@ import SignUpPage from "../../Pages/SignUpPage";
 import SingleProductPage from "../../Pages/SingleProductPage";
 import AdminDashBoard from "../AdminDashBoard";
 import AdminLogin from "../AdminLogin";
+import { NotFound } from "../NotFound";
 import PrivateRoute from "../PrivateRoute";
 const AllRoutes = () => {
   return (
@@ -35,7 +36,7 @@ const AllRoutes = () => {
       <Route path="/products/:_id" element={<SingleProductPage />} />
       <Route path="/admin/dashboard" element={<AdminDashBoard />} />
       <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/user/cart/payment" element={<PaymentPage />} />
+      <Route path="/*" element={<NotFound/>} />
     </Routes>
   );
 };

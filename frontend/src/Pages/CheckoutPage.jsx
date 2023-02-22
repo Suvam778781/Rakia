@@ -26,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { converttoUpper } from "../HOF/AllSmallFunction";
+import PaymentPage from "./PaymentPage";
 
 function CheckoutPage() {
   const [total, settotal] = useState(0);
@@ -35,6 +36,7 @@ function CheckoutPage() {
   const toast = useToast();
   const [step, setStep] = useState(1);
   const [address, setaddress] = useState([]);
+  const [paymentmodal,setpaymentmodal]=useState(false)
   const [formData, setFormData] = useState({
     pincode: "",
     mobile: "",
@@ -59,7 +61,6 @@ function CheckoutPage() {
 // email:"",
 // _id
 // allOrders:[{...products,status:cancelled},{...products,status:placed},{...products,status:refund}]
-
   // }
   }
   const AddressGetdata = async () => {
@@ -110,7 +111,6 @@ function CheckoutPage() {
   };
   const AddAddress = async (data) => {
 if(address.length<2){
-  
     let token = localStorage.getItem("token") || "";
     try {
       let res=await axios.post(
@@ -153,7 +153,6 @@ if(address.length<2){
     });
   }
   };
-
   const UpdateAddress = async (data) => {
     let token = localStorage.getItem("token") || "";
     try {
@@ -403,11 +402,12 @@ if(address.length<2){
                  alignItems={"center"}
                   mt='10px'
                   position={"relative"}
-                  onClick={()=>navigate("/user/cart/payment")}
+                  onClick={()=>setpaymentmodal(true)}
                   _hover={{ bgColor:"green.600"}}
                 >
                 SELECT
                 </Button>
+                <PaymentPage paymentmodal={paymentmodal} setpaymentmodal={setpaymentmodal} address={ele}/>
                 </Box>
               </Box>
             ))}
