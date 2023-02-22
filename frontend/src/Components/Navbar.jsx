@@ -197,8 +197,7 @@ SingleUser()
                         ? "Logout"
                         : "Login"}
                     </MenuItem>
-                    <MenuItem bg={"rgb(167, 173, 173)"}_hover={{color:"grey"}}  as={"a"} href="/user/order">My Order</MenuItem>
-               
+                    <MenuItem bg={"rgb(167, 173, 173)"}_hover={{color:"grey"}}  as={"a"} href="/user/orders">My Order</MenuItem>
                   <MenuDivider />
                   <MenuGroup fontWeight={"700"} fontSize="20px" color={"grey"}  title="Help">
                     <MenuItem _hover={{color:"grey"}} bg={"rgb(167, 173, 173)"} as="a">Docs</MenuItem>

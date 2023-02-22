@@ -13,6 +13,7 @@ import {
     Text,
     useColorModeValue,
     useToast,
+    Spinner,
   } from '@chakra-ui/react';
   import { useDispatch, useSelector } from "react-redux";
   import {Navigate} from "react-router-dom"
@@ -97,7 +98,7 @@ if(userandadmin.adminloginSuc){
                        bg:'green.500',
                        color:"black",
                      }}>
-                  Sign in
+                 {userandadmin.adminloginLoad?<Spinner/>:"Sign In"}
                 </Button>
               </Stack>
             </Stack>
