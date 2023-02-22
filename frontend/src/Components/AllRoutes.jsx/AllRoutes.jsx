@@ -4,6 +4,7 @@ import AddToCartPage from "../../Pages/AddToCartPage";
 import CheckoutPage from "../../Pages/CheckoutPage";
 import HomePage from "../../Pages/HomePage";
 import LoginPage from "../../Pages/LoginPage";
+import Orders from "../../Pages/Orders";
 import PaymentPage from "../../Pages/PaymentPage";
 import SignUpPage from "../../Pages/SignUpPage";
 import SingleProductPage from "../../Pages/SingleProductPage";
@@ -11,6 +12,7 @@ import AdminDashBoard from "../AdminDashBoard";
 import AdminLogin from "../AdminLogin";
 import { NotFound } from "../NotFound";
 import PrivateRoute from "../PrivateRoute";
+import PrivateRoute2 from "../PrivateRoute2";
 const AllRoutes = () => {
   return (
     <Routes>
@@ -33,8 +35,10 @@ const AllRoutes = () => {
            </PrivateRoute>
         }
       />
-      <Route path="/products/:_id" element={<SingleProductPage />} />
-      <Route path="/admin/dashboard" element={<AdminDashBoard />} />
+      <Route path="/products/:_id" element={<PrivateRoute><SingleProductPage/></PrivateRoute>} />
+      <Route path="/user/orders" element={<PrivateRoute><Orders/></PrivateRoute>} />
+      <Route path="/admin/dashboard" element={<PrivateRoute2> <AdminDashBoard /></PrivateRoute2>} />
+
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/*" element={<NotFound/>} />
     </Routes>

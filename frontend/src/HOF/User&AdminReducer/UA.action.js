@@ -54,7 +54,7 @@ export const AdminLoginF = (adminlogindata) => async (dispatch) => {
   try {
     dispatch({ type: ADMIN_LOGIN_LOADING });
     let res = await axios.post(
-      `http://localhost:8080/admin/login`,
+      `${process.env.REACT_APP_BASE_URL}/admin/login`,
       adminlogindata
     );
     console.log(res)
