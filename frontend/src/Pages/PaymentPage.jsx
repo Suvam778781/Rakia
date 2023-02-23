@@ -26,6 +26,7 @@ import {
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { CartlistGetdata } from "../HOF/Cartreducer/cart.action";
 import { CloseIcon } from "@chakra-ui/icons";
 import { converttoUpper } from "../HOF/AllSmallFunction";
@@ -45,24 +46,29 @@ firebase.initializeApp(firebaseConfig);
 const PaymentPage = ({ paymentmodal, setpaymentmodal, address }) => {
   const cartdata = useSelector((state) => state.CartReducer);
   const [phoneNumber, setPhoneNumber] = useState("+91");
-  const [userdata,setuserdata]=useState({});
+  const [userdata, setuserdata] = useState({});
   const [verificationId, setVerificationId] = useState("");
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
+  const [liading2, setLoading2] = useState(false);
   const [code, setCode] = useState("");
   const [total, settotal] = useState(0);
-  const [show,setShow]=useState(true)
-  const [mod,setMod]=useState("Cash On Delivery.")
+  const [show, setShow] = useState(true);
+  const [mop, setMop] = useState("Cash On Delivery.");
   const toast = useToast();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const SingleUser=async()=>{
-    let token=localStorage.getItem("token")||"";
-    let user=await axios(`${process.env.REACT_APP_BASE_URL}/users/singleuser`,{
-    headers:{
-      Authorization:token
-    }
-    })
-    setuserdata(user.data);
+  const SingleUser = async () => {
+    let token = localStorage.getItem("token") || "";
+    let user = await axios(
+      `${process.env.REACT_APP_BASE_URL}/users/singleuser`,
+      {
+        headers: {
+          Authorization: token,
+        },
       }
+    );
+    setuserdata(user.data);
+  };
   const handleTotal = () => {
     let Total = 0;
     cartdata.Cart.map((ele) => {
@@ -72,39 +78,48 @@ const PaymentPage = ({ paymentmodal, setpaymentmodal, address }) => {
     });
     settotal(Total);
   };
-  const HandleOrderplace=async()=>{
-    let newDate=new Date()
-    let day=newDate.getDate()
-    let year=newDate.getFullYear()
-    let month=newDate.getMonth()
-    let updatecartdata=cartdata.Cart.map((ele)=>{
-      ele={...ele,ordered_at:`${day}/${month+1}/${year}`,status:"placed",mop:"COD"}
-      return ele
-    })
-    try{
-     let res=await axios.post(`${process.env.REACT_APP_BASE_URL}/users/checkout/${userdata._id}`,updatecartdata)
-     toast({
-      title: `${res.data.msg}`,
-      status: "success",
-      duration: 3000,
-      isClosable: true,
+  const HandleOrderplace = async () => {
+    let newDate = new Date();
+    let day = newDate.getDate();
+    let year = newDate.getFullYear();
+    let month = newDate.getMonth();
+    let updatecartdata = cartdata.Cart.map((ele) => {
+      ele = {
+        ...ele,
+        ordered_at: `${day}/${month + 1}/${year}`,
+        status: "placed",
+        mop: mop,
+        address: address,
+      };
+      return ele;
     });
-    }catch(err){
+    try {
+      let res = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/users/checkout/${userdata._id}`,
+        updatecartdata
+      );
       toast({
-        title: `${err.data.msg}`,
+        title: `${res.data[0].msg}`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate("/");
+    } catch (err) {
+      toast({
+        title: `${err.data[0].msg}`,
         status: "error",
         duration: 3000,
         isClosable: true,
       });
     }
-  }
+  };
   useEffect(() => {
     dispatch(CartlistGetdata());
   }, []);
-  useEffect(()=>{
-SingleUser()
-  },[])
-  console.log(userdata)
+  useEffect(() => {
+    SingleUser();
+  }, []);
   useEffect(() => {
     handleTotal();
   }, [cartdata]);
@@ -117,7 +132,7 @@ SingleUser()
         new firebase.auth.RecaptchaVerifier("recaptcha-container")
       )
       .then((id) => {
-        setLoading(false)
+        setLoading(false);
         setVerificationId(id);
         toast({
           title: "Verification code sent!",
@@ -127,7 +142,7 @@ SingleUser()
         });
       })
       .catch((error) => {
-        setLoading(false)
+        setLoading(false);
         toast({
           title: "Error sending verification code",
           description: error.message,
@@ -146,7 +161,7 @@ SingleUser()
       .auth()
       .signInWithCredential(credential)
       .then(() => {
-        HandleOrderplace()
+        HandleOrderplace();
       })
       .catch((error) => {
         toast({
@@ -187,17 +202,37 @@ SingleUser()
             Total Price: ₹ {total}
           </Badge>
           <VStack mt="60px" h="250px">
-            <Box w="80%" borderRadius={"4px"} onClick={()=>setShow((sh)=>!sh)}>
-             <Badge m="auto" my="10px">Deliver To</Badge>
+            <Box
+              w="80%"
+              borderRadius={"4px"}
+              onClick={() => setShow((sh) => !sh)}
+            >
+              <Badge m="auto" my="10px">
+                Deliver To
+              </Badge>
               <Collapse color="black" in={show}>
-                <VStack align={"self-start"} p="2" color={"white"} bgColor="green.500"  w="100%" border="1px solid white">
-                <Text>Name : {converttoUpper(address.name)}</Text>
-                <Text>Pin : {address.pincode}</Text>
+                <VStack
+                  align={"self-start"}
+                  p="2"
+                  color={"white"}
+                  bgColor="green.500"
+                  w="100%"
+                  border="1px solid white"
+                >
+                  <Text>Name : {converttoUpper(address.name)}</Text>
+                  <Text>Pin : {address.pincode}</Text>
                 </VStack>
               </Collapse>
             </Box>
-            <Select m="auto" py="20px" align={"self-start"} w="80%" value={mod} onChange={(e)=>setMod(e.target.value)}>
-              <option borderRadius={"50%"} >Cash On Delivery.</option>
+            <Select
+              m="auto"
+              py="20px"
+              align={"self-start"}
+              w="80%"
+              value={mop}
+              onChange={(e) => setMop(e.target.value)}
+            >
+              <option borderRadius={"50%"}>Cash On Delivery.</option>
               <option>Net Banking.</option>
             </Select>
           </VStack>
@@ -211,16 +246,15 @@ SingleUser()
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </FormControl>
-          
+
             <Button borderRadius={"sm"} onClick={HandleSendCode}>
-             {loading?<Spinner />: "Send code"}
+              {loading ? <Spinner /> : "Send code"}
             </Button>
             {verificationId && (
               <>
                 {/* <FormControl id="code"> */}
                 <FormLabel>Verification code</FormLabel>
                 <HStack>
-                  
                   <Input
                     type="alphanumeric"
                     otp
