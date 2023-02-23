@@ -37,6 +37,7 @@ import {
   RemoveFromCartlist,
   UpdateCartProducts,
 } from "../HOF/Cartreducer/cart.action";
+import { converttoUpper } from "../HOF/AllSmallFunction";
 const AddToCartPage = () => {
   const cartdata = useSelector((state) => state.CartReducer);
   const [pin, setPin] = useState("");
@@ -225,7 +226,7 @@ const AddToCartPage = () => {
                 {/*  mapping all the cart data */}
                 {cartdata.Cart.length > 0 ? (
                   cartdata.Cart.map((item, index) => (
-                    <Box boxShadow={"md"} key={item.id}>
+                    <Box borderBottom={"3px solid"} key={item.id}>
                       <SingleItem
                         key={item._id}
                         item={item}
@@ -586,7 +587,7 @@ export const SingleItem = ({
         {item.title}
       </Text>
 
-      <Box display="flex" w="100%" justifyContent="space-between" m="auto">
+      <Box display="flex" w="100%" justifyContent="space-between"  m="auto">
         <Box display="flex" fontSize="14px" w="40%">
           <Box boxShadow={"sm"} mr="10px">
             <Image
@@ -597,13 +598,13 @@ export const SingleItem = ({
               }}
             />
           </Box>
-          <Box textAlign={"left"} w="200px" lineHeight={"25px"}>
-            <Text> Brand:{item.brand}</Text>
-            <Text> category:{item.category}</Text>
-            {/* <Text> {item.Spindle_Speed}</Text> */}
+          <Box textAlign={"left"}  lineHeight={"25px"}>
+            {/* <Text> Brand : {converttoUpper(item.brand)}</Text>
+            <Text> Category : <Badge py="0px">{converttoUpper(item.category)}</Badge></Text>
+            */}
             {!dd ? (
               <Button
-                mt="40px"
+                mt="100px"
                 style={{
                   textAlign: "left",
                   display: "flex",
@@ -612,7 +613,7 @@ export const SingleItem = ({
                 verticalAlign="middle"
                 alignItems={"center"}
                 pl="0px"
-                bg="white"
+                bg="none"
                 color="red"
                 _hover={{ backgroundColor: "background", color: "red.700" }}
                 onClick={() => handleRemove(item)}
@@ -759,6 +760,7 @@ export const SingleItem = ({
           </HStack>
         </Box>
       </Box>
+          <Box p="2" color={"GrayText"} textAlign={"left"}>{item.description}</Box>
     </Box>
   );
 };

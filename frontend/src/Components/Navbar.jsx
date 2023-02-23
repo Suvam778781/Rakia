@@ -46,7 +46,7 @@ import {
 import { UserSignout } from "../HOF/User&AdminReducer/UA.action";
 
 export default function Navbar() {
- const [userdata,setuserdata]=useState({})
+  const [userdata, setuserdata] = useState({});
   const [search, setsearch] = useState("");
   const [openModal, setopenModal] = useState(false);
   const dispatch = useDispatch();
@@ -56,22 +56,22 @@ export default function Navbar() {
   const userandadmin = useSelector((state) => state.useradminReducer);
   // const [authstate,setauthstate]=useState(userandadmin.adminloginSuc||userandadmin.userloginSuc)
 
-  const SingleUser=async()=>{
-let token=localStorage.getItem("token")||"";
-let user=await axios(`${process.env.REACT_APP_BASE_URL}/users/singleuser`,{
-
-headers:{
-
-  Authorization:token
-}
-
-})
-setuserdata(user.data);
-  }
-console.log(userdata)
-  useEffect(()=>{
-SingleUser()
-  },[userandadmin])
+  const SingleUser = async () => {
+    let token = localStorage.getItem("token") || "";
+    let user = await axios(
+      `${process.env.REACT_APP_BASE_URL}/users/singleuser`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    setuserdata(user.data);
+  };
+  console.log(userdata);
+  useEffect(() => {
+    SingleUser();
+  }, [userandadmin]);
   const HandleSearch = () => {
     navigate("/");
     if (search !== "") {
@@ -95,139 +95,207 @@ SingleUser()
     }
   };
   return (
-    <>{location.pathname !== "/admin/dashboard"&&
-    
-    <div style={{ height: "60px" }} mb="10px">
-      <HStack
-        // display={{md:"none"}}
-        zIndex={20}
-        w="100%"
-        px="20px"
-        bg="rgb(167, 173, 173)"
-        boxShadow={"lg"}
-        justifyContent={"space-between"}
-        position="fixed"
-        top="0"
-        h="60px"
-      >
-        <Box
-          fontSize={"25px"}
-          fontWeight="semibold"
-          textDecoration="line-through"
-          color={"green.500"}
-          style={{ fontFamily: "inherit" }}
-          w="20%"
-        >
-          <Link href="/">RAKIA</Link>
-        </Box>
-        <Box
-          w="80%"
-          visibility={{
-            lg: "visible",
-            xl: "visible",
-            "2xl": "visible",
-            base: "hidden",
-          }}
-          display={{
-            base: "none",
-            lg: "flex",
-            md: "flex",
-            xl: "flex",
-            "2xl": "flex",
-          }}
-          pr="60px"
-          justifyContent={"space-between"}
-        >
-          <Box w="50%">
-            {/* <InputAddon> */}
-            {location.pathname == "/" && (
-              <Box>
-                <Input
-                  w="400px"
-                  type={"text"}
-                  _focus={{
-                    boxShadow: "none",
-                    borderBottom: "1px solid white",
-                  }}
-                  placeholder="Enter..."
-                  borderRadius={"0px"}
-                  border="none"
-                  value={search}
-                  borderBottom="1px solid white"
-                  h="30px"
-                  color="gray"
-                  _placeholder={{ color: "grey" }}
-                  onClick={() => setopenModal(true)}
-                />
-                <SearchModal
-                  openModal={openModal}
-                  setopenModal={setopenModal}
-                  search={search}
-                  setsearch={setsearch}
-                  HandleSearch={HandleSearch}
-                />
-                <Search2Icon ml="10px" color={"white"} onClick={HandleSearch} />
-              </Box>
-            )}
-          </Box>
+    <>
+      {location.pathname !== "/admin/dashboard" && (
+        <div style={{ height: "60px" }} mb="10px">
           <HStack
+            // display={{md:"none"}}
+            zIndex={20}
+            w="100%"
+            px="20px"
+            bg="rgb(167, 173, 173)"
+            boxShadow={"lg"}
             justifyContent={"space-between"}
-            w="10%"
-            fontWeight={"bold"}
-            color={"white"}
+            position="fixed"
+            top="0"
+            h="60px"
           >
-            <Box>
-              <Link href="/user/help">Help</Link>
+            <Box
+              fontSize={"25px"}
+              fontWeight="semibold"
+              textDecoration="line-through"
+              color={"green.500"}
+              style={{ fontFamily: "inherit" }}
+              w={{ sm: "30%", md: "30%", lg: "20%" }}
+            >
+              <Link href="/">RAKIA</Link>
             </Box>
-            <Box>
-              <Link href="/user/cart">Cart</Link>
+            <Box
+              w="80%"
+              visibility={{
+                lg: "visible",
+                xl: "visible",
+                "2xl": "visible",
+                base: "hidden",
+              }}
+              display={{
+                base: "none",
+                lg: "flex",
+                md: "flex",
+                xl: "flex",
+                "2xl": "flex",
+              }}
+              pr="60px"
+              justifyContent={"space-between"}
+            >
+              <Box w="50%">
+                {/* <InputAddon> */}
+                {location.pathname == "/" && (
+                  <Box>
+                    <Input
+                      w="400px"
+                      type={"text"}
+                      _focus={{
+                        boxShadow: "none",
+                        borderBottom: "1px solid white",
+                      }}
+                      placeholder="Enter..."
+                      borderRadius={"0px"}
+                      border="none"
+                      value={search}
+                      borderBottom="1px solid white"
+                      h="30px"
+                      color="gray"
+                      _placeholder={{ color: "grey" }}
+                      onClick={() => setopenModal(true)}
+                    />
+                    <SearchModal
+                      openModal={openModal}
+                      setopenModal={setopenModal}
+                      search={search}
+                      setsearch={setsearch}
+                      HandleSearch={HandleSearch}
+                    />
+                    <Search2Icon
+                      ml="10px"
+                      color={"white"}
+                      onClick={HandleSearch}
+                    />
+                  </Box>
+                )}
+              </Box>
+              <HStack
+                justifyContent={"space-between"}
+                w="10%"
+                fontWeight={"bold"}
+                color={"white"}
+              >
+                <Box
+                  borderBottom={
+                    location.pathname == "/user/help" && "3px solid green"
+                  }
+                >
+                  <Link href="/user/help">Help</Link>
+                </Box>
+                <Box
+                  borderBottom={
+                    location.pathname == "/user/cart" && "3px solid green"
+                  }
+                >
+                  <Link href="/user/cart">Cart</Link>
+                </Box>
+                <Box>
+                  <Menu isLazy>
+                    <MenuButton as={Link}>Profile</MenuButton>
+                    <MenuList bg={"rgb(167, 173, 173)"}>
+                      <Avatar />
+                      <Text
+                        fontWeight={"700"}
+                        fontSize="20px"
+                        color={"grey"}
+                        bg={"rgb(167, 173, 173)"}
+                      >
+                        {userdata.firstname &&
+                          converttoUpper(
+                            userdata.firstname + " " + userdata.lastname
+                          )}
+                      </Text>
+                      <MenuItem
+                        bg={"rgb(167, 173, 173)"}
+                        _hover={{ color: "grey  " }}
+                        as={"a"}
+                        href="/login"
+                        onClick={Handleauth}
+                      >
+                        {userandadmin.adminloginSuc || userandadmin.userloginSuc
+                          ? "Logout"
+                          : "Login"}
+                      </MenuItem>
+                      <Box p={"10px"} textAlign={"left"}>
+                        <Link
+                          borderBottom={
+                            location.pathname == "/user/orders" &&
+                            "3px solid green"
+                          }
+                          w="30%"
+                          bg={"rgb(167, 173, 173)"}
+                          _hover={{ color: "grey" }}
+                          as={"a"}
+                          href="/user/orders"
+                        >
+                          My Order
+                        </Link>
+                      </Box>
+                      <MenuDivider />
+                      <MenuGroup
+                        fontWeight={"700"}
+                        fontSize="20px"
+                        color={"grey"}
+                        title="Help"
+                      >
+                        <MenuItem
+                          borderBottom={
+                            location.pathname == "/user/docs" &&
+                            "3px solid green"
+                          }
+                          w="30%"
+                          _hover={{ color: "grey" }}
+                          bg={"rgb(167, 173, 173)"}
+                          as="a"
+                          href="/user/docs"
+                        >
+                          Docs
+                        </MenuItem>
+                        <MenuItem
+                          borderBottom={
+                            location.pathname == "/user/faq" &&
+                            "3px solid green"
+                          }
+                          w="30%"
+                          _hover={{ color: "grey" }}
+                          bg={"rgb(167, 173, 173)"}
+                          as="a"
+                          href="/user/faq"
+                        >
+                          FAQ
+                        </MenuItem>
+                      </MenuGroup>
+                    </MenuList>
+                  </Menu>
+                </Box>
+              </HStack>
             </Box>
-            <Box>
-              <Menu isLazy >
-                <MenuButton as={Link} >
-                  Profile
-                </MenuButton>
-                <MenuList  bg={"rgb(167, 173, 173)"} >
-                  <Avatar/>
-                  <Text fontWeight={"700"} fontSize="20px" color={"grey"}  bg={"rgb(167, 173, 173)"}>
-                  {userdata.firstname&&converttoUpper((userdata.firstname+" "+userdata.lastname))}
-                  </Text>
-                    <MenuItem bg={"rgb(167, 173, 173)"} _hover={{color:"grey  "}} as={"a"} href="/login" onClick={Handleauth}>
-                      {userandadmin.adminloginSuc || userandadmin.userloginSuc
-                        ? "Logout"
-                        : "Login"}
-                    </MenuItem>
-                    <MenuItem bg={"rgb(167, 173, 173)"}_hover={{color:"grey"}}  as={"a"} href="/user/orders">My Order</MenuItem>
-                  <MenuDivider />
-                  <MenuGroup fontWeight={"700"} fontSize="20px" color={"grey"}  title="Help">
-                    <MenuItem _hover={{color:"grey"}} bg={"rgb(167, 173, 173)"} as="a">Docs</MenuItem>
-                    <MenuItem _hover={{color:"grey"}}  bg={"rgb(167, 173, 173)"} as="a">FAQ</MenuItem>
-                  </MenuGroup>
-                </MenuList>
-              </Menu>
+            <Box
+              visibility={{
+                base: "visible",
+                sm: "visible",
+                md: "visible",
+                lg: "hidden",
+                xl: "hidden",
+                "2xl": "hidden",
+              }}
+              display={{ base: "flex", lg: "none", xl: "none", "2xl": "none" }}
+            >
+              <NavbarDrawer
+                search={search}
+                setsearch={setsearch}
+                HandleSearch={HandleSearch}
+                userandadmin={userandadmin}
+              />
             </Box>
           </HStack>
-        </Box>
-        <Box
-          visibility={{
-            base: "visible",
-            sm: "visible",
-            md: "visible",
-            lg: "hidden",
-            xl: "hidden",
-            "2xl": "hidden",
-          }}
-          display={{ base: "flex", lg: "none", xl: "none", "2xl": "none" }}
-        >
-          <NavbarDrawer
-            search={search}
-            setsearch={setsearch}
-            HandleSearch={HandleSearch}
-            userandadmin={userandadmin}
-          />
-        </Box>
-      </HStack>
-    </div>}
+        </div>
+      )}
     </>
   );
 }
@@ -240,6 +308,7 @@ export const NavbarDrawer = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [openModal, setopenModal] = useState(false);
   const btnRef = React.useRef();
+  const location = useLocation();
   const Handleauth = () => {
     if (userandadmin.adminloginSuc || userandadmin.userloginSuc) {
       UserSignout();
@@ -271,42 +340,71 @@ export const NavbarDrawer = ({
             </Box>
           </DrawerHeader>
           <DrawerBody>
-            <Box>
-              <Input
-                w="80%"
-                type={"text"}
-                _focus={{ boxShadow: "none", borderBottom: "1px solid green" }}
-                placeholder="Enter..."
-                borderRadius={"0px"}
-                border="none"
-                onChange={(e) => setsearch(e.target.value)}
-                value={search}
-                borderBottom="1px solid green"
-                h="30px"
-                color="gray"
-                _placeholder={{ color: "grey" }}
-              />
-              <Search2Icon
-                ml="10px"
-                boxSize={"30px"}
-                color={"green.500"}
-                onClick={HandleSearch}
-              />
-            </Box>
+            {location.pathname === "/" && (
+              <Box>
+                <Input
+                  w="80%"
+                  type={"text"}
+                  _focus={{
+                    boxShadow: "none",
+                    borderBottom: "1px solid green",
+                  }}
+                  placeholder="Enter..."
+                  borderRadius={"0px"}
+                  border="none"
+                  onChange={(e) => setsearch(e.target.value)}
+                  value={search}
+                  borderBottom="1px solid green"
+                  h="30px"
+                  color="gray"
+                  _placeholder={{ color: "grey" }}
+                />
+                <Search2Icon
+                  ml="10px"
+                  boxSize={"30px"}
+                  color={"green.500"}
+                  onClick={HandleSearch}
+                />
+              </Box>
+            )}
             <VStack textAlign={"left"} alignItems="flex-start">
-              <Link href="/user/cart">Cart</Link>
-              <Link href="/login" onClick={Handleauth}>
-                {userandadmin.adminloginSuc || userandadmin.userloginSuc
-                  ? "Logout"
-                  : "Login"}
-              </Link>
+              <Box
+                p="2px"
+                borderBottom={
+                  location.pathname == "/user/cart" && "3px solid green"
+                }
+              >
+                <Link href="/user/cart">Cart</Link>
+              </Box>
+              <Box transition={"2s ease-in-out"} textAlign={"left"}>
+                <Link
+                  borderBottom={
+                    location.pathname == "/user/orders" && "3px solid green"
+                  }
+                  href="/user/orders"
+                >
+                  My Order
+                </Link>
+              </Box>
+              <Box
+                borderBottom={
+                  location.pathname == "/login" && "3px solid green"
+                }
+              >
+                <Link href="/login" onClick={Handleauth}>
+                  {userandadmin.adminloginSuc || userandadmin.userloginSuc
+                    ? "Logout"
+                    : "Login"}
+                </Link>
+              </Box>
+
+              <Link href="/user/orders">{}</Link>
             </VStack>
           </DrawerBody>
           <DrawerFooter>
             <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
+              Close
             </Button>
-            <Button colorScheme="blue">Save</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

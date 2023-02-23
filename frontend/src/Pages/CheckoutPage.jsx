@@ -226,7 +226,7 @@ if(address.length<2){
         mt="90px"
         boxShadow={"md"}
       >
-        {step === 1 ? (
+        
           <VStack
             w={{ sm: "100%", md: "48%", lg: "48%", xl: "48%", "2xl": "48%" }}
           >
@@ -338,9 +338,7 @@ if(address.length<2){
               </form>
             </Box>
           </VStack>
-        ) : (
-          <CheckForm1 setprogress={setprogress} setStep={setStep} />
-        )}
+       
         <Box
           w={{ sm: "80%", md: "48%", lg: "48%", xl: "48%", "2xl": "48%" }}
           m="auto"
@@ -416,41 +414,6 @@ if(address.length<2){
     </>
   );
 }
-
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2M2NiYmM5OWFhYTZkZTRmNGU4ZDJjOGMiLCJpYXQiOjE2NzQyOTY1MDd9.barY9qnmDOK4I4ZwOOS7olVvQv8PxmDgVb2et-ipLCc"
 export default CheckoutPage;
 
-const CheckForm1 = ({ setStep, setprogress, Cart_Data }) => {
-  const handle1 = () => {
-    setStep((stp) => stp - 1);
-    setprogress((prog) => prog - 33.33);
-  };
-  const handle2 = () => {
-    setStep((stp) => stp + 1);
-    setprogress((prog) => prog + 33.33);
-  };
-  return (
-    <>
-      <Text margin={"auto"} display="flex" w="200px" my="30px">
-        Product Preview
-      </Text>
-      <Box>
-        {/* {Cart_Data.map((item, index) => (
-          <div key={item.id}>
-            <SingleItem
-              key={item._id}
-              item={item}
-              dd={true}
-              // handleDecrease={handleDecrease}
-              // handleIncrease={handleIncrease}
-              // handleRemove={handleRemove} */}
-        {/* /> */}
-        {/* <Divider /> */}
-        {/* </div> */}
-        {/* ))} */}
-      </Box>
-      <Button onClick={handle1}>Back</Button>
-      <Button onClick={handle2}>Next</Button>
-    </>
-  );
-};
