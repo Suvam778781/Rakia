@@ -43,6 +43,7 @@ import {
   Thead,
   Table,
   Th,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import {
@@ -70,6 +71,7 @@ import { DeleteIcon, Search2Icon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useState } from "react";
 import { converttoUpper } from "../HOF/AllSmallFunction";
+import { Navigate, useNavigate } from "react-router-dom";
 const AdminDashBoard = () => {
   const [admindetails, setadmindetails] = useState({});
   const [search, setsearch] = useState("");
@@ -78,24 +80,55 @@ const AdminDashBoard = () => {
   const [count, setcount] = useState(1);
   const [userloading, setuserloading] = useState(true);
   const [allusers, setallusers] = useState([]);
+  const [alladmins, setalladmins] = useState([]);
   const dispatch = useDispatch();
   const productsadmin = useSelector((state) => state.AdminReducer);
   const userandadmin = useSelector((state) => state.useradminReducer);
+  const [tempalluserdata, settempalluserdata] = useState([]);
   const toast = useToast();
-  const HandleSearch = () => {};
+  const navigate = useNavigate();
+  const HandleSearch = () => {
+    dispatch(GetProductForAdmin(search));
+  };
   const GetAllUser = async () => {
     let admintoken = localStorage.getItem("admintoken") || "";
     try {
       setuserloading(true);
-      let res = await axios(`${process.env.REACT_APP_BASE_URL}/users/allusers`, {
-        headers: {
-          Authorization: admintoken,
-        },
-      });
+      let res = await axios(
+        `${process.env.REACT_APP_BASE_URL}/users/allusers`,
+        {
+          headers: {
+            Authorization: admintoken,
+          },
+        }
+      );
       setuserloading(false);
-      setallusers(res.data);
+      settempalluserdata(res.data);
     } catch (err) {
       setuserloading(false);
+      toast({
+        title: "Something Went Wrong.",
+        description: "",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const GetAllAdmin = async () => {
+    let admintoken = localStorage.getItem("admintoken") || "";
+    try {
+      let res = await axios(
+        `${process.env.REACT_APP_BASE_URL}/admin/alladmin`,
+        {
+          headers: {
+            Authorization: admintoken,
+          },
+        }
+      );
+      setalladmins(res.data);
+    } catch (err) {
       toast({
         title: "Something Went Wrong.",
         description: "",
@@ -131,31 +164,49 @@ const AdminDashBoard = () => {
       });
     }
   };
+  //  filter here
+  const FilterCancelled = () => {
+    setcount(2);
+    let filterdata = tempalluserdata.filter(
+      (user) => user.allorders.length > 0
+    );
+    filterdata = filterdata.map((user) => {
+      user.allorders = user.allorders.filter(
+        (order) => order.status === "cancelled"
+      );
+      if(user.allorders.length>0){
+      return user;
+      };
+    });
+    setallusers(filterdata);
+  };
+  const FilterPlaced = () => {
+    setcount(3);
 
-  //  filter here 
-
-  const FilterCancelled=()=>{
-    setcount(2)
-
-  }
-  const FilterPlaced=()=>{
-    setcount(3)
-
-let filterdata=allusers.filter((user)=>{
-user=user.allorders.filter((ele)=>
-ele.status=="cancelled"
-)}
-// console.log(user)
-    )
-console.log(filterdata)
-  }
+    let filterdata = tempalluserdata.filter(
+      (user) => user.allorders.length > 0
+    );
+    filterdata = filterdata.map((user) => {
+      user.allorders = user.allorders.filter(
+        (order) => order.status === "placed"
+      );
+      return user
+    });
+    setallusers(filterdata);
+  };
+  const HandleOrderHistory = () => {
+    setcount(4);
+    setallusers(tempalluserdata);
+  };
   useEffect(() => {
     dispatch(GetProductForAdmin());
   }, []);
   useEffect(() => {
     GetAdminDetails();
     GetAllUser();
-  }, []);
+    GetAllAdmin();
+  }, [count]);
+
   return (
     <div>
       <Box
@@ -178,6 +229,7 @@ console.log(filterdata)
           color={"green.500"}
           margin="auto 0px auto 0px"
           style={{ fontFamily: "inherit" }}
+          onClick={() => navigate("/")}
         >
           RAKIA
         </Box>
@@ -228,7 +280,7 @@ console.log(filterdata)
           transition="all 0.5s"
           m="auto"
           backgroundColor="white"
-          w="14%"
+          w={{base:"12%",sm:"12%",md:"12%",lg:"12%",xl:"12%","2xl":"12%"}}
           h="250px"
           mt="60px"
           zIndex={20}
@@ -238,13 +290,18 @@ console.log(filterdata)
             transition="all 0.5s"
             bgColor={count == 1 ? "green.500" : "tranparent"}
             color={count == 1 ? "white" : "black"}
+            bgImage={
+              count == 1 &&
+              "https://images.ctfassets.net/5de70he6op10/4IFhnhWQZpy0mGYEQeDwyZ/7f5135fc723f65cebb8463a4a2d677b8/Dress_Toppers_Party_Live_Text.jpg?w=630&q=80&fm=webp"
+            }
             justifyContent={"flex-start"}
             rounded="md"
             _hover={{ bg: "green.500" }}
             background={"white"}
             className="admin_left_button"
-            onClick={() => {setcount(1)}}
-            
+            onClick={() => {
+              setcount(1);
+            }}
           >
             All Products
           </Button>
@@ -254,6 +311,10 @@ console.log(filterdata)
             _hover={{ bg: "green.500" }}
             justifyContent={"flex-start"}
             rounded="md"
+            bgImage={
+              count == 2 &&
+              "https://images.ctfassets.net/5de70he6op10/4IFhnhWQZpy0mGYEQeDwyZ/7f5135fc723f65cebb8463a4a2d677b8/Dress_Toppers_Party_Live_Text.jpg?w=630&q=80&fm=webp"
+            }
             background={"white"}
             className="admin_left_button"
             onClick={() => FilterCancelled()}
@@ -263,6 +324,10 @@ console.log(filterdata)
             Cancelled Orders
           </Button>
           <Button
+            bgImage={
+              count == 3 &&
+              "https://images.ctfassets.net/5de70he6op10/4IFhnhWQZpy0mGYEQeDwyZ/7f5135fc723f65cebb8463a4a2d677b8/Dress_Toppers_Party_Live_Text.jpg?w=630&q=80&fm=webp"
+            }
             shadow={"sm"}
             transition="all 0.5s"
             _hover={{ bg: "green.500" }}
@@ -284,16 +349,23 @@ console.log(filterdata)
             rounded="md"
             background={"white"}
             className="admin_left_button"
-            onClick={() => setcount(4)}
+            onClick={() => HandleOrderHistory()}
+            bgImage={
+              count == 4 &&
+              "https://images.ctfassets.net/5de70he6op10/4IFhnhWQZpy0mGYEQeDwyZ/7f5135fc723f65cebb8463a4a2d677b8/Dress_Toppers_Party_Live_Text.jpg?w=630&q=80&fm=webp"
+            }
             bgColor={count == 4 ? "green.500" : "tranparent"}
             color={count == 4 ? "white" : "black"}
           >
             Order History
           </Button>
         </VStack>
-
-        <Box justifyContent={"flex-end"} w="86%">
-          <OrderData product={productsadmin.Products} allusers={allusers} />
+        <Box justifyContent={"flex-end"} w="80%">
+          <OrderData
+            product={productsadmin.Products}
+            allusers={allusers}
+            alladmins={alladmins}
+          />
           {/* all products */}
           {count == 1 && (
             <Box>
@@ -329,21 +401,18 @@ console.log(filterdata)
             </Box>
           )}
 
-         {count==4&&<Box>
-  
-            {!userloading&& allusers.map((ele)=>
-            
-            <OrderHistory userdata={ele}/>
-            
-            )}
-          </Box>}
+          {(count == 4 || count == 3 || count == 2) && (
+            <Box>
+              {!userloading &&
+                allusers.map((ele) => <OrderHistory userdata={ele} />)}
+            </Box>
+          )}
         </Box>
       </Flex>
       <Flex></Flex>
     </div>
   );
 };
-
 const SingleProduct = ({ product }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
@@ -353,7 +422,7 @@ const SingleProduct = ({ product }) => {
 
   return (
     <Box
-      key={product._id}
+      key={`${product._id}`}
       bg="#f6f6f6"
       shadow={"md"}
       alignItems="center"
@@ -415,7 +484,6 @@ const SingleProduct = ({ product }) => {
     </Box>
   );
 };
-
 export default AdminDashBoard;
 export function Card({ stat, icon, title, bg }) {
   return (
@@ -447,7 +515,7 @@ export function Card({ stat, icon, title, bg }) {
     </Stat>
   );
 }
-export function OrderData({ product, allusers }) {
+export function OrderData({ product, allusers, alladmins }) {
   return (
     <Box maxW="7xl" mx={"auto"} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
       <h1
@@ -466,7 +534,7 @@ export function OrderData({ product, allusers }) {
         <Card
           title={"Admins"}
           bg="https://images.ctfassets.net/5de70he6op10/4IFhnhWQZpy0mGYEQeDwyZ/7f5135fc723f65cebb8463a4a2d677b8/Dress_Toppers_Party_Live_Text.jpg?w=630&q=80&fm=webp"
-          stat={"7"}
+          stat={alladmins.length}
           icon={<BsPerson size={"3em"} />}
         />
         <Card
@@ -742,49 +810,79 @@ const AddModal = ({ addmodal, setaddmodal }) => {
     </Modal>
   );
 };
-const OrderHistory = ({userdata}) => {
-  const total=()=>{
-    let total=0;
-userdata.allorders.map((ele)=>{
-total+=(ele.price*ele.quantity)
-})
+const OrderHistory = ({ userdata }) => {
+  const tableSize = useBreakpointValue
+  ({ base: "sm", md: "md", lg: "lg" });
+  const total = () => {
+    let total = 0;
+    userdata.allorders.map((ele) => {
+      total += ele.price * ele.quantity;
+    });
 
-return total
-  }
+    return total;
+  };
   return (
     <Container maxW="container.lg">
-      <Heading textAlign={"left"} p="5" size="md" mt="3" color={"GrayText"}>
-        {(converttoUpper(userdata.firstname))} {converttoUpper(userdata.lastname)}'s Orders
+      <Heading textAlign={"left"} p="4" size="md" mt="3" color={"GrayText"}>
+        {converttoUpper(userdata.firstname)} {converttoUpper(userdata.lastname)}
+        's Orders
       </Heading>
       {userdata.allorders.length > 0 ? (
-        <List spacing="3" border="1px" borderColor="gray.200" borderRadius="md">
-            <Table variant="simple" size="md" mb="8">
-            <Thead>
-              <Tr>
-                <Th>Image</Th>
-                <Th>Description</Th>
-                <Th>Price</Th>
-                <Th>Quantity</Th>
-                <Th>Ordered At</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {userdata.allorders.map((order) => (
-                <Tr fontSize={"13px"} key={order._id}>
-                   <Td><Image  h="200px" objectFit={"contain"} src={order.image}/></Td>
-                  <Td>{order.description}</Td>
-                  <Td>₹{order.price}</Td>
-                  <Td>{order.quantity}</Td>
-                  <Td>{order.ordered_at.toLocaleString()}</Td>
-                </Tr>
-              ))}
-              
-            </Tbody>
-          </Table>
-          <Flex display={"flex"} p="3" w="100%" verticalAlign={"center"} justifyContent={"space-between"}>
-                <Text fontWeight={"600"} color={"red.400"}>TOTAL</Text>
-              <Badge>₹ {total().toLocaleString()}</Badge>
-              </Flex>
+        <List border="1px" borderColor="gray.200" borderRadius="md">
+    <Table variant="simple" minW={"100%"} maxW="100%">
+      <Thead>
+        <Tr>
+          <Th color={"yellow.600"}>Image</Th>
+          <Th color={"yellow.600"}>Description</Th>
+          <Th color={"yellow.600"}>Price</Th>
+          <Th color={"yellow.600"}>Quantity</Th>
+          {tableSize === "lg" && (
+            <>
+              <Th color={"yellow.600"}>Ordered At</Th>
+              <Th color={"yellow.600"}>Cancelled At</Th>
+            </>
+          )}
+        </Tr>
+      </Thead>
+      <Tbody>
+        {userdata.allorders.map((order) => (
+          <Tr fontSize={"13px"}>
+            <Td>
+              <Image h="200px" objectFit={"contain"} src={order.image} />
+            </Td>
+            <Td color={"gray.500"}>{order.description}</Td>
+            <Td>₹{(order.price).toLocaleString()}</Td>
+            <Td>{order.quantity}</Td>
+            {tableSize === "lg" && (
+              <>
+                <Td>
+                  <Badge color={"white"} bgColor="green.500">
+                    {order.ordered_at}
+                  </Badge>
+                </Td>
+                <Td color="red.600">
+                  <Badge color={"white"} bgColor="red.500">
+                    {order.cancelled_at || "null"}
+                  </Badge>
+                </Td>
+              </>
+            )}
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+          <Flex
+            display={"flex"}
+            p="3"
+            w="100%"
+            verticalAlign={"center"}
+            justifyContent={"space-between"}
+          >
+            <Text fontWeight={"600"} color={"red.400"}>
+              TOTAL
+            </Text>
+            <Badge>₹ {total().toLocaleString()}</Badge>
+          </Flex>
         </List>
       ) : (
         <Center border="1px" borderColor="gray.200" borderRadius="md" h="150px">
