@@ -98,10 +98,10 @@ function HomePage() {
             gap="2"
             templateColumns={{
               lg: "repeat(4, 1fr)",
+              "2xl": "repeat(4, 1fr)",
               xl: "repeat(4, 1fr)",
-              xl: "repeat(4, 1fr)",
-              sm: "repeat(3, 1fr)",
-              md: "repeat(3, 1fr)",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(2, 1fr)",
               base: "repeat(1, 1fr)",
             }}
           >
@@ -118,9 +118,9 @@ function HomePage() {
             templateColumns={{
               lg: "repeat(4, 1fr)",
               xl: "repeat(4, 1fr)",
-              sm: "repeat(3, 1fr)",
-              md: "repeat(3, 1fr)",
-              "2xl": "repeat(3, 1fr)",
+              xl: "repeat(4, 1fr)",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(2, 1fr)",
               base: "repeat(1, 1fr)",
             }}
             rowGap={5}
@@ -162,10 +162,6 @@ const ProductsLeftSection = ({ page }) => {
   const cartdata = useSelector((store) => store.CartReducer);
   let allfilter = [...selectedBrand, ...selectedType];
   // Price filter start from here==-----
-
-  useEffect(() => {
-    // dispatch(CartlistGetdata())
-  }, []);
   // Type filter start from here==-----
   const handleFilterByType = (type) => {
     if (selectedType.includes(type)) {
@@ -250,19 +246,14 @@ const ProductsLeftSection = ({ page }) => {
           "2xl": "flex",
           md: "flex",
           sm: "flex",
+          base:"flex"
         }}
-        width={{
-          lg: "60%",
-          xl: "50%",
-          "2xl": "40%",
-          md: "66%",
-          sm: "65%",
-          base: "60%",
-        }}
+        width={
+         "100%"
+        }
         style={{
           alignItems: "left",
           textAlign: "start",
-
           fontSize: "15px",
           lineHeight: "25px",
         }}
@@ -274,7 +265,7 @@ const ProductsLeftSection = ({ page }) => {
           alignItems={"center"}
           fontSize="16px"
           color="green.500"
-          w="30%"
+          w="100px"
           display={"flex"}
           m="auto"
           my="20px"
@@ -294,8 +285,9 @@ const ProductsLeftSection = ({ page }) => {
           }}
           mt="10px"
         >
-          <Accordion allowToggle w="30%">
-            <AccordionItem w="100%">
+
+          <Accordion allowToggle w="144px">
+            <AccordionItem w="100%" zIndex={"20"}>
               <h2>
                 <AccordionButton
                   backgroundColor="white"
@@ -341,8 +333,8 @@ const ProductsLeftSection = ({ page }) => {
               </AccordionPanel>
             </AccordionItem>
           </Accordion>
-          <Accordion allowToggle w="30%">
-            <AccordionItem w="100%">
+          <Accordion allowToggle w="144px">
+            <AccordionItem w="144px">
               <h2>
                 <AccordionButton
                   backgroundColor="white"
@@ -364,6 +356,7 @@ const ProductsLeftSection = ({ page }) => {
                 </AccordionButton>
               </h2>
               <AccordionPanel
+              w="144px"
                 position={"absolute"}
                 bg="rgb(167, 173, 173)"
                 className="Filter_Parents"
