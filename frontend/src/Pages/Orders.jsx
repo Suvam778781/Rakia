@@ -73,10 +73,11 @@ function Orders() {
     SingleUser();
   }, []);
   return (
-    <Box w="100%" my="60px">
+    <Box w="100%"  py="10">
       <Box>
         <Badge fontSize={"30px"}>My Orders</Badge>
       </Box>
+      {(!orderloading&&userdata.allorders.length==0)&&<EmptyOrders/>}
       {orderloading ? (
         <Box my="100px">
           {" "}
@@ -96,7 +97,7 @@ function Orders() {
           m="auto"
           mt="100px"
         >
-          {userdata.allorders.map((ele) => (
+         {userdata.allorders.map((ele) => (
             <>
               <Box
                 key={ele._id}
@@ -128,7 +129,7 @@ function Orders() {
                     {/*  address started here */}
 
                     <Text fontWeight="bold" mb={2} color="gray.800">
-                      {ele.address.name.toUpperCase()}
+                      {ele.address?.name.toUpperCase()}
                     </Text>
                     <Text mb={2} color="gray.600">
                       {ele.address.pincode}
@@ -139,7 +140,6 @@ function Orders() {
                     </Text>
                   </Box>
                 </Box>
-
                 <Box textAlign={"left"} w="40%">
                   {ele.status == "placed" ? (
                     <Badge color={"red.500"}>
@@ -185,3 +185,21 @@ function Orders() {
   );
 }
 export default Orders;
+
+const EmptyOrders = () => {
+  return (
+    <Box textAlign="center" py={10}>
+      <Text fontSize="xl" fontWeight="bold" mb={4}>
+        You have no orders yet!
+      </Text>
+      <Text fontSize="md" mb={6}>
+        Browse our collection of products and find something you love.
+      </Text>
+      <Button  as={"a"} href="/" colorScheme="teal" variant="solid">
+        Start Shopping
+      </Button>
+    </Box>
+  );
+};
+
+export {EmptyOrders};
