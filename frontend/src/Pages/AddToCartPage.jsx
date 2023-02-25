@@ -3,7 +3,7 @@ import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { ArrowLeftIcon, Search2Icon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import env from "react-dotenv";
-
+// https://1drv.ms/u/s!Agy8Y5ocUlKbjTrH6AmsKPNFeqJ0?e=SYhwVL
 // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2M2RmOTlkZmY0ODAzY2Q4YTYzMjMzOTUiLCJpYXQiOjE2NzU1OTgzMjMsImV4cCI6MTY3NTY4NDcyM30.chHmPbJN8h9QPtViekmUqs4WbG9DoRgnwXdr2Qbuzzw"
 import {
   Box,
@@ -201,7 +201,7 @@ const AddToCartPage = () => {
                 w="98%"
                 m="10px"
               >
-                <Box
+                {/* <Box
                   justifyContent="space-between"
                   display="flex"
                   w="88%"
@@ -222,11 +222,11 @@ const AddToCartPage = () => {
                   <Text>Item</Text>
                   <Text>Quantity</Text>
                   <Text>Price (Inclusive of GST)</Text>
-                </Box>
+                </Box> */}
                 {/*  mapping all the cart data */}
                 {cartdata.Cart.length > 0 ? (
                   cartdata.Cart.map((item, index) => (
-                    <Box borderBottom={"3px solid"} key={item.id}>
+                    <Box key={item._id} shadow="sm">
                       <SingleItem
                         key={item._id}
                         item={item}
@@ -255,302 +255,304 @@ const AddToCartPage = () => {
           )}
 
           {/*cart total and offer section*/}
-         {cartdata.Cart.length>0&&
-        
-         
-         <VStack w="88%"  m="auto" my="50px"  >
-            <Box
-              h="auto"
-              pb="20px"
-              style={{ boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px" }}
-              w="100%"
-            >
-              {/*  pincode added and shiping section */}
+          {cartdata.Cart.length > 0 && (
+            <VStack w="88%" m="auto" my="50px">
               <Box
-                bgColor={"green.500"}
+                h="auto"
+                pb="20px"
+                style={{ boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px" }}
                 w="100%"
-                h="40px"
-                mb={"10px"}
-                display="flex"
-                px="7px"
-                justifyContent="space-between"
               >
-                <Text
-                  color="white"
-                  alignItems={"center"}
-                  textAlign="left"
-                  pt="5px"
-                >
-                  Payment Summary
-                </Text>
-                <Image
-                  filter={"invert(100%)"}
-                  w="20px"
-                  src="https://www.industrybuying.com/static/desktop-payment/assets/svg/rupee-circle-icon.svg"
-                />
-              </Box>
-              <Text
-                color="RGBA(0, 0, 0, 0.48)"
-                pl="20px"
-                pb="10px"
-                textAlign={"left"}
-              >
-                Estimate shipping charges
-              </Text>
-              <HStack px="20px" w="100%">
-                <Input
-                  w="80%"
-                  type={"text"}
-                  _focus={{
-                    boxShadow: "none",
-                    borderBottom: "2px solid green",
-                  }}
-                  borderRadius={"0px"}
-                  border="none"
-                  value={pin}
-                  borderBottom="1px solid green"
-                  h="30px"
-                  color="gray"
-                  _placeholder={{ color: "grey" }}
-                  fontSize={"12px"}
-                  placeholder="ENTER YOUR PINCODE"
-                  rounded="xs"
-                  _hover={{ borderBotton: "2px solid green" }}
-                  onChange={(e) => setPin(e.target.value)}
-                />
-                <Search2Icon
-                  onClick={findDelivery}
-                  verticalAlign="middle"
-                  zIndex="10"
-                />
-              </HStack>
-              <Text
-                pl="20px"
-                fontSize={"13px"}
-                color="#de2511"
-                py="3px"
-                textAlign={"left"}
-              >
-                {error}
-              </Text>
-              {!error ? (
-                <VStack>
-                  <Box
-                    display={"flex"}
-                    h="30px"
-                    justifyContent="space-between"
-                    w="90%"
-                    margin="auto"
-                    py="20px"
-                  >
-                    <Text>Subtotal:Rs.</Text>
-                    <Text>{total.toLocaleString()}</Text>
-                  </Box>
-                  <Box
-                    display={"flex"}
-                    justifyContent="space-between"
-                    h="30px"
-                    w="90%"
-                    margin="auto"
-                    py="20px"
-                  >
-                    <Text>Shipping Charges</Text>
-                    <Text color="#3da73a">FREE</Text>
-                  </Box>
-                  <Box
-                    fontWeight={"bold"}
-                    display={"flex"}
-                    h="30px"
-                    justifyContent="space-between"
-                    w="90%"
-                    margin="auto"
-                    py="20px"
-                    fontSize={"20px"}
-                  >
-                    <Text>Total Price</Text>
-                    <Text color="#e45301">{total.toLocaleString()}</Text>
-                  </Box>
-                  <HStack
-                    w="100%"
-                    px="10px"
-                    mt="10px"
-                    borderTop={"0.5px solid RGBA(0, 0, 0, 0.36)"}
-                  >
-                    <Image
-                      w="30px"
-                      h="30px"
-                      src="https://www.industrybuying.com/static/desktop-payment/assets/svg/delivery-truck.svg"
-                      alt="Free Shipping"
-                    />
-                    <Text color={"grey"} fontSize="12px">
-                      Shipping charges applicable as per your pincode {pin}
-                    </Text>
-                  </HStack>
-                </VStack>
-              ) : null}
-            </Box>
-            {/* Partner offer section */}
-            <Box
-              h="auto"
-              pb="20px"
-              style={{ boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px" }}
-              w="100%"
-            >
-              <Box
-                bgColor={"green.500"}
-                w="100%"
-                h="40px"
-                mb={"10px"}
-                display="flex"
-                px="7px"
-                justifyContent="space-between"
-              >
-                <Text
-                  color="white"
-                  alignItems={"center"}
-                  textAlign="left"
-                  pt="5px"
-                >
-                  Partner Offers
-                </Text>
-                <Image
-                  filter={"invert(100%)"}
-                  w="20px"
-                  src="https://www.industrybuying.com/static/desktop-payment/assets/svg/discount-icon.svg"
-                />
-              </Box>
-              <VStack
-                textAlign={"left"}
-                lineHeight="20px"
-                align="flex-start"
-                borderRadius={"7px"}
-                px="20px"
-                h="80px"
-                bgColor={"#fffaef"}
-                border="1px dashed #e3daad"
-                w="90%"
-                m="auto"
-              >
-                <Text fontWeight={"semibold"}>
-                  Get GST invoice and save up to 28% on Business Purchases.
-                </Text>
-                <Link
-                  onClick={onOpen}
-                  color={"#046699"}
-                  textDecoration="underline"
-                >
-                  View More
-                </Link>
-              </VStack>
-            </Box>
-
-            <Box
-              h="auto"
-              pb="20px"
-              style={{ boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px" }}
-              w="100%"
-            >
-              <Box
-                bgColor={"green.500"}
-                w="100%"
-                h="40px"
-                mb={"10px"}
-                display="flex"
-                px="7px"
-                justifyContent="space-between"
-              >
-                <Text
-                  color="white"
-                  alignItems={"center"}
-                  textAlign="left"
-                  pt="5px"
-                >
-                  Offers Available
-                </Text>
-                <Image
-                  filter={"invert(100%)"}
-                  w="20px"
-                  src="https://www.industrybuying.com/static/desktop-payment/assets/svg/discount-icon.svg"
-                />
-              </Box>
-              <HStack px="20px" w="100%">
-                <Input
-                  fontSize={"12px"}
+                {/*  pincode added and shiping section */}
+                <Box
+                  bgColor={"green.500"}
                   w="100%"
-                  placeholder="ENTER YOUR PINCODE"
-                  _hover={{ border: "none" }}
-                  value={coupon}
-                  onChange={(e) => setcoupon(e.target.value)}
-                />
-                <Link
-                  as={Link}
-                  position={"relative"}
-                  left="-60px"
-                  color="#fb8869"
-                  verticalAlign="middle"
-                  zIndex="20"
-                  onClick={() => handleDiscount()}
+                  h="40px"
+                  mb={"10px"}
+                  display="flex"
+                  px="7px"
+                  justifyContent="space-between"
                 >
-                  Apply
-                </Link>
-              </HStack>
-            </Box>
-            {/* first coupon box */}
-            <Box
-              px="10px"
-              alignItems="flex-start"
-              w="100%"
-              pl="10px"
-              h="100px"
-              id="scrollbar"
-              fontSize={"14px"}
-              overflowY="scroll"
-            >
-              <Box>
-                <Box display={"flex"}>
-                  <Badge
-                    bgColor={"#fb8869"}
-                    alignItems="flex-start"
+                  <Text
                     color="white"
+                    alignItems={"center"}
+                    textAlign="left"
+                    pt="5px"
                   >
-                    Avalable
-                  </Badge>
+                    Payment Summary
+                  </Text>
+                  <Image
+                    filter={"invert(100%)"}
+                    w="20px"
+                    src="https://www.industrybuying.com/static/desktop-payment/assets/svg/rupee-circle-icon.svg"
+                  />
                 </Box>
-                <Flex w="100%" justifyContent={"space-between"}>
-                  <Text>DUBAM300</Text>
-                  <Link onClick={() => setcoupon("DUBAM300")} color={"#E53E3E"}>
-                    Apply Now
+                <Text
+                  color="RGBA(0, 0, 0, 0.48)"
+                  pl="20px"
+                  pb="10px"
+                  textAlign={"left"}
+                >
+                  Estimate shipping charges
+                </Text>
+                <HStack px="20px" w="100%">
+                  <Input
+                    w="80%"
+                    type={"text"}
+                    _focus={{
+                      boxShadow: "none",
+                      borderBottom: "2px solid green",
+                    }}
+                    borderRadius={"0px"}
+                    border="none"
+                    value={pin}
+                    borderBottom="1px solid green"
+                    h="30px"
+                    color="gray"
+                    _placeholder={{ color: "grey" }}
+                    fontSize={"12px"}
+                    placeholder="ENTER YOUR PINCODE"
+                    rounded="xs"
+                    _hover={{ borderBotton: "2px solid green" }}
+                    onChange={(e) => setPin(e.target.value)}
+                  />
+                  <Search2Icon
+                    onClick={findDelivery}
+                    verticalAlign="middle"
+                    zIndex="10"
+                  />
+                </HStack>
+                <Text
+                  pl="20px"
+                  fontSize={"13px"}
+                  color="#de2511"
+                  py="3px"
+                  textAlign={"left"}
+                >
+                  {error}
+                </Text>
+                {!error ? (
+                  <VStack>
+                    <Box
+                      display={"flex"}
+                      h="30px"
+                      justifyContent="space-between"
+                      w="90%"
+                      margin="auto"
+                      py="20px"
+                    >
+                      <Text>Subtotal:Rs.</Text>
+                      <Text>{total.toLocaleString()}</Text>
+                    </Box>
+                    <Box
+                      display={"flex"}
+                      justifyContent="space-between"
+                      h="30px"
+                      w="90%"
+                      margin="auto"
+                      py="20px"
+                    >
+                      <Text>Shipping Charges</Text>
+                      <Text color="#3da73a">FREE</Text>
+                    </Box>
+                    <Box
+                      fontWeight={"bold"}
+                      display={"flex"}
+                      h="30px"
+                      justifyContent="space-between"
+                      w="90%"
+                      margin="auto"
+                      py="20px"
+                      fontSize={"20px"}
+                    >
+                      <Text>Total Price</Text>
+                      <Text color="#e45301">{total.toLocaleString()}</Text>
+                    </Box>
+                    <HStack
+                      w="100%"
+                      px="10px"
+                      mt="10px"
+                      borderTop={"0.5px solid RGBA(0, 0, 0, 0.36)"}
+                    >
+                      <Image
+                        w="30px"
+                        h="30px"
+                        src="https://www.industrybuying.com/static/desktop-payment/assets/svg/delivery-truck.svg"
+                        alt="Free Shipping"
+                      />
+                      <Text color={"grey"} fontSize="12px">
+                        Shipping charges applicable as per your pincode {pin}
+                      </Text>
+                    </HStack>
+                  </VStack>
+                ) : null}
+              </Box>
+              {/* Partner offer section */}
+              <Box
+                h="auto"
+                pb="20px"
+                style={{ boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px" }}
+                w="100%"
+              >
+                <Box
+                  bgColor={"green.500"}
+                  w="100%"
+                  h="40px"
+                  mb={"10px"}
+                  display="flex"
+                  px="7px"
+                  justifyContent="space-between"
+                >
+                  <Text
+                    color="white"
+                    alignItems={"center"}
+                    textAlign="left"
+                    pt="5px"
+                  >
+                    Partner Offers
+                  </Text>
+                  <Image
+                    filter={"invert(100%)"}
+                    w="20px"
+                    src="https://www.industrybuying.com/static/desktop-payment/assets/svg/discount-icon.svg"
+                  />
+                </Box>
+                <VStack
+                  textAlign={"left"}
+                  lineHeight="20px"
+                  align="flex-start"
+                  borderRadius={"7px"}
+                  px="20px"
+                  h="80px"
+                  bgColor={"#fffaef"}
+                  border="1px dashed #e3daad"
+                  w="90%"
+                  m="auto"
+                >
+                  <Text fontWeight={"semibold"}>
+                    Get GST invoice and save up to 28% on Business Purchases.
+                  </Text>
+                  <Link
+                    onClick={onOpen}
+                    color={"#046699"}
+                    textDecoration="underline"
+                  >
+                    View More
                   </Link>
-                </Flex>
-                <Flex mt="20px" w="100%" justifyContent={"space-between"}>
+                </VStack>
+              </Box>
+
+              <Box
+                h="auto"
+                pb="20px"
+                style={{ boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px" }}
+                w="100%"
+              >
+                <Box
+                  bgColor={"green.500"}
+                  w="100%"
+                  h="40px"
+                  mb={"10px"}
+                  display="flex"
+                  px="7px"
+                  justifyContent="space-between"
+                >
+                  <Text
+                    color="white"
+                    alignItems={"center"}
+                    textAlign="left"
+                    pt="5px"
+                  >
+                    Offers Available
+                  </Text>
+                  <Image
+                    filter={"invert(100%)"}
+                    w="20px"
+                    src="https://www.industrybuying.com/static/desktop-payment/assets/svg/discount-icon.svg"
+                  />
+                </Box>
+                <HStack px="20px" w="100%">
+                  <Input
+                    fontSize={"12px"}
+                    w="100%"
+                    placeholder="ENTER YOUR PINCODE"
+                    _hover={{ border: "none" }}
+                    value={coupon}
+                    onChange={(e) => setcoupon(e.target.value)}
+                  />
+                  <Link
+                    as={Link}
+                    position={"relative"}
+                    left="-60px"
+                    color="#fb8869"
+                    verticalAlign="middle"
+                    zIndex="20"
+                    onClick={() => handleDiscount()}
+                  >
+                    Apply
+                  </Link>
+                </HStack>
+              </Box>
+              {/* first coupon box */}
+              <Box
+                px="10px"
+                alignItems="flex-start"
+                w="100%"
+                pl="10px"
+                h="100px"
+                id="scrollbar"
+                fontSize={"14px"}
+                overflowY="scroll"
+              >
+                <Box>
+                  <Box display={"flex"}>
+                    <Badge
+                      bgColor={"#fb8869"}
+                      alignItems="flex-start"
+                      color="white"
+                    >
+                      Avalable
+                    </Badge>
+                  </Box>
+                  <Flex w="100%" justifyContent={"space-between"}>
+                    <Text>DUBAM300</Text>
+                    <Link
+                      onClick={() => setcoupon("DUBAM300")}
+                      color={"#E53E3E"}
+                    >
+                      Apply Now
+                    </Link>
+                  </Flex>
+                  <Flex mt="20px" w="100%" justifyContent={"space-between"}>
+                    <h6>Get Flat Rs. 300 Off.</h6>
+                    <Link>T&C Apply</Link>
+                  </Flex>
+                </Box>
+                {/* second coupon box */}
+                <Box>
+                  <Box display={"flex"} pt="30px" pb="4px">
+                    <Badge
+                      bgColor={"#fb8869"}
+                      alignItems="flex-start"
+                      color="white"
+                    >
+                      Avalable
+                    </Badge>
+                  </Box>
+                  <Flex w="100%" justifyContent={"space-between"}>
+                    <Text>APP300</Text>
+                    <Link onClick={() => setcoupon("APP300")} color={"#E53E3E"}>
+                      Apply Now
+                    </Link>
+                  </Flex>
+                </Box>
+                <Flex w="100%" mt="20px" justifyContent={"space-between"}>
                   <h6>Get Flat Rs. 300 Off.</h6>
                   <Link>T&C Apply</Link>
                 </Flex>
               </Box>
-              {/* second coupon box */}
-              <Box>
-                <Box display={"flex"} pt="30px" pb="4px">
-                  <Badge
-                    bgColor={"#fb8869"}
-                    alignItems="flex-start"
-                    color="white"
-                  >
-                    Avalable
-                  </Badge>
-                </Box>
-                <Flex w="100%" justifyContent={"space-between"}>
-                  <Text>APP300</Text>
-                  <Link onClick={() => setcoupon("APP300")} color={"#E53E3E"}>
-                    Apply Now
-                  </Link>
-                </Flex>
-              </Box>
-              <Flex w="100%" mt="20px" justifyContent={"space-between"}>
-                <h6>Get Flat Rs. 300 Off.</h6>
-                <Link>T&C Apply</Link>
-              </Flex>
-            </Box>
-          </VStack>}
+            </VStack>
+          )}
         </Box>
       </Box>
     </>
@@ -574,7 +576,7 @@ export const SingleItem = ({
   // colapse function for price details
   const handleToggle = () => setShow(!show);
   return (
-    <Box h="350px" key={item._id} py="20px">
+    <Box key={item._id} py="20px">
       {/* initial sec item quantity */}
       <Text
         mb="30px"
@@ -583,22 +585,27 @@ export const SingleItem = ({
         fontSize="15px"
         display="flex"
         pl="10px"
+        color={"green.600"}
+        fontWeight="650"
       >
         {item.title}
       </Text>
 
-      <Box display="flex" w="100%" justifyContent="space-between"  m="auto">
-        <Box display="flex" fontSize="14px" w="40%">
+      <Box display="flex" w="100%" justifyContent="space-between" m="auto">
+        <Box
+          display="flex"
+          fontSize="14px"
+          w={{ base: "52%", md: "42%", lg: "42%", xl: "40%", "2xl": "40%" }}
+        >
           <Box boxShadow={"sm"} mr="10px">
             <Image
               src={item.image}
               style={{
-                width: "100%",
                 height: "200px",
               }}
             />
           </Box>
-          <Box textAlign={"left"}  lineHeight={"25px"}>
+          <Box textAlign={"left"} lineHeight={"25px"}>
             {/* <Text> Brand : {converttoUpper(item.brand)}</Text>
             <Text> Category : <Badge py="0px">{converttoUpper(item.category)}</Badge></Text>
             */}
@@ -624,143 +631,182 @@ export const SingleItem = ({
             ) : null}
           </Box>
         </Box>
-        {dd ? null : (
-          <Box
-            style={{
-              width: "10%",
-              m: "auto",
-              display: "flex",
-              height: "33px",
-              color: "grey",
-              alignItems: "center",
-              border: "0.5px solid RGBA(0, 0, 0, 0.16)",
-            }}
-          >
-            <button
-              style={{
-                alignItems: "center",
-                fontSize: "18px",
-                backgroundColor: "white",
-                border: "none",
-                borderRight: "0.5px solid RGBA(0, 0, 0, 0.16)",
-                cursor: "pointer",
-                margin: "auto",
-              }}
-              onClick={() => handleDecrease(item)}
-            >
-              <MinusIcon py="1" />
-            </button>
-            <input
-              type="text"
-              value={item.quantity}
-              style={{
-                width: "30px",
-                height: "30px",
-                fontSize: "20px",
-                textAlign: "center",
-                margin: "auto",
-              }}
-            />
-            <button
-              style={{
-                alignItems: "center",
-                fontSize: "18px",
-                backgroundColor: "white",
-                border: "none",
-                borderLeft: "0.5px solid RGBA(0, 0, 0, 0.16)",
-                cursor: "pointer",
-                margin: "auto",
-              }}
-              onClick={() => handleIncrease(item)}
-            >
-              <AddIcon py="1" />
-            </button>
-          </Box>
-        )}
+        <Box w="70%" justifyContent={"space-between"} display="flex">
+          <Box>
+            {dd ? null : (
+              <Box
+                alignItems={"center"}
+                h="auto"
+                style={{
+                  width: "100px",
+                  m: "auto",
+                  display: "flex",
+                  height: "33px",
+                  color: "grey",
+                  alignItems: "center",
+                  border: "0.5px solid RGBA(0, 0, 0, 0.16)",
+                }}
+              >
+                <button
+                  style={{
+                    alignItems: "center",
+                    fontSize: "18px",
+                    backgroundColor: "white",
+                    border: "none",
+                    borderRight: "0.5px solid RGBA(0, 0, 0, 0.16)",
+                    cursor: "pointer",
+                    margin: "auto",
+                  }}
+                  onClick={() => handleDecrease(item)}
+                >
+                  <MinusIcon py="1" />
+                </button>
+                <input
+                  type="text"
+                  value={item.quantity}
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    fontSize: "20px",
+                    textAlign: "center",
+                    margin: "auto",
+                  }}
+                />
+                <button
+                  style={{
+                    alignItems: "center",
+                    fontSize: "18px",
+                    backgroundColor: "white",
+                    border: "none",
+                    borderLeft: "0.5px solid RGBA(0, 0, 0, 0.16)",
+                    cursor: "pointer",
+                    margin: "auto",
+                  }}
+                  onClick={() => handleIncrease(item)}
+                >
+                  <AddIcon py="1" />
+                </button>
+              </Box>
+            )}
 
-        <Box w="50%">
-          <HStack w="50%" m="auto" justifyContent={"space-between"}>
-            <span>RS:{totalPrice(item).total.toLocaleString()}</span>
-            <Button
-              fontSize={"14px"}
-              color="green.500"
-              w="40px"
-              m="auto"
-              background={"Background"}
-              _hover={{ backgroundColor: "white" }}
-              variantColor="blue"
-              onClick={handleToggle}
-            >
-              Details{" "}
-              {show ? (
-                <AddIcon
-                  borderRadius={"50%"}
-                  w="15px"
-                  h="15px"
-                  border="1px solid #38A169"
-                  color={"green.500"}
-                />
-              ) : (
-                <MinusIcon
-                  color={"green.500"}
-                  w="15px"
-                  h="15px"
-                  borderRadius={"50%"}
-                  border="1px solid #38A169"
-                />
-              )}
-            </Button>
-          </HStack>
-          <Collapse color="black" mt={4} in={show}>
-            <VStack
-              w="200px"
-              fontSize="12px"
-              display="flex"
-              justifyContent="space-between"
-              p="10px"
-              lineHeight="0.7"
-              m="auto"
-              bgColor="green.500"
-              color={"white"}
-            >
-              <Box display="flex" w="95%" justifyContent="space-between">
-                <span> Price Rs.</span>
-                <span>{item.price.toLocaleString()}</span>
-              </Box>
-              <Box
-                display="flex"
-                w="95%"
-                justifyContent="space-between"
-                m="auto"
-              >
-                <span> GST@{18}%</span>
-                <span>+Rs.{totalPrice(item).tax.toLocaleString()}</span>
-              </Box>
-              <Box
-                display="flex"
-                w="95%"
-                justifyContent="space-between"
-                m="auto"
-              >
-                <span>Final Price</span>
-                <span>{totalPrice(item).total.toLocaleString()}</span>
-              </Box>
-            </VStack>
-          </Collapse>
-          <HStack w="50%" m="auto" pt="70px">
-            <Image
-              w="30px"
-              h="30px"
-              src="https://www.industrybuying.com/static/svg/delivery-truck-afterdiscount.svg"
-              alt="Free Shipping"
-            />
-            <Text textAlign={"center"} color={"#4c993e"}>
-              Free shipping
-            </Text>
-          </HStack>
+            <Box>
+              <HStack m="auto" w="200px" justifyContent={"space-between"}>
+                <span>RS:{totalPrice(item).total.toLocaleString()}</span>
+                <Button
+                  fontSize={"14px"}
+                  color="green.500"
+                  w="40px"
+                  m="auto"
+                  background={"Background"}
+                  _hover={{ backgroundColor: "white" }}
+                  variantColor="blue"
+                  onClick={handleToggle}
+                >
+                  Details{" "}
+                  {show ? (
+                    <AddIcon
+                      borderRadius={"50%"}
+                      w="15px"
+                      h="15px"
+                      border="1px solid #38A169"
+                      color={"green.500"}
+                    />
+                  ) : (
+                    <MinusIcon
+                      color={"green.500"}
+                      w="15px"
+                      h="15px"
+                      borderRadius={"50%"}
+                      border="1px solid #38A169"
+                    />
+                  )}
+                </Button>
+              </HStack>
+              <Collapse color="black" mt={4} in={show}>
+                <VStack
+                  w="200px"
+                  fontSize="12px"
+                  display="flex"
+                  justifyContent="space-between"
+                  p="10px"
+                  lineHeight="0.7"
+                  m="auto"
+                  bgColor="green.500"
+                  color={"white"}
+                >
+                  <Box display="flex" w="95%" justifyContent="space-between">
+                    <span> Price Rs.</span>
+                    <span>{item.price.toLocaleString()}</span>
+                  </Box>
+                  <Box
+                    display="flex"
+                    w="95%"
+                    justifyContent="space-between"
+                    m="auto"
+                  >
+                    <span> GST@{18}%</span>
+                    <span>+Rs.{totalPrice(item).tax.toLocaleString()}</span>
+                  </Box>
+                  <Box
+                    display="flex"
+                    w="95%"
+                    justifyContent="space-between"
+                    m="auto"
+                  >
+                    <span>Final Price</span>
+                    <span>{totalPrice(item).total.toLocaleString()}</span>
+                  </Box>
+                </VStack>
+              </Collapse>
+            </Box>
+            <HStack w="200px" m="auto" pt="70px">
+              <Image
+                w="50px"
+                h="30px"
+                src="https://www.industrybuying.com/static/svg/delivery-truck-afterdiscount.svg"
+                alt="Free Shipping"
+              />
+              <Text textAlign={"center"} color={"#4c993e"}>
+                Free shipping
+              </Text>
+            </HStack>
+          </Box>
+          <Box
+            p="6"
+            w="70%"
+            fontWeight={"600"}
+            fontSize="15px"
+            display={{
+              base: "none",
+              md: "block",
+              lg: "block",
+              xl: "block",
+              "2xl": "block",
+            }}
+            color={"GrayText"}
+            textAlign={"left"}
+          >
+            {item.description}
+          </Box>
         </Box>
       </Box>
-          <Box p="2" color={"GrayText"} textAlign={"left"}>{item.description}</Box>
+      <Box
+        p="6"
+        w="100%"
+        fontWeight={"600"}
+        fontSize="15px"
+        display={{
+          base: "block",
+          md: "none",
+          lg: "none",
+          xl: "none",
+          "2xl": "none",
+        }}
+        color={"GrayText"}
+        textAlign={"left"}
+      >
+        {item.description}
+      </Box>
     </Box>
   );
 };
