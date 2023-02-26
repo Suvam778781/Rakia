@@ -50,4 +50,3 @@ A list of all users on the platform, along with their details, and the option fo
 
 Dashboards:-
 A series of dashboards that provide key metrics and insights, including sales made today, last week, and last month, sales from Jan to Dec, the highest-sold product ordered by rating in a given duration, the highest-rated product in a given duration, the highest-sold product categorized under selling price, and the highest-sold product in different categories.
-Note: This document serves as a guide for the development of an e-commerce platform and should be used as a reference for the features that need to be implemented.
