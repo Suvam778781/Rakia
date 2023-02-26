@@ -490,7 +490,7 @@ export function Card({ stat, icon, title, bg }) {
     <Stat
       px={{ base: 2, md: 4 }}
       py={"5"}
-      shadow={"md"}
+      boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
       // border={"1px solid"}
       bgImage={bg}
       rounded={"sm"}
@@ -547,7 +547,6 @@ export function OrderData({ product, allusers, alladmins }) {
     </Box>
   );
 }
-
 const UpdateModal = ({ isOpen, onClose, product }) => {
   const [title, setTitle] = useState(product.title);
   const [description, setDescription] = useState(product.description);
@@ -621,7 +620,7 @@ const UpdateModal = ({ isOpen, onClose, product }) => {
           </FormControl>
           <FormControl>
             <FormLabel>Images</FormLabel>
-            <Input
+            <Textarea
               value={allimages.join(",")}
               onChange={(e) => setallImages(e.target.value.split(","))}
             />

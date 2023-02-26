@@ -85,7 +85,6 @@ function HomePage() {
       <Flex
         display={{ md: "inherit", sm: "inherit" }}
         p="10px"
-        mt="100px"
         w="100%"
       >
         <Box w={"100%"} p="4">

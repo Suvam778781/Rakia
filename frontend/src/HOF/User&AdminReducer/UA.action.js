@@ -1,9 +1,3 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-} from "@chakra-ui/react";
 import axios from "axios";
 import {
   ADMIN_LOGIN_ERROR,
