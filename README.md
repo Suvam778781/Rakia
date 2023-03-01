@@ -1,8 +1,8 @@
 
 # About Rakia
+It is an e-commerce website designed by me would have a modern, visually appealing design, and would allow customers to browse and purchase products such as jeans, shirts, t-shirts, hoodies, and shoes. Customers could filter products by category, brand, etc.. also they can manage their order.
 
-
-#Features
+<h1>Features</h1>
 
 E-Commerce Platform - User & Admin Features Which Are Implement
 User Side Features
