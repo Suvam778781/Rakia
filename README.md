@@ -1,3 +1,9 @@
+
+# About Rakia
+
+
+#Features
+
 E-Commerce Platform - User & Admin Features Which Are Implement
 User Side Features
 ------------------
@@ -50,3 +56,22 @@ A list of all users on the platform, along with their details, and the option fo
 
 Dashboards:-
 A series of dashboards that provide key metrics and insights, including sales made today, last week, and last month, sales from Jan to Dec, the highest-sold product ordered by rating in a given duration, the highest-rated product in a given duration, the highest-sold product categorized under selling price, and the highest-sold product in different categories.
+
+
+## Some Gimples (Rakia)
+
+
+![Nemow_LandingPage](https://masai-course.s3.ap-south-1.amazonaws.com/editor/uploads/2022-12-21/nemow_landing_page_245881.png)
+This is the Landing Page of our project. 
+
+***********************************************************************************************************************************************************************
+![Nemow_Login_Signup](https://masai-course.s3.ap-south-1.amazonaws.com/editor/uploads/2022-12-21/nemow_login_816819.png)
+
+***********************************************************************************************************************************************************************
+
+![cartPage](https://masai-course.s3.ap-south-1.amazonaws.com/editor/uploads/2022-12-21/nemow_cartPage_256340.png)
+
+***********************************************************************************************************************************************************************
+
+![Pament Option](https://masai-course.s3.ap-south-1.amazonaws.com/editor/uploads/2022-12-21/nemow_payment_848747.png)
+
