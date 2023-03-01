@@ -61,17 +61,26 @@ A series of dashboards that provide key metrics and insights, including sales ma
 ## Some Gimples (Rakia)
 
 
-![Nemow_LandingPage](https://masai-course.s3.ap-south-1.amazonaws.com/editor/uploads/2022-12-21/nemow_landing_page_245881.png)
+![Nemow_LandingPage](https://i.ibb.co/WvqLMjQ/2023-03-01-1.png)
 This is the Landing Page of our project. 
 
 ***********************************************************************************************************************************************************************
-![Nemow_Login_Signup](https://masai-course.s3.ap-south-1.amazonaws.com/editor/uploads/2022-12-21/nemow_login_816819.png)
+![Nemow_Login_Signup](https://i.ibb.co/m5DCMRY/2023-03-01-2.png)
 
 ***********************************************************************************************************************************************************************
 
-![cartPage](https://masai-course.s3.ap-south-1.amazonaws.com/editor/uploads/2022-12-21/nemow_cartPage_256340.png)
+![cartPage](https://i.ibb.co/F0YQcxx/2023-03-01-3.png)
 
 ***********************************************************************************************************************************************************************
 
-![Pament Option](https://masai-course.s3.ap-south-1.amazonaws.com/editor/uploads/2022-12-21/nemow_payment_848747.png)
+![Pament Option](https://i.ibb.co/CbSkNfR/2023-03-01-4.png)
+
+
+***********************************************************************************************************************************************************************
+
+![Pament Option](https://i.ibb.co/sq0NYQ1/2023-03-01-5.png)
+
+***********************************************************************************************************************************************************************
+
+![Pament Option](https://i.ibb.co/Gv6yR7y/2023-03-01-6.png)
 
