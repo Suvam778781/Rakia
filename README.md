@@ -1,5 +1,5 @@
 
-# About Rakia
+<h1> About Rakia</h1>
 It is an e-commerce website designed by me would have a modern, visually appealing design, and would allow customers to browse and purchase products such as jeans, shirts, t-shirts, hoodies, and shoes. Customers could filter products by category, brand, etc.. also they can manage their order.
 
 # Deploy -https://rakiacom.netlify.app/
